@@ -124,7 +124,7 @@ class TemporalGraph:
 
 if __name__ == '__main__':
     # data = input('Edgeliste eingeben: ')
-    data = 'test.txt'
+    data = 'aves-weaver-social.txt'
     output = data.split(".")[0] + '-Ranking' + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(data)
