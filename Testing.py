@@ -6,8 +6,6 @@ import numpy as np
 
 
 def show_tree(tree, total_width=60, fill=' '):
-    """Pretty-print a tree.
-    total_width depends on your input size"""
     output = StringIO()
     last_row = -1
     for i, n in enumerate(tree):
