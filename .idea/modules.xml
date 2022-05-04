@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../BA/TemporalGraph/.idea/TemporalGraph.iml" filepath="$PROJECT_DIR$/../BA/TemporalGraph/.idea/TemporalGraph.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/TemporalReachability.iml" filepath="$PROJECT_DIR$/.idea/TemporalReachability.iml" />
     </modules>
   </component>

@@ -1,0 +1,11 @@
+name: tempreach
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.9.12
+  - numpy=1.21.5
+  - numpy-base=1.21.5
+  - pip:
+    - heapq-max==0.21
+prefix: C:\Users\Daniel\miniconda3\envs\tempreach
