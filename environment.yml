@@ -1,0 +1,7 @@
+name: TempReach
+channels:
+  - default
+  - conda-forge
+dependencies:
+  - numpy==1.21.6
+  - heapq_max
