@@ -3,7 +3,7 @@ import math
 import time
 from io import StringIO
 import numpy as np
-
+import os
 
 # function to draw the max heap
 def show_tree(tree, total_width=60, fill=' '):
@@ -130,6 +130,7 @@ class TemporalGraph:
 
 
 if __name__ == '__main__':
+    os.chdir("C:\\Users\\Daniel\\Documents\\GitHub\\TemporalReachability\\")
     # data = input('Edgeliste eingeben: ')
     data = 'aves-weaver-social.txt'
     output = data.split(".")[0] + '-Ranking' + '.txt'
@@ -137,7 +138,7 @@ if __name__ == '__main__':
     G.import_edgelist(data)
     a = 0
     b = np.inf
-    print(G.top_k_nodes(a, b, 10))
+    print(G.top_k_nodes(a, b, 4))
     # wikipediasg.txt         |  V = 208142 | E = 810702    geschätzt 6 h nur um gesamterreichbarkeit auszurechnen
     # facebook.txt            |  V = 63731  | E = 817036
     # infectious.txt          |  V = 10972  | E = 415912
