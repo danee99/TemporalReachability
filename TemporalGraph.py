@@ -2,6 +2,7 @@ import os
 import time
 import heapq_max
 import numpy as np
+from pathlib import Path
 
 
 class TemporalGraph:
@@ -20,7 +21,7 @@ class TemporalGraph:
     # Assumption: edge stream representation, i.e. edges are sorted by timestamps
     # scans the edgelist and adds all nodes and edges to the graph
     def import_edgelist(self, file_name):
-        with open(os.getcwd()+"\\edge-lists\\" + file_name, "r") as f:
+        with open(os.getcwd() + file_name, "r") as f:
             for line in f:
                 arr = line.split()
                 u = int(arr[0])
