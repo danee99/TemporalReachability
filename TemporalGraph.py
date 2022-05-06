@@ -100,24 +100,24 @@ class TemporalGraph:
             else:
                 if R < max_heap[0][0]:
                     heapq_max.heappushpop_max(max_heap, (R, node))
-        with open('edge-lists\\' + output_name, 'w') as f:
+        with open(os.getcwd() + output_name, 'w') as f:
             f.write(str(max_heap)+"\n")
             f.write("--- finished in %s seconds ---" % (time.time() - start_time))
 
 
 if __name__ == '__main__':
     data = input('Edgeliste eingeben: ')
+    output1 = input('Output Verzeichnis eingeben: ')
     output = data.split(".")[0] + '-Ranking' + '.txt'
-    output2 = data.split(".")[0] + '-top-k' + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(data)
     a = 0
     b = np.inf
-    G.top_k_nodes(a, b, 30, output2)
-    # wikipediasg.txt         |  V = 208142 | E = 810702
-    # facebook.txt            |  V = 63731  | E = 817036
-    # infectious.txt          |  V = 10972  | E = 415912
-    # tij_SFHH.txt            |  V = 3906   | E = 70261
-    # ht09_contact_list.txt   |  V = 5351   | E = 20817
-    # aves-weaver-social.txt  |  V = 445    | E = 1426
-    # test.txt                |  V = 7      | E = 18
+    G.top_k_nodes(a, b, 30, output1)
+    # /edge-lists/wikipediasg.txt         |  V = 208142 | E = 810702
+    # /edge-lists/facebook.txt            |  V = 63731  | E = 817036
+    # /edge-lists/infectious.txt          |  V = 10972  | E = 415912
+    # /edge-lists/tij_SFHH.txt            |  V = 3906   | E = 70261
+    # /edge-lists/ht09_contact_list.txt   |  V = 5351   | E = 20817
+    # /edge-lists/aves-weaver-social.txt  |  V = 445    | E = 1426
+    # /edge-lists/test.txt                |  V = 7      | E = 18
