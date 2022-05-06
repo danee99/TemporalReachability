@@ -1,26 +1,26 @@
-import heapq
+import os
 import time
-
+import heapq_max
 import numpy as np
 
 
 class TemporalGraph:
     def __init__(self, nodelist, edgelist):
-        self.nodelist = {}
-        # self.outdegree = []
+        self.nodelist = []
+        self.out = []
         self.edgelist = []
 
-    # outputs the set of nodes and every temporal edge
+    # outputs the set of nodes and each temporal edge as well as the outdegreee array
     def print_graph(self):
         for i in self.edgelist:
             print(*i)
         print(self.nodelist)
-        # print(self.outdegree)
+        print(self.out)
 
-    # Assumption: Input graph is in edge stream representation, i.e. edges are sorted by timestamps
+    # Assumption: edge stream representation, i.e. edges are sorted by timestamps
+    # scans the edgelist and adds all nodes and edges to the graph
     def import_edgelist(self, file_name):
-        with open('edge-lists\\' + file_name, "r") as f:
-            # self.outdegree = []
+        with open(os.getcwd()+"\\edge-lists\\" + file_name, "r") as f:
             for line in f:
                 arr = line.split()
                 u = int(arr[0])
@@ -31,19 +31,16 @@ class TemporalGraph:
                 except IndexError:
                     l = 1
                 if u not in self.nodelist:
-                    self.nodelist.update({u: 0})
-                    # self.nodelist.append(u)
-                    # self.outdegree.append(0)
+                    self.nodelist.append(u)
+                    self.out.append(0)
                 if v not in self.nodelist:
-                    self.nodelist.update({v: 0})
-                    # self.nodelist.append(v)
-                    # self.outdegree.append(0)
-                # self.outdegree[u] = self.outdegree[u] + 1
-                self.nodelist[u] = self.nodelist[u] + 1
+                    self.nodelist.append(v)
+                    self.out.append(0)
+                self.out[u] = self.out[u] + 1
                 self.edgelist.append((u, v, t, l))
-        self.nodelist = {k: v for k, v in sorted(self.nodelist.items(), key=lambda item: item[1], reverse=True)}
+        self.nodelist = [x for _, x in sorted(zip(self.out, self.nodelist), reverse=True)]
 
-    # O(n+m)
+    # calculates how many nodes can be reached from a node in O(n+m) for an interval [a,b]
     def calc_reachable_nodes(self, node, a, b):
         reach_num = 1
         min_at = [np.inf for i in range(0, len(self.nodelist))]
@@ -56,24 +53,24 @@ class TemporalGraph:
                     reach_num = reach_num + 1
         return reach_num
 
-    # O(n^2 + nm)
+    # calculates the total reachability (sum of the vector) of the entire graph in O(n^2 + nm)
     def total_reachability(self, a, b):
         result = []
         for node in self.nodelist:
             result.append(self.calc_reachable_nodes(node, a, b))
-        # print(result)
-        return sum(result)
+        sum(result)
 
     # calculates the total reachability of the entire graph after deleting "node"
-    def total_reachability_after(self, a, b, node, my_heap, k):
+    # this is the helper function for the top k nodes
+    def total_reachability_after(self, a, b, node, my_heap, k, h):
         result = 0
         count = 0
-        for x in self.nodelist.keys():
+        for x in self.nodelist:
             count = count + 1
             reach_num = 1
             if x == node:
                 reach_num = 0
-            min_at = [np.inf for i in range(0, len(self.nodelist))]
+            min_at = h.copy()
             min_at[x] = 0
             for (u, v, t, l) in self.edgelist:
                 if u != node and v != node:
@@ -84,84 +81,42 @@ class TemporalGraph:
                             reach_num = reach_num + 1
             result = result + reach_num
             if my_heap != [] and len(my_heap) >= k:
-                if -result < my_heap[0][0]:
+                if result > my_heap[0][0]:
                     return -1
         return result
 
     # outputs the top k nodes
-    def top_k_nodes(self, a, b, k):
+    def top_k_nodes(self, a, b, k, output_name):
+        max_heap = []
         start_time = time.time()
-        my_heap = []
-        for node in self.nodelist.keys():
-            R = self.total_reachability_after(a, b, node, my_heap, k)
+        h = [np.inf for i in range(0, len(self.nodelist))]
+        for node in self.nodelist:
+            R = self.total_reachability_after(a, b, node, max_heap, k, h)
             if R == -1:
                 continue
-            if len(my_heap) < k:
-                heapq.heappush(my_heap, (-R, node))
+            if len(max_heap) < k:
+                heapq_max.heappush_max(max_heap, (R, node))
             else:
-                if -R > my_heap[0][0]:
-                    heapq.heappushpop(my_heap, (-R, node))
-        return my_heap, ("--- finished in %s seconds ---" % (time.time() - start_time))
-    # -------------------------------------------------------------------------------------------------------------------
-    def total_reachability(self, a, b):
-        total_reach = 0
-        for x in self.nodelist:
-            reach_num = 1
-            min_at = [np.inf for i in range(0, len(self.nodelist))]
-            min_at[x] = 0
-            for (u, v, t, l) in self.edgelist:
-                if t < a or t + l > b: continue
-                if min_at[u] <= t:
-                    if min_at[v] > t + 1:
-                        min_at[v] = t + 1
-                        reach_num = reach_num + 1
-            total_reach = total_reach + reach_num
-        return total_reach
-
-    def rank_node(self, a, b, node, before):
-        after = 0
-        for x in self.nodelist:
-            reach_num = 1
-            if x == node:
-                reach_num = 0
-            min_at = [np.inf for i in range(0, len(self.nodelist))]
-            min_at[x] = 0
-            for (u, v, t, l) in self.edgelist:
-                if u != node and v != node:
-                    if t < a or t + l > b: continue
-                    if min_at[u] <= t:
-                        if min_at[v] > t + 1:
-                            min_at[v] = t + 1
-                            reach_num = reach_num + 1
-            after = after + reach_num
-        return 1 - (after / before)
-
-    def rank_all_nodes(self, a, b, output_name):
-        start_time = time.time()
-        h = self.total_reachability(a, b)
-        new_list = []
-        for i in self.nodelist:
-            new_list.append((i, self.rank_node(a, b, i, h)))
-        new_list.sort(key=lambda y: y[1], reverse=True)
+                if R < max_heap[0][0]:
+                    heapq_max.heappushpop_max(max_heap, (R, node))
         with open('edge-lists\\' + output_name, 'w') as f:
-            for rank in new_list:
-                f.write(str(rank[0]) + ' ' + str(rank[1]) + "\n")
+            f.write(str(max_heap)+"\n")
             f.write("--- finished in %s seconds ---" % (time.time() - start_time))
 
 
 if __name__ == '__main__':
-    # data = input('Edgeliste eingeben: ')
-    data = 'aves-weaver-social.txt'
+    data = input('Edgeliste eingeben: ')
     output = data.split(".")[0] + '-Ranking' + '.txt'
+    output2 = data.split(".")[0] + '-top-k' + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(data)
     a = 0
     b = np.inf
-    print(G.top_k_nodes(a, b, 3))
-    # wikipediasg.txt         |  V = 208142 | E = 810702    geschätzt 6 h nur um gesamterreichbarkeit auszurechnen
+    G.top_k_nodes(a, b, 30, output2)
+    # wikipediasg.txt         |  V = 208142 | E = 810702
     # facebook.txt            |  V = 63731  | E = 817036
     # infectious.txt          |  V = 10972  | E = 415912
-    # tij_SFHH.txt            |  V = 3906   | E = 70261     1.3 knoten pro minute --> 50 h
-    # ht09_contact_list.txt   |  V = 5351   | E = 20817     3 knoten pro minute --> 29 h
+    # tij_SFHH.txt            |  V = 3906   | E = 70261
+    # ht09_contact_list.txt   |  V = 5351   | E = 20817
     # aves-weaver-social.txt  |  V = 445    | E = 1426
     # test.txt                |  V = 7      | E = 18

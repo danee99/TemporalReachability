@@ -83,7 +83,7 @@ class TemporalGraph:
 
     # calculates the total reachability of the entire graph after deleting "node"
     # this is the helper function for the top k nodes
-    def total_reachability_after(self, a, b, node, my_heap, k):
+    def total_reachability_after(self, a, b, node, my_heap, k, h):
         result = 0
         count = 0
         for x in self.nodelist:
@@ -91,7 +91,7 @@ class TemporalGraph:
             reach_num = 1
             if x == node:
                 reach_num = 0
-            min_at = [np.inf for i in range(0, len(self.nodelist))]
+            min_at = h.copy()
             min_at[x] = 0
             for (u, v, t, l) in self.edgelist:
                 if u != node and v != node:
@@ -114,10 +114,11 @@ class TemporalGraph:
     def top_k_nodes(self, a, b, k):
         max_heap = []
         start_time = time.time()
+        h = [np.inf for i in range(0, len(self.nodelist))]
         for node in self.nodelist:
             show_tree(max_heap, total_width=60, fill=' ')
             print("\nbin bei knoten " + str(node))
-            R = self.total_reachability_after(a, b, node, max_heap, k)
+            R = self.total_reachability_after(a, b, node, max_heap, k, h)
             if R == -1:
                 print("--> Der Knoten " + str(node) + " gehört nicht zu top k" + " --> " + str(R))
                 continue
@@ -126,7 +127,7 @@ class TemporalGraph:
             else:
                 if R < max_heap[0][0]:
                     heapq_max.heappushpop_max(max_heap, (R, node))
-        return (max_heap, ("--- finished in %s seconds ---" % (time.time() - start_time)))
+        return max_heap, ("--- finished in %s seconds ---" % (time.time() - start_time))
 
 
 if __name__ == '__main__':
@@ -138,13 +139,11 @@ if __name__ == '__main__':
     G.import_edgelist(data)
     a = 0
     b = np.inf
-    print(G.top_k_nodes(a, b, 4))
-    # wikipediasg.txt         |  V = 208142 | E = 810702    geschätzt 6 h nur um gesamterreichbarkeit auszurechnen
+    print(G.top_k_nodes(a, b, 1))
+    # wikipediasg.txt         |  V = 208142 | E = 810702
     # facebook.txt            |  V = 63731  | E = 817036
     # infectious.txt          |  V = 10972  | E = 415912
-    # tij_SFHH.txt            |  V = 3906   | E = 70261     1.3 knoten pro minute --> 50 h
-    # ht09_contact_list.txt   |  V = 5351   | E = 20817     3 Knoten/min --> 29 h
-    # aves-weaver-social.txt  |  V = 445    | E = 1426      600 Knoten/min
+    # tij_SFHH.txt            |  V = 3906   | E = 70261
+    # ht09_contact_list.txt   |  V = 5351   | E = 20817
+    # aves-weaver-social.txt  |  V = 445    | E = 1426
     # test.txt                |  V = 7      | E = 18
-
-    # Knoten in einem Temporalen Graphen haben meistens sehr ähnliche Erreichbarkeiten
