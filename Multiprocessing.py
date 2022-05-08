@@ -5,6 +5,9 @@ import heapq_max
 import threading
 import multiprocessing
 
+result_list = []
+def log_result(result):
+    result_list.append(result)
 
 class TemporalGraph:
     def __init__(self, nodelist, edgelist):
@@ -107,10 +110,11 @@ class TemporalGraph:
             # results.append(self.inner(a, b, node, help_list))
             # results.append(pool.apply_async(self.inner, args=(a, b, node, help_list)))
             # self.get_result(results, self.inner(a, b, node, help_list))
-            pool.apply_async(self.inner, args=(a, b, node, help_list))
+            pool.apply_async(self.inner, args=(a, b, node, help_list), callback = log_result)
         pool.close()
         pool.join()
         # results.sort()
+        print(result_list)
         print(results)
         print("--- finished in %s seconds ---" % (time.time() - start_time))
 

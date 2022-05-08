@@ -7,7 +7,7 @@ import numpy as np
 class TemporalGraph:
     def __init__(self, nodelist, edgelist):
         self.nodelist = []
-        self.out = []
+        # self.out = []
         self.edgelist = []
 
     # outputs the set of nodes and each temporal edge as well as the outdegreee array
@@ -15,7 +15,7 @@ class TemporalGraph:
         for i in self.edgelist:
             print(*i)
         print(self.nodelist)
-        print(self.out)
+        # print(self.out)
 
     # Assumption: edge stream representation, i.e. edges are sorted by timestamps
     # scans the edgelist and adds all nodes and edges to the graph
@@ -32,13 +32,13 @@ class TemporalGraph:
                     l = 1
                 if u not in self.nodelist:
                     self.nodelist.append(u)
-                    self.out.append(0)
+                    # self.out.append(0)
                 if v not in self.nodelist:
                     self.nodelist.append(v)
-                    self.out.append(0)
-                self.out[u] = self.out[u] + 1
+                    # self.out.append(0)
+                # self.out[u] = self.out[u] + 1
                 self.edgelist.append((u, v, t, l))
-        self.nodelist = [x for _, x in sorted(zip(self.out, self.nodelist), reverse=True)]
+        # self.nodelist = [x for _, x in sorted(zip(self.out, self.nodelist), reverse=True)]
 
     # calculates how many nodes can be reached from a node in O(n+m) for an interval [a,b]
     def calc_reachable_nodes(self, node, a, b):
@@ -58,7 +58,7 @@ class TemporalGraph:
         result = []
         for node in self.nodelist:
             result.append(self.calc_reachable_nodes(node, a, b))
-        sum(result)
+        return sum(result)
 
     # calculates the total reachability of the entire graph after deleting "node"
     # this is the helper function for the top k nodes
@@ -112,7 +112,7 @@ if __name__ == '__main__':
     G.import_edgelist(data)
     a = 0
     b = np.inf
-    G.top_k_nodes(a, b, 30, output1)
+    G.top_k_nodes(0, np.inf, 10, output1)
     # /edge-lists/wikipediasg.txt         |  V = 208142 | E = 810702
     # /edge-lists/facebook.txt            |  V = 63731  | E = 817036
     # /edge-lists/infectious.txt          |  V = 10972  | E = 415912
@@ -120,3 +120,4 @@ if __name__ == '__main__':
     # /edge-lists/ht09_contact_list.txt   |  V = 5351   | E = 20817
     # /edge-lists/aves-weaver-social.txt  |  V = 445    | E = 1426
     # /edge-lists/test.txt                |  V = 7      | E = 18
+    # /edge-lists/comparison.txt
