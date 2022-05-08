@@ -2,7 +2,6 @@ import os
 import time
 import heapq_max
 import numpy as np
-from pathlib import Path
 
 
 class TemporalGraph:
