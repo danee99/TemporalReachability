@@ -1,14 +1,7 @@
-import heapq
-import multiprocessing
 import os
 import time
+import heapq_max
 import numpy as np
-
-result_list = []
-
-
-def log_result(result):
-    heapq.heappush(result_list, result)
 
 
 class TemporalGraph:
@@ -40,7 +33,9 @@ class TemporalGraph:
                 self.edgelist.append((u, v, t, l))
         self.nodelist = [x for _, x in sorted(zip(self.out, self.nodelist), reverse=True)]
 
-    def total_reachability_after(self, a, b, node, help_list):
+    # calculates the total reachability of the entire graph after deleting "node"
+    # this is the helper function for the top k nodes
+    def total_reachability_after(self, a, b, node, max_heap, k, help_list):
         total_reach = 0
         for x in self.nodelist:
             reach_num = 1
@@ -56,19 +51,24 @@ class TemporalGraph:
                             min_at[v] = t + 1
                             reach_num = reach_num + 1
             total_reach = total_reach + reach_num
-        return total_reach, node
+            if max_heap != [] and len(max_heap) >= k:
+                if total_reach > max_heap[0][0]:
+                    break
+        if len(max_heap) < k:
+            heapq_max.heappush_max(max_heap, (total_reach, node))
+        else:
+            if total_reach < max_heap[0][0]:
+                heapq_max.heappushpop_max(max_heap, (total_reach, node))
 
-    def top_k_nodes(self, a, b, k, output_name):
+    # outputs the top k nodes
+    def top_k_nodes(self, a, b, k):
         start_time = time.time()
+        max_heap = []
         help_list = [np.inf for i in range(0, len(self.nodelist))]
-        pool = multiprocessing.Pool(multiprocessing.cpu_count())
         for node in self.nodelist:
-            pool.apply_async(self.total_reachability_after, args=(a, b, node, help_list), callback=log_result)
-        pool.close()
-        pool.join()
-        with open(os.getcwd() + output_name, 'w') as f:
-            f.write(str(heapq.nsmallest(k, result_list)) + "\n")
-            f.write("--- finished in %s seconds ---" % (time.time() - start_time))
+            self.total_reachability_after(a, b, node, max_heap, k, help_list,)
+        print(str(max_heap) + "\n")
+        print("--- finished in %s seconds ---" % (time.time() - start_time))
 
 
 if __name__ == '__main__':
@@ -77,7 +77,7 @@ if __name__ == '__main__':
     output = data.split(".")[0] + '-Ranking' + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(data)
-    G.top_k_nodes(0, np.inf, 30, output1)
+    G.top_k_nodes(0, np.inf, 3)
     # /edge-lists/wikipediasg.txt         |  V = 208142 | E = 810702
     # /edge-lists/facebook.txt            |  V = 63731  | E = 817036
     # /edge-lists/infectious.txt          |  V = 10972  | E = 415912
