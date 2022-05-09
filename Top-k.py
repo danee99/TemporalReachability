@@ -1,3 +1,4 @@
+import heapq
 import os
 import time
 import heapq_max
@@ -53,21 +54,21 @@ class TemporalGraph:
             total_reach = total_reach + reach_num
             if max_heap != [] and len(max_heap) >= k:
                 if total_reach > max_heap[0][0]:
-                    break
+                    return
         if len(max_heap) < k:
             heapq_max.heappush_max(max_heap, (total_reach, node))
         else:
             if total_reach < max_heap[0][0]:
                 heapq_max.heappushpop_max(max_heap, (total_reach, node))
 
-    # outputs the top k nodes
+    # outputs the max heap with the top k nodes
     def top_k_nodes(self, a, b, k):
         start_time = time.time()
         max_heap = []
         help_list = [np.inf for i in range(0, len(self.nodelist))]
         for node in self.nodelist:
             self.total_reachability_after(a, b, node, max_heap, k, help_list,)
-        print(str(max_heap) + "\n")
+        print(str(heapq.nsmallest(k, max_heap)) + "\n")
         print("--- finished in %s seconds ---" % (time.time() - start_time))
 
 
@@ -85,4 +86,4 @@ if __name__ == '__main__':
     # /edge-lists/ht09_contact_list.txt   |  V = 5351   | E = 20817
     # /edge-lists/aves-weaver-social.txt  |  V = 445    | E = 1426
     # /edge-lists/test.txt                |  V = 7      | E = 18
-    # \\edge-lists\\aves-weaver-social.txt  --> \\edge-lists\\hallo.txt
+    # /edge-lists/comparison.txt          |  V = 7      | E = 9

@@ -1,2 +1,0 @@
-heapq_max
-numpy

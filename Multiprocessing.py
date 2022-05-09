@@ -14,7 +14,7 @@ def log_result(result):
 class TemporalGraph:
     def __init__(self, nodelist, edgelist):
         self.nodelist = []
-        self.out = []
+        # self.out = []
         self.edgelist = []
 
     # Assumption: edge stream representation, i.e. edges are sorted by timestamps
@@ -32,13 +32,13 @@ class TemporalGraph:
                     l = 1
                 if u not in self.nodelist:
                     self.nodelist.append(u)
-                    self.out.append(0)
+                    # self.out.append(0)
                 if v not in self.nodelist:
                     self.nodelist.append(v)
-                    self.out.append(0)
-                self.out[u] = self.out[u] + 1
+                    # self.out.append(0)
+                # self.out[u] = self.out[u] + 1
                 self.edgelist.append((u, v, t, l))
-        self.nodelist = [x for _, x in sorted(zip(self.out, self.nodelist), reverse=True)]
+        # self.nodelist = [x for _, x in sorted(zip(self.out, self.nodelist), reverse=True)]
 
     def total_reachability_after(self, a, b, node, help_list):
         total_reach = 0
@@ -68,16 +68,19 @@ class TemporalGraph:
         pool.join()
         with open(os.getcwd() + output_name, 'w') as f:
             f.write(str(heapq.nsmallest(k, result_list)) + "\n")
-            f.write("--- finished in %s seconds ---" % (time.time() - start_time))
+            finish = time.time() - start_time
+            f.write("--- finished in %s seconds ---" % (finish) + "\n")
+            f.write("--- finished in %s minutes ---" % ((finish) / 60) + "\n")
+            f.write("--- finished in %s hours ---" % ((finish) / 3600))
 
 
 if __name__ == '__main__':
     data = input('Edgeliste eingeben: ')
-    output1 = input('Output Verzeichnis eingeben: ')
-    output = data.split(".")[0] + '-Ranking' + '.txt'
+    k = int(input('k eingeben: '))
+    output = data.split(".")[0] + '-FAST-TOP-' + str(k) + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(data)
-    G.top_k_nodes(0, np.inf, 30, output1)
+    G.top_k_nodes(0, np.inf, k, output)
     # /edge-lists/wikipediasg.txt         |  V = 208142 | E = 810702
     # /edge-lists/facebook.txt            |  V = 63731  | E = 817036
     # /edge-lists/infectious.txt          |  V = 10972  | E = 415912
@@ -85,4 +88,4 @@ if __name__ == '__main__':
     # /edge-lists/ht09_contact_list.txt   |  V = 5351   | E = 20817
     # /edge-lists/aves-weaver-social.txt  |  V = 445    | E = 1426
     # /edge-lists/test.txt                |  V = 7      | E = 18
-    # \\edge-lists\\aves-weaver-social.txt  --> \\edge-lists\\hallo.txt
+    # /edge-lists/comparison.txt          |  V = 7      | E = 9

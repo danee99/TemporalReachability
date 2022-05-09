@@ -106,13 +106,11 @@ class TemporalGraph:
 
 if __name__ == '__main__':
     data = input('Edgeliste eingeben: ')
-    output1 = input('Output Verzeichnis eingeben: ')
-    output = data.split(".")[0] + '-Ranking' + '.txt'
+    k = int(input('k eingeben: '))
+    output = data.split(".")[0] + '-FAST-TOP-' + str(k) + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(data)
-    a = 0
-    b = np.inf
-    G.top_k_nodes(0, np.inf, 10, output1)
+    G.top_k_nodes(0, np.inf, k, output)
     # /edge-lists/wikipediasg.txt         |  V = 208142 | E = 810702
     # /edge-lists/facebook.txt            |  V = 63731  | E = 817036
     # /edge-lists/infectious.txt          |  V = 10972  | E = 415912
@@ -120,4 +118,4 @@ if __name__ == '__main__':
     # /edge-lists/ht09_contact_list.txt   |  V = 5351   | E = 20817
     # /edge-lists/aves-weaver-social.txt  |  V = 445    | E = 1426
     # /edge-lists/test.txt                |  V = 7      | E = 18
-    # /edge-lists/comparison.txt
+    # /edge-lists/comparison.txt          |  V = 7      | E = 9
