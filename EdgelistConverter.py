@@ -26,4 +26,4 @@ def convert(file_name, output):
 
 
 if __name__ == '__main__':
-    convert('wikipediasg.tg2', 'wikipediasg')
+    convert('wiki_talk_nl.tg2', 'wiki_talk_nl')

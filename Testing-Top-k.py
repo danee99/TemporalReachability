@@ -136,6 +136,7 @@ if __name__ == '__main__':
     G = TemporalGraph([], [])
     G.import_edgelist(data)
     print(G.top_k_nodes(0, np.inf, k))
+    # /edge-lists/wiki_talk_nl            |  V = 225749 | E = 1554698
     # /edge-lists/wikipediasg.txt         |  V = 208142 | E = 810702
     # /edge-lists/facebook.txt            |  V = 63731  | E = 817036
     # /edge-lists/infectious.txt          |  V = 10972  | E = 415912
