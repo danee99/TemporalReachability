@@ -2,6 +2,7 @@ import os
 import time
 import heapq_max
 import numpy as np
+import heapq
 
 
 class TemporalGraph:
@@ -100,14 +101,17 @@ class TemporalGraph:
                 if R < max_heap[0][0]:
                     heapq_max.heappushpop_max(max_heap, (R, node))
         with open(os.getcwd() + output_name, 'w') as f:
-            f.write(str(max_heap)+"\n")
-            f.write("--- finished in %s seconds ---" % (time.time() - start_time))
+            f.write(str(heapq.nsmallest(k, max_heap)) + "\n")
+            finish = time.time() - start_time
+            f.write("--- finished in %s seconds ---" % (finish) + "\n")
+            f.write("--- finished in %s minutes ---" % ((finish) / 60) + "\n")
+            f.write("--- finished in %s hours ---" % ((finish) / 3600))
 
 
 if __name__ == '__main__':
     data = input('Edgeliste eingeben: ')
     k = int(input('k eingeben: '))
-    output = data.split(".")[0] + '-FAST-TOP-' + str(k) + '.txt'
+    output = '/edge-lists/' + str(input('Output-Name eingeben: '))
     G = TemporalGraph([], [])
     G.import_edgelist(data)
     G.top_k_nodes(0, np.inf, k, output)

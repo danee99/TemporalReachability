@@ -62,23 +62,27 @@ class TemporalGraph:
                 heapq_max.heappushpop_max(max_heap, (total_reach, node))
 
     # outputs the max heap with the top k nodes
-    def top_k_nodes(self, a, b, k):
+    def top_k_nodes(self, a, b, k, output_name):
         start_time = time.time()
         max_heap = []
         help_list = [np.inf for i in range(0, len(self.nodelist))]
         for node in self.nodelist:
             self.total_reachability_after(a, b, node, max_heap, k, help_list,)
-        print(str(heapq.nsmallest(k, max_heap)) + "\n")
-        print("--- finished in %s seconds ---" % (time.time() - start_time))
+        with open(os.getcwd() + output_name, 'w') as f:
+            f.write(str(heapq.nsmallest(k, max_heap)) + "\n")
+            finish = time.time() - start_time
+            f.write("--- finished in %s seconds ---" % (finish) + "\n")
+            f.write("--- finished in %s minutes ---" % ((finish) / 60) + "\n")
+            f.write("--- finished in %s hours ---" % ((finish) / 3600))
 
 
 if __name__ == '__main__':
     data = input('Edgeliste eingeben: ')
-    output1 = input('Output Verzeichnis eingeben: ')
-    output = data.split(".")[0] + '-Ranking' + '.txt'
+    k = int(input('k eingeben: '))
+    output = data.split(".")[0] + '-TOP-' + str(k) + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(data)
-    G.top_k_nodes(0, np.inf, 3)
+    G.top_k_nodes(0, np.inf, k, output)
     # /edge-lists/wikipediasg.txt         |  V = 208142 | E = 810702
     # /edge-lists/facebook.txt            |  V = 63731  | E = 817036
     # /edge-lists/infectious.txt          |  V = 10972  | E = 415912

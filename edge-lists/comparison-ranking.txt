@@ -1,0 +1,5 @@
+1.Platz 4 (e) mit R(G-v) = 12
+2.Platz 2 (c) mit R(G-v) = 13
+3.Platz 0 (a) mit R(G-v) = 17
+4.Platz 3, 5, 6 (d,f,g) mit R(G-v) = 18
+5.Platz 1 (b) mit R(G-v) = 21
