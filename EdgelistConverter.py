@@ -1,12 +1,16 @@
+import os
+
+
 def convert(file_name, output):
     file = 'edge-lists\\' + file_name
     out = 'edge-lists\\' + output + '.txt'
     nodemanager = {}
     edgelist = []
     with open(file) as fp:
-        with open(out, 'w') as f:
+        with open(os.getcwd() + file_name, "r") as f:
+            n = int(f.readline())
             val = 0
-            for line in fp:
+            for line in f:
                 arr = line.split()
                 u = int(arr[0])
                 v = int(arr[1])

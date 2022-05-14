@@ -1,4 +1,0 @@
-[(21, 3), (25, 2), (26, 5)]
---- finished in 0.30829930305480957 seconds ---
---- finished in 0.00513832171758016 minutes ---
---- finished in 8.563869529300265e-05 hours ---

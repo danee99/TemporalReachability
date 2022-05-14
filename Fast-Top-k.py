@@ -21,6 +21,7 @@ class TemporalGraph:
     # scans the edgelist and adds all nodes and edges to the graph
     def import_edgelist(self, file_name):
         with open(os.getcwd() + file_name, "r") as f:
+            n = int(f.readline())
             for line in f:
                 arr = line.split()
                 u = int(arr[0])
