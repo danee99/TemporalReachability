@@ -25,6 +25,7 @@ class TemporalGraph:
         print(self.nodes)
         print(self.incidence_list)
 
+    # returns the list of the incident edges (sorted by timestamps) for a given node
     def edges_of_node(self, node):
         return self.incidence_list[node]
 
@@ -50,7 +51,7 @@ class TemporalGraph:
                 if (u, v, t, l) not in self.incidence_list[u]:
                     self.incidence_list[u].append((u, v, t, l))
 
-    # scans the edgelist and adds all nodes and edges to the Graph
+    # calculates for a given source node the earliest arrival times to all other nodes
     def temporal_earliest_arrival(self, source):
         earliest_arrival_time = [np.inf for i in range(len(self.nodes))]
         earliest_arrival_time[source] = 0
@@ -92,44 +93,39 @@ class TemporalGraph:
             total.append(len([i for i in earliest_arrival_time if i != np.inf]))
         return sum(total)
 
-    def master(self):
-        start_time = time.time()
-        results = []
+    def top_k_util(self, a, b, x, helper):
+        # total = []
+        total = 0
         for node in self.nodes:
-            results.append((node, self.total_reach_after(node)))
-        finish = time.time() - start_time
-        print(results)
-        print(finish)
-
-    def topk_util(self, a, b, x, helper):
-        total = []
-        for node in self.nodes:
+            reach_num = 1
             if node == x:
                 continue
             earliest_arrival_time = helper.copy()
             earliest_arrival_time[node] = 0
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
-            visited = [x]
+            # visited = [x]
             while not PQ.empty():
                 (current_arrival_time, current_node) = PQ.get()
-                if current_node not in visited:
+                if current_node != x:
                     for (u, v, t, l) in self.edges_of_node(current_node):
                         if u != x and v != x:
                             if t < a or t + l > b: continue
                             if t + l < earliest_arrival_time[v] and t >= earliest_arrival_time[u]:
                                 earliest_arrival_time[v] = t + l
                                 PQ.put((earliest_arrival_time[v], v))
-                    visited.append(current_node)
-            total.append(len([i for i in earliest_arrival_time if i != np.inf]))
-        return sum(total), x
+                                reach_num = reach_num + 1
+                    # visited.append(current_node)
+            total = total + reach_num
+            # total.append(len([i for i in earliest_arrival_time if i != np.inf]))
+        return total, x
 
     def top_k_nodes(self, alpha, beta, k, output_file):
         start_time = time.time()
         help_list = [np.inf for i in range(0, len(self.nodes))]
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
         for node in self.nodes:
-            pool.apply_async(self.topk_util, args=(alpha, beta, node, help_list), callback=log_result)
+            pool.apply_async(self.top_k_util, args=(alpha, beta, node, help_list), callback=log_result)
         pool.close()
         pool.join()
         with open(os.getcwd() + output_file, 'w') as f:
@@ -174,3 +170,4 @@ if __name__ == '__main__':
     # /edge-lists/aves-weaver-social.txt  |  V = 445    | E = 1426
     # /edge-lists/test.txt                |  V = 7      | E = 18
     # /edge-lists/comparison.txt          |  V = 7      | E = 9
+    # to beat: 2.8742947578430176 seconds

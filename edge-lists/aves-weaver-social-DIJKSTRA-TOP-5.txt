@@ -1,4 +1,4 @@
 [(1849, 235), (1881, 239), (1883, 203), (1885, 133), (1886, 31)]
---- finished in 2.396780014038086 seconds ---
---- finished in 0.039946333567301436 minutes ---
---- finished in 0.0006657722261216905 hours ---
+--- finished in 1.8939738273620605 seconds ---
+--- finished in 0.03156623045603434 minutes ---
+--- finished in 0.0005261038409339057 hours ---
