@@ -3,10 +3,11 @@ import multiprocessing
 import os
 import time
 from queue import PriorityQueue
-
+import heapq_max
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
+from multiprocessing import Process
 
 result_list = []
 
@@ -34,7 +35,7 @@ class TemporalGraph:
     def import_edgelist(self, file_name):
         with open(os.getcwd() + file_name, "r") as f:
             n = int(f.readline())
-            self.incidence_list = [[] for i in range(n)]
+            self.incidence_list = [[] for _ in range(n)]
             for line in f:
                 arr = line.split()
                 u = int(arr[0])
@@ -48,8 +49,7 @@ class TemporalGraph:
                     self.nodes.append(u)
                 if v not in self.nodes:
                     self.nodes.append(v)
-                if (u, v, t, l) not in self.incidence_list[u]:
-                    self.incidence_list[u].append((u, v, t, l))
+                self.incidence_list[u].append((u, v, t, l))
 
     # calculates for a given source node the earliest arrival times to all other nodes
     def temporal_earliest_arrival(self, source):
@@ -134,6 +134,53 @@ class TemporalGraph:
             f.write("--- finished in %s minutes ---" % ((finish) / 60) + "\n")
             f.write("--- finished in %s hours ---" % ((finish) / 3600))
 
+    def inner(self, a, b, x, max_heap, k, helper):
+        total = 0
+        for node in self.nodes:
+            reach_num = 1
+            if node == x:
+                continue
+            earliest_arrival_time = helper.copy()
+            earliest_arrival_time[node] = 0
+            PQ = PriorityQueue()
+            PQ.put((earliest_arrival_time[node], node))
+            visited = [x]
+            while not PQ.empty():
+                (current_arrival_time, current_node) = PQ.get()
+                if current_node != x:
+                    for (u, v, t, l) in self.edges_of_node(current_node):
+                        if u != x and v != x:
+                            if t < a or t + l > b:
+                                continue
+                            if t + l < earliest_arrival_time[v] and t >= earliest_arrival_time[u] and v not in visited:
+                                visited.append(v)
+                                reach_num = reach_num + 1
+                                earliest_arrival_time[v] = t + l
+                                PQ.put((earliest_arrival_time[v], v))
+            total = total + reach_num
+            if max_heap != [] and len(max_heap) >= k:
+                if total > max_heap[0][0]:
+                    return
+        if len(max_heap) < k:
+            heapq_max.heappush_max(max_heap, (total, x))
+        else:
+            if total < max_heap[0][0]:
+                heapq_max.heappushpop_max(max_heap, (total, x))
+
+    # outputs the top k nodes
+    def outer(self, a, b, k, output_name):
+        start_time = time.time()
+        max_heap = []
+        help_list = [np.inf for i in range(0, len(self.nodes))]
+        for node in self.nodes:
+            self.inner(a, b, node, max_heap, k, help_list)
+        with open(os.getcwd() + output_name, 'w') as f:
+            f.write(str(max_heap) + "\n")
+            finish = time.time() - start_time
+            f.write("--- finished in %s seconds ---" % (finish) + "\n")
+            f.write("--- finished in %s minutes ---" % ((finish) / 60) + "\n")
+            f.write("--- finished in %s hours ---" % ((finish) / 3600))
+
 
 # using the networkx library to plot the graph in a more appealing way
 def draw_graph(file_name):
@@ -160,7 +207,7 @@ if __name__ == '__main__':
     output_file = input_graph.split(".")[0] + '-DIJKSTRA-TOP-' + str(k) + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
-    G.top_k_nodes(0, np.inf, k, output_file)
+    G.outer(0, np.inf, k, output_file)
     # /edge-lists/wiki_talk_nl            |  V = 225749 | E = 1554698
     # /edge-lists/wikipediasg.txt         |  V = 208142 | E = 810702
     # /edge-lists/facebook.txt            |  V = 63731  | E = 817036
@@ -170,4 +217,3 @@ if __name__ == '__main__':
     # /edge-lists/aves-weaver-social.txt  |  V = 445    | E = 1426
     # /edge-lists/test.txt                |  V = 7      | E = 18
     # /edge-lists/comparison.txt          |  V = 7      | E = 9
-    # to beat: 2.8742947578430176 seconds

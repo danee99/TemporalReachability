@@ -80,7 +80,7 @@ class TemporalGraph:
 if __name__ == '__main__':
     data = input('Edgeliste eingeben: ')
     k = int(input('k eingeben: '))
-    output = data.split(".")[0] + '-TOP-' + str(k) + '.txt'
+    output = data.split(".")[0] + '-SLOW-TOP-' + str(k) + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(data)
     G.top_k_nodes(0, np.inf, k, output)
