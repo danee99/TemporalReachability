@@ -69,29 +69,29 @@ class TemporalGraph:
                 visited.append(current_node)
         return len([x for x in earliest_arrival_time if x != np.inf])
 
-    def total_reach_after(self, x):
-        total = []
-        helper = [np.inf for i in range(len(self.nodes))]
+    def total_reach(self, a, b):
+        total = 0
+        help_list = [np.inf for _ in range(len(self.nodes))]
         for node in self.nodes:
-            if node == x:
-                continue
-            earliest_arrival_time = helper.copy()
+            reach_num = 1
+            earliest_arrival_time = help_list.copy()
             earliest_arrival_time[node] = 0
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
-            visited = [x]
+            visited = []
             while not PQ.empty():
-                # print("Prioritätswarteschlange: " + str(PQ.queue))
                 (current_arrival_time, current_node) = PQ.get()
-                if current_node not in visited:
-                    for (u, v, t, l) in self.edges_of_node(current_node):
-                        if u != x and v != x:
-                            if t + l < earliest_arrival_time[v] and t >= earliest_arrival_time[u]:
-                                earliest_arrival_time[v] = t + l
-                                PQ.put((earliest_arrival_time[v], v))
-                    visited.append(current_node)
-            total.append(len([i for i in earliest_arrival_time if i != np.inf]))
-        return sum(total)
+                for (u, v, t, l) in self.edges_of_node(current_node):
+                    if t < a or t + l > b:
+                        continue
+                    if t + l < earliest_arrival_time[v] and t >= earliest_arrival_time[u] and v not in visited:
+                        visited.append(v)
+                        reach_num = reach_num + 1
+                        earliest_arrival_time[v] = t + l
+                        PQ.put((earliest_arrival_time[v], v))
+            total = total + reach_num
+        # return total, x
+        return total
 
     def top_k_util(self, a, b, x, helper):
         total = 0
@@ -117,7 +117,8 @@ class TemporalGraph:
                                 earliest_arrival_time[v] = t + l
                                 PQ.put((earliest_arrival_time[v], v))
             total = total + reach_num
-        return total, x
+        # return total, x
+        return total
 
     def top_k_nodes(self, alpha, beta, k, output_file):
         start_time = time.time()
@@ -129,6 +130,21 @@ class TemporalGraph:
         pool.join()
         with open(os.getcwd() + output_file, 'w') as f:
             f.write(str(heapq.nsmallest(k, result_list)) + "\n")
+            finish = time.time() - start_time
+            f.write("--- finished in %s seconds ---" % (finish) + "\n")
+            f.write("--- finished in %s minutes ---" % ((finish) / 60) + "\n")
+            f.write("--- finished in %s hours ---" % ((finish) / 3600))
+
+    def node_ranking(self, alpha, beta, k, output_file):
+        start_time = time.time()
+        before = self.total_reach(0, np.inf)
+        print(before)
+        ranks = []
+        help_list = [np.inf for _ in range(len(self.nodes))]
+        for node in self.nodes:
+            ranks.append(1-(self.top_k_util(alpha, beta, node, help_list)/before))
+        with open(os.getcwd() + output_file, 'w') as f:
+            f.write(str(ranks) + "\n")
             finish = time.time() - start_time
             f.write("--- finished in %s seconds ---" % (finish) + "\n")
             f.write("--- finished in %s minutes ---" % ((finish) / 60) + "\n")
@@ -207,7 +223,7 @@ if __name__ == '__main__':
     output_file = input_graph.split(".")[0] + '-DIJKSTRA-TOP-' + str(k) + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
-    G.outer(0, np.inf, k, output_file)
+    G.node_ranking(0, np.inf, k, output_file)
     # /edge-lists/wiki_talk_nl            |  V = 225749 | E = 1554698
     # /edge-lists/wikipediasg.txt         |  V = 208142 | E = 810702
     # /edge-lists/facebook.txt            |  V = 63731  | E = 817036
