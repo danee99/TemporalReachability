@@ -215,10 +215,12 @@ class TemporalGraph:
 if __name__ == '__main__':
     input_graph = input('Edgeliste eingeben: ')
     # k = int(input('k eingeben: '))
+    a = int(input('Intervall a eingeben: '))
+    b = int(input('Intervall b eingeben: '))
     output_file = input_graph.split(".")[0] + '-RANKING2' + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
-    G.fast_node_ranking(0, 10, output_file)
+    G.fast_node_ranking(a, b, output_file)
     # /edge-lists/wiki_talk_nl            |  V = 225749 | E = 1554698
     # /edge-lists/wikipediasg.txt         |  V = 208142 | E = 810702
     # /edge-lists/facebook.txt            |  V = 63731  | E = 817036
