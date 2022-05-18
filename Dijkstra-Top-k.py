@@ -138,7 +138,6 @@ class TemporalGraph:
     def node_ranking(self, alpha, beta, k, output_file):
         start_time = time.time()
         before = self.total_reach(0, np.inf)
-        print(before)
         ranks = []
         help_list = [np.inf for _ in range(len(self.nodes))]
         for node in self.nodes:

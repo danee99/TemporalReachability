@@ -1,13 +1,14 @@
 import heapq
 import multiprocessing
-import os
 import time
 from queue import PriorityQueue
 import heapq_max
-import matplotlib.pyplot as plt
-import networkx as nx
 import numpy as np
-from multiprocessing import Process
+import os
+
+# import scipy.stats as stats
+# from teneto import TemporalNetwork
+# from teneto import networkmeasures
 
 result_list = []
 
@@ -78,6 +79,7 @@ class TemporalGraph:
         return earliest_arrival_time
 
     # calculates for a given node "source" the number of nodes that "source" can reach
+    # O(n + m*log(n))
     def number_of_reachable_nodes(self, source, a, b):
         # source can reach itself
         reach_set = [source]
@@ -100,8 +102,9 @@ class TemporalGraph:
         return len(reach_set)
 
     # calculates the total reachability of the given graph in a time interval [a,b]
+    # O(n * (n + m * log(n))
     def total_reachability(self, a, b):
-        total = []
+        total = 0
         helper = [np.inf for _ in range(len(self.nodes))]
         for node in self.nodes:
             reach_set = [node]
@@ -121,12 +124,12 @@ class TemporalGraph:
                         earliest_arrival_time[v] = t + l
                         PQ.put((earliest_arrival_time[v], v))
                 # visited.append(current_node)
-            total.append(len(reach_set))
-        return sum(total)
+            total = total + len(reach_set)
+        return total
 
-    # calculates the total reachability of a given graph in a time interval [a,b] after deleting a node x
+    # calculates the total reachability of a given graph in a time interval [a,b] after deleting the node "x"
     def total_reachability_after(self, x, a, b, helper):
-        total = []
+        total = 0
         for node in self.nodes:
             if node == x:
                 continue
@@ -146,10 +149,11 @@ class TemporalGraph:
                                 reach_set.append(v)
                             earliest_arrival_time[v] = t + l
                             PQ.put((earliest_arrival_time[v], v))
-            total.append(len(reach_set))
-        return sum(total)
+            # total.append(len(reach_set))
+            total = total + len(reach_set)
+        return total
 
-    # calculates the total reachability of a given graph in a time interval [a,b] after deleting a node x
+    # ranks a node. rank is a float between 0 and 1
     def rank_node(self, x, a, b, helper, before):
         total = []
         for node in self.nodes:
@@ -174,7 +178,7 @@ class TemporalGraph:
             total.append(len(reach_set))
         return 1 - (sum(total) / before)
 
-    # returns node ranking
+    # returns array with rank of every node
     def node_ranking(self, a, b):
         start_time = time.time()
         before = self.total_reachability(a, b)
@@ -184,8 +188,9 @@ class TemporalGraph:
             result.append(self.rank_node(node, a, b, helper, before))
         finish = time.time() - start_time
         print(finish)
-        return result
+        print(result)
 
+    # node ranking but with multiprocessing
     def fast_node_ranking(self, a, b, output_name):
         start_time = time.time()
         before = self.total_reachability(a, b)
@@ -209,10 +214,11 @@ class TemporalGraph:
 
 if __name__ == '__main__':
     input_graph = input('Edgeliste eingeben: ')
-    output_file = input_graph.split(".")[0] + '-RANKING' + '.txt'
+    # k = int(input('k eingeben: '))
+    output_file = input_graph.split(".")[0] + '-RANKING2' + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
-    G.fast_node_ranking(0, np.inf, output_file)
+    G.fast_node_ranking(0, 10, output_file)
     # /edge-lists/wiki_talk_nl            |  V = 225749 | E = 1554698
     # /edge-lists/wikipediasg.txt         |  V = 208142 | E = 810702
     # /edge-lists/facebook.txt            |  V = 63731  | E = 817036
