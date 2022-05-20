@@ -12,6 +12,7 @@ result_list = []
 def log_result(result):
     result_list.append(result)
 
+
 class TemporalGraph:
     def __init__(self):
         self.nodes = []
@@ -29,6 +30,16 @@ class TemporalGraph:
     # returns the out-degree of a node
     def outdegree(self, node):
         return len(self.incidence_list[node])
+
+    # returns the out-degree of a node
+    def degree_centrality(self):
+        res = []
+        for node in range(0, len(self.nodes)):
+            res.append(self.outdegree(node))
+        maximum = max(res)
+        for i in range(0, len(self.nodes)):
+            res[i] = res[i]/maximum
+        return res
 
     # scans an edgelist and creates a TemporalGraph object in O(n+m)
     def import_edgelist(self, file_name):
