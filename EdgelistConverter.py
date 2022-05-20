@@ -1,15 +1,11 @@
 import os
 
-
 def convert(file_name, output):
-    file = 'edge-lists\\' + file_name
-    out = 'edge-lists\\' + output + '.txt'
     nodemanager = {}
-    edgelist = []
-    with open(file) as fp:
+    with open(os.getcwd() + output, "w") as o:
         with open(os.getcwd() + file_name, "r") as f:
             n = int(f.readline())
-            val = 0
+            id = 0
             for line in f:
                 arr = line.split()
                 u = int(arr[0])
@@ -20,14 +16,13 @@ def convert(file_name, output):
                 except IndexError:
                     l = 1
                 if u not in nodemanager.keys():
-                    nodemanager.update({u: val})
-                    val = val + 1
+                    nodemanager[u] = id
+                    id = id + 1
                 if v not in nodemanager.keys():
-                    nodemanager.update({v: val})
-                    val = val + 1
-                f.write(str(nodemanager[u]) + " " + str(nodemanager[v]) + " " + str(t) + " " + str(l) + "\n")
-            f.write(str(len(nodemanager.values())))
-
+                    nodemanager[v] = id
+                    id = id + 1
+                o.write((str(nodemanager[u])+" "+str(nodemanager[v])+" "+str(t)+" "+str(l)+"\n"))
+        o.write(str(len(nodemanager.keys())))
 
 if __name__ == '__main__':
-    convert('wiki_talk_nl.tg2', 'wiki_talk_nl')
+    convert('/edge-lists/twitter.tg2', '/edge-lists/twitter.txt')
