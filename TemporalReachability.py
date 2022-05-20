@@ -6,7 +6,11 @@ import heapq_max
 import numpy as np
 import os
 
+result_list = []
 
+
+def log_result(result):
+    result_list.append(result)
 
 class TemporalGraph:
     def __init__(self):
@@ -126,7 +130,7 @@ class TemporalGraph:
     # ranks a node, where the ranking is a floating point number between 0 and 1
     def rank_node(self, x, a, b, before, helper):
         after = self.total_reachability_after(x, a, b, helper)
-        return 1 - (after / before)
+        return 1 - (after / before), x
 
     # returns array with rank of every node
     def node_ranking(self, a, b):
@@ -152,6 +156,24 @@ class TemporalGraph:
             f.write("--- finished in %s minutes ---" % ((finish) / 60) + "\n")
             f.write("--- finished in %s hours ---" % ((finish) / 3600))
 
+    # alternative node ranking, but with asynchronous multiprocessing
+    def alternative_node_ranking(self, a, b, output_name):
+        start_time = time.time()
+        before = self.total_reachability(a, b)
+        helper = [np.inf for _ in range(len(self.nodes))]
+        pool = multiprocessing.Pool(multiprocessing.cpu_count())
+        for node in self.nodes:
+            pool.apply_async(self.rank_node, args=(node, a, b, before, helper), callback=log_result)
+        pool.close()
+        pool.join()
+        result_list.sort(key=lambda tup: tup[1])
+        with open(os.getcwd() + output_name, 'w') as f:
+            f.write(str([x[0] for x in result_list]) + "\n")
+            finish = time.time() - start_time
+            f.write("--- finished in %s seconds ---" % (finish) + "\n")
+            f.write("--- finished in %s minutes ---" % ((finish) / 60) + "\n")
+            f.write("--- finished in %s hours ---" % ((finish) / 3600))
+
 
 if __name__ == '__main__':
     input_graph = input('Edgeliste eingeben: ')
@@ -161,7 +183,7 @@ if __name__ == '__main__':
     output_file = input_graph.split(".")[0] + '-RANKING' + '.txt'
     G = TemporalGraph()
     G.import_edgelist(input_graph)
-    G.fast_node_ranking(a, b, output_file)
+    G.alternative_node_ranking(a, b, output_file)
     # DATASETS:
     # /edge-lists/wiki_talk_nl.txt          |  |V| = 225.749 | |E| = 1.554.698
     # /edge-lists/wikipediasg.txt           |  |V| = 208.142 | |E| = 810.702
