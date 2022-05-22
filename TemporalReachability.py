@@ -141,7 +141,8 @@ class TemporalGraph:
     # ranks a node, where the ranking is a floating point number between 0 and 1
     def rank_node(self, x, a, b, before, helper):
         after = self.total_reachability_after(x, a, b, helper)
-        return 1 - (after / before), x
+        # return 1 - (after / before), x
+        return 1 - (after / before)
 
     # returns array with rank of every node
     def node_ranking(self, a, b):
