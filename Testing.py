@@ -135,67 +135,39 @@ class TemporalGraph:
             f.write("--- finished in %s minutes ---" % ((finish) / 60) + "\n")
             f.write("--- finished in %s hours ---" % ((finish) / 3600))
 
-    def node_ranking(self, alpha, beta, k, output_file):
-        start_time = time.time()
-        before = self.total_reach(0, np.inf)
-        ranks = []
-        help_list = [np.inf for _ in range(len(self.nodes))]
-        for node in self.nodes:
-            ranks.append(1-(self.top_k_util(alpha, beta, node, help_list)/before))
-        with open(os.getcwd() + output_file, 'w') as f:
-            f.write(str(ranks) + "\n")
-            finish = time.time() - start_time
-            f.write("--- finished in %s seconds ---" % (finish) + "\n")
-            f.write("--- finished in %s minutes ---" % ((finish) / 60) + "\n")
-            f.write("--- finished in %s hours ---" % ((finish) / 3600))
-
-    def inner(self, a, b, x, max_heap, k, helper):
+    def inner(self, x, a, b, helper):
         total = 0
         for node in self.nodes:
-            reach_num = 1
             if node == x:
                 continue
+            reach_set = {node}
             earliest_arrival_time = helper.copy()
             earliest_arrival_time[node] = 0
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
-            visited = [x]
             while not PQ.empty():
                 (current_arrival_time, current_node) = PQ.get()
-                if current_node != x:
-                    for (u, v, t, l) in self.edges_of_node(current_node):
-                        if u != x and v != x:
-                            if t < a or t + l > b:
-                                continue
-                            if t + l < earliest_arrival_time[v] and t >= earliest_arrival_time[u] and v not in visited:
-                                visited.append(v)
-                                reach_num = reach_num + 1
-                                earliest_arrival_time[v] = t + l
-                                PQ.put((earliest_arrival_time[v], v))
-            total = total + reach_num
-            if max_heap != [] and len(max_heap) >= k:
-                if total > max_heap[0][0]:
-                    return
-        if len(max_heap) < k:
-            heapq_max.heappush_max(max_heap, (total, x))
-        else:
-            if total < max_heap[0][0]:
-                heapq_max.heappushpop_max(max_heap, (total, x))
+                for (u, v, t, l) in self.incidence_list[current_node]:
+                    if u != x and v != x:
+                        if t < a or t + l > b:
+                            continue
+                        if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+                            reach_set.add(v)
+                            earliest_arrival_time[v] = t + l
+                            PQ.put((earliest_arrival_time[v], v))
+            total = total + len(reach_set)
+        return total
 
-    # outputs the top k nodes
-    def outer(self, a, b, k, output_name):
+    def outer(self, a, b):
         start_time = time.time()
-        max_heap = []
-        help_list = [np.inf for i in range(0, len(self.nodes))]
-        for node in self.nodes:
-            self.inner(a, b, node, max_heap, k, help_list)
-        with open(os.getcwd() + output_name, 'w') as f:
-            f.write(str(max_heap) + "\n")
-            finish = time.time() - start_time
-            f.write("--- finished in %s seconds ---" % (finish) + "\n")
-            f.write("--- finished in %s minutes ---" % ((finish) / 60) + "\n")
-            f.write("--- finished in %s hours ---" % ((finish) / 3600))
-
+        pool = multiprocessing.Pool(multiprocessing.cpu_count())
+        helper = [np.inf for _ in range(len(self.nodes))]
+        result_objects = [pool.apply_async(self.inner, args=(node, a, b, helper)) for node in range(0, len(self.nodes))]
+        results1 = [r.get() for r in result_objects]
+        pool.close()
+        pool.join()
+        finish = time.time() - start_time
+        print(results1, finish)
 
 # using the networkx library to plot the graph in a more appealing way
 def draw_graph(file_name):
@@ -222,13 +194,16 @@ if __name__ == '__main__':
     output_file = input_graph.split(".")[0] + '-DIJKSTRA-' + str(k) + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
-    G.top_k_nodes(0, np.inf, k, output_file)
-    # /edge-lists/wiki_talk_nl            |  V = 225749 | E = 1554698
-    # /edge-lists/wikipediasg.txt         |  V = 208142 | E = 810702
-    # /edge-lists/facebook.txt            |  V = 63731  | E = 817036
-    # /edge-lists/infectious.txt          |  V = 10972  | E = 415912
-    # /edge-lists/tij_SFHH.txt            |  V = 3906   | E = 70261
-    # /edge-lists/ht09_contact_list.txt   |  V = 5351   | E = 20817
-    # /edge-lists/aves-weaver-social.txt  |  V = 445    | E = 1426
-    # /edge-lists/test.txt                |  V = 7      | E = 18
-    # /edge-lists/comparison.txt          |  V = 7      | E = 9
+    G.outer(0, np.inf)
+    # DATASETS:
+    # /edge-lists/wiki_talk_nl.txt          |  |V| = 225.749 | |E| = 1.554.698
+    # /edge-lists/wikipediasg.txt           |  |V| = 208.142 | |E| = 810.702
+    # /edge-lists/facebook.txt              |  |V| = 63.731  | |E| = 817.035
+    # /edge-lists/infectious.txt            |  |V| = 10.972  | |E| = 415.912
+    # /edge-lists/ht09_contact_list.txt     |  |V| = 5.351   | |E| = 20.817
+    # /edge-lists/tij_SFHH.txt              |  |V| = 3.906   | |E| = 70.261
+    # /edge-lists/twitter.txt               |  |V| = 4.605   | |E| = 23.736
+    # /edge-lists/email-dnc.txt             |  |V| = 1.891   | |E| = 39.264
+    # /edge-lists/aves-weaver-social.txt    |  |V| = 445     | |E| = 1.426
+    # /edge-lists/example_graph1.txt        |  |V| = 7       | |E| = 18
+    # /edge-lists/example_graph2.txt        |  |V| = 7       | |E| = 9

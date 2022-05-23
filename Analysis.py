@@ -7,6 +7,6 @@ mydataframe = pd.read_csv("myfile")
 
 
 # heatmap test
-print(mydataframe.corr())
+print(mydataframe.corr(method='kendall'))
 sns.heatmap(data=mydataframe.corr())
 plt.show()
