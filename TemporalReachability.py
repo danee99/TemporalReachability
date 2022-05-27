@@ -212,7 +212,7 @@ if __name__ == '__main__':
     a = int(input('Intervall a eingeben: '))
     # b = int(input('Intervall b eingeben: '))
     b = np.inf
-    output_file = input_graph.split(".")[0] + '-Rangliste' + '.txt'
+    output_file = input_graph.split(".")[0] + '-Rangliste2' + '.txt'
     G = TemporalGraph()
     G.import_edgelist(input_graph)
     G.alternative_node_ranking(a, b, output_file)
