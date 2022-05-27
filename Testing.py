@@ -169,6 +169,45 @@ class TemporalGraph:
         finish = time.time() - start_time
         print(results1, finish)
 
+    def util(self, x, alpha, beta, k, max_heap, helper):
+        total = 0
+        for node in range(0, len(self.nodes)):
+            if node == x:
+                continue
+            reach_set = {node}
+            earliest_arrival_time = helper.copy()
+            earliest_arrival_time[node] = 0
+            PQ = PriorityQueue()
+            PQ.put((earliest_arrival_time[node], node))
+            while not PQ.empty():
+                (current_arrival_time, current_node) = PQ.get()
+                for (u, v, t, l) in self.incidence_list[current_node]:
+                    if u != x and v != x:
+                        if t < alpha or t + l > beta:
+                            continue
+                        if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+                            reach_set.add(v)
+                            earliest_arrival_time[v] = t + l
+                            PQ.put((earliest_arrival_time[v], v))
+            total = total + len(reach_set)
+            if max_heap != [] and len(max_heap) >= k:
+                if total > max_heap[0][0]:
+                    return
+        if len(max_heap) < k:
+            heapq_max.heappush_max(max_heap, (total, x))
+        else:
+            if total < max_heap[0][0]:
+                heapq_max.heappushpop_max(max_heap, (total, x))
+
+    def top_k_agorithm(self, alpha, beta, k):
+        start_time = time.time()
+        helper = [np.inf for _ in range(len(self.nodes))]
+        max_heap = []
+        for x in range(0, len(self.nodes)):
+            self.util(x, alpha, beta, k, max_heap, helper)
+        finish = time.time() - start_time
+        print(max_heap, finish)
+
 # using the networkx library to plot the graph in a more appealing way
 def draw_graph(file_name):
     G = nx.Graph()
@@ -194,7 +233,7 @@ if __name__ == '__main__':
     output_file = input_graph.split(".")[0] + '-DIJKSTRA-' + str(k) + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
-    G.outer(0, np.inf)
+    G.top_k_agorithm(0, np.inf, k)
     # DATASETS:
     # /edge-lists/wiki_talk_nl.txt          |  |V| = 225.749 | |E| = 1.554.698
     # /edge-lists/wikipediasg.txt           |  |V| = 208.142 | |E| = 810.702

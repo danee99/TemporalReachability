@@ -1,10 +1,12 @@
 import heapq
 import multiprocessing
 import time
+import matplotlib.pyplot as plt
 from queue import PriorityQueue
 import heapq_max
 import numpy as np
 import os
+import networkx as nx
 
 result_list = []
 
@@ -17,34 +19,31 @@ class TemporalGraph:
     def __init__(self):
         self.nodes = []
         self.incidence_list = []
+        self.outdegree = []
 
     # prints each node and the corresponding set of outgoing edges of the node
     def print_graph(self):
         for node in self.nodes:
-            print(str(node) + ": " + str(self.incidence_list[node]))
+            print(str(node) + ": " + str(self.incidence_list[node]) + " Outdegree = " + str(self.outdegree[node]))
 
     # returns the list of the incident edges (sorted by timestamps) for a given node
     def outgoing_edges_from_node(self, node):
         return self.incidence_list[node]
 
-    # returns the out-degree of a node
-    def outdegree(self, node):
-        return len(self.incidence_list[node])
-
-    # returns the out-degree of a node
-    def degree_centrality(self):
-        res = []
+    def k_core_decomposition(self, k):
         for node in range(0, len(self.nodes)):
-            res.append(self.outdegree(node))
-        maximum = max(res)
-        for i in range(0, len(self.nodes)):
-            res[i] = res[i]/maximum
-        return res
+            if self.outdegree[node] < k:
+                self.incidence_list[node] = []
+                continue
+            self.incidence_list[node] = [(u, v, t, l) for (u, v, t, l) in self.incidence_list[node] if
+                                         self.outdegree[v] >= k]
 
     # scans an edgelist and creates a TemporalGraph object in O(n+m)
     def import_edgelist(self, file_name):
         with open(os.getcwd() + file_name, "r") as f:
-            self.incidence_list = [[] for _ in range(int(f.readline()))]
+            n = int(f.readline())
+            self.incidence_list = [[] for _ in range(n)]
+            self.outdegree = [0 for _ in range(n)]
             for line in f:
                 arr = line.split()
                 u = int(arr[0])
@@ -58,6 +57,7 @@ class TemporalGraph:
                     self.nodes.append(u)
                 if v not in self.nodes:
                     self.nodes.append(v)
+                self.outdegree[u] = self.outdegree[u] + 1
                 self.incidence_list[u].append((u, v, t, l))
 
     # calculates for a given source node the earliest arrival times to all other nodes in a time interval [a,b]
@@ -79,19 +79,30 @@ class TemporalGraph:
     def number_of_reachable_nodes(self, source, a, b):
         # each node can reach itself
         reach_set = {source}
+        visited = set()
+        counter1 = 0
+        counter2 = 0
         earliest_arrival_time = [np.inf for _ in range(len(self.nodes))]
         earliest_arrival_time[source] = 0
         PQ = PriorityQueue()
         PQ.put((earliest_arrival_time[source], source))
         while not PQ.empty():
+            counter1 = counter1 + 1
+            print(PQ.queue)
             (current_arrival_time, current_node) = PQ.get()
+            if current_node in visited: continue
             for (u, v, t, l) in self.outgoing_edges_from_node(current_node):
+                print((u, v, t, l))
+                counter2 = counter2 + 1
+                print("Counter edges: " + str(counter2))
                 if t < a or t + l > b: continue
                 if t + l < earliest_arrival_time[v] and t >= earliest_arrival_time[u]:
                     reach_set.add(v)
                     earliest_arrival_time[v] = t + l
                     PQ.put((earliest_arrival_time[v], v))
-        return len(reach_set)
+            visited.add(current_node)
+        print(counter1)
+        print(len(reach_set))
 
     # calculates the total reachability of the given temporal graph in a time interval [a,b]
     def total_reachability(self, a, b):
@@ -145,14 +156,12 @@ class TemporalGraph:
             if node == x:
                 continue
             reach_set = {node}
-            visited = set()
             earliest_arrival_time = helper.copy()
             earliest_arrival_time[node] = 0
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
             while not PQ.empty():
                 (current_arrival_time, current_node) = PQ.get()
-                if current_node in visited: continue
                 for (u, v, t, l) in self.outgoing_edges_from_node(current_node):
                     if u != x and v != x:
                         if t < a or t + l > b:
@@ -161,7 +170,6 @@ class TemporalGraph:
                             reach_set.add(v)
                             earliest_arrival_time[v] = t + l
                             PQ.put((earliest_arrival_time[v], v))
-                visited.add(current_node)
             total = total + len(reach_set)
         return 1 - (total / before)
 
@@ -195,7 +203,8 @@ class TemporalGraph:
         before = self.total_reachability(a, b)
         helper = [np.inf for _ in range(len(self.nodes))]
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        result_objects = [pool.apply_async(self.rank_node, args=(node, a, b, before, helper)) for node in range(0, len(self.nodes))]
+        result_objects = [pool.apply_async(self.rank_node, args=(node, a, b, before, helper)) for node in
+                          range(0, len(self.nodes))]
         ranking = [r.get() for r in result_objects]
         pool.close()
         pool.join()
@@ -209,13 +218,13 @@ class TemporalGraph:
 
 if __name__ == '__main__':
     input_graph = input('Edgeliste eingeben: ')
-    a = int(input('Intervall a eingeben: '))
-    # b = int(input('Intervall b eingeben: '))
+    a = 0
     b = np.inf
     output_file = input_graph.split(".")[0] + '-Rangliste' + '.txt'
     G = TemporalGraph()
     G.import_edgelist(input_graph)
-    G.alternative_node_ranking(a, b, output_file)
+    G.number_of_reachable_nodes(0, 0, np.inf)
+    G.print_graph()
     # DATASETS:
     # /edge-lists/wiki_talk_nl.txt          |  |V| = 225.749 | |E| = 1.554.698
     # /edge-lists/wikipediasg.txt           |  |V| = 208.142 | |E| = 810.702
@@ -228,3 +237,4 @@ if __name__ == '__main__':
     # /edge-lists/aves-weaver-social.txt    |  |V| = 445     | |E| = 1.426
     # /edge-lists/example_graph1.txt        |  |V| = 7       | |E| = 18
     # /edge-lists/example_graph2.txt        |  |V| = 7       | |E| = 9
+    # /edge-lists/complete-graph.txt

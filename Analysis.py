@@ -2,8 +2,12 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
 
-mydataframe = pd.read_csv("myfile")
+def import_ranking():
+    return 0
+
+mydataframe = pd.read_csv(os.getcwd() + "Dataframes/myfile")
 
 
 # heatmap test
