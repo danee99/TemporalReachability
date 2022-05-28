@@ -87,22 +87,20 @@ class TemporalGraph:
         PQ = PriorityQueue()
         PQ.put((earliest_arrival_time[source], source))
         while not PQ.empty():
+            print(visited)
             counter1 = counter1 + 1
-            print(PQ.queue)
             (current_arrival_time, current_node) = PQ.get()
             if current_node in visited: continue
             for (u, v, t, l) in self.outgoing_edges_from_node(current_node):
-                print((u, v, t, l))
-                counter2 = counter2 + 1
-                print("Counter edges: " + str(counter2))
-                if t < a or t + l > b: continue
-                if t + l < earliest_arrival_time[v] and t >= earliest_arrival_time[u]:
-                    reach_set.add(v)
-                    earliest_arrival_time[v] = t + l
-                    PQ.put((earliest_arrival_time[v], v))
+                if v not in visited:
+                    counter2 = counter2 + 1
+                    if t < a or t + l > b: continue
+                    if t + l < earliest_arrival_time[v] and t >= earliest_arrival_time[u]:
+                        reach_set.add(v)
+                        earliest_arrival_time[v] = t + l
+                        PQ.put((earliest_arrival_time[v], v))
             visited.add(current_node)
-        print(counter1)
-        print(len(reach_set))
+        print(len(reach_set), earliest_arrival_time)
 
     # calculates the total reachability of the given temporal graph in a time interval [a,b]
     def total_reachability(self, a, b):
@@ -223,8 +221,7 @@ if __name__ == '__main__':
     output_file = input_graph.split(".")[0] + '-Rangliste' + '.txt'
     G = TemporalGraph()
     G.import_edgelist(input_graph)
-    G.number_of_reachable_nodes(0, 0, np.inf)
-    G.print_graph()
+    G.number_of_reachable_nodes(33, 0, np.inf)
     # DATASETS:
     # /edge-lists/wiki_talk_nl.txt          |  |V| = 225.749 | |E| = 1.554.698
     # /edge-lists/wikipediasg.txt           |  |V| = 208.142 | |E| = 810.702
