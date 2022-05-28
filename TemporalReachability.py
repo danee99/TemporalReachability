@@ -25,14 +25,24 @@ class TemporalGraph:
         return len(self.incidence_list[node])
 
     # returns the out-degree of a node
-    def degree_centrality(self):
+    def degree_centrality(self, output_name):
+        res = []
+        for node in range(0, len(self.nodes)):
+            res.append(self.outdegree(node))
+        with open(os.getcwd() + output_name, 'w') as f:
+            f.write(str(res) + "\n")
+
+    # returns the out-degree of a node
+    def degree_centrality_normalized(self, output_name):
         res = []
         for node in range(0, len(self.nodes)):
             res.append(self.outdegree(node))
         maximum = max(res)
-        for i in range(0, len(self.nodes)):
-            res[i] = res[i] / maximum
-        return res
+        minimum = min(res)
+        for j in range(0, len(self.nodes)):
+            res[j] = (res[j]-minimum)/(maximum-minimum)
+        with open(os.getcwd() + output_name, 'w') as f:
+            f.write(str(res) + "\n")
 
     # scans an edgelist and creates a TemporalGraph object in O(n+m)
     def import_edgelist(self, file_name):
@@ -195,11 +205,13 @@ class TemporalGraph:
 if __name__ == '__main__':
     input_graph = input('Edgeliste eingeben: ')
     a = int(input('Intervall a eingeben: '))
-    b = int(input('Intervall b eingeben: '))
+    b = np.inf
     output_file = input_graph.split(".")[0] + '-Rangliste' + '.txt'
+    degree_output_file = input_graph.split(".")[0] + '-Outdegrees' + '.txt'
     G = TemporalGraph()
     G.import_edgelist(input_graph)
-    G.alternative_node_ranking(a, b, output_file)
+    # G.alternative_node_ranking(a, b, output_file)
+    G.degree_centrality_normalized(degree_output_file)
     # DATASETS:
     # /edge-lists/wiki_talk_nl.txt          |  |V| = 225.749 | |E| = 1.554.698
     # /edge-lists/wikipediasg.txt           |  |V| = 208.142 | |E| = 810.702
