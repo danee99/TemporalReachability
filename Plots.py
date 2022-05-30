@@ -19,9 +19,9 @@ plt.show()
 # /edge-lists/wiki_talk_nl.txt          |  |V| = 225.749 | |E| = 1.554.698
 # /edge-lists/wikipediasg.txt           |  |V| = 208.142 | |E| = 810.702
 # /edge-lists/facebook.txt              |  |V| = 63.731  | |E| = 817.035
+# /edge-lists/twitter.txt               |  |V| = 4.605   | |E| = 23.736     402.64135769208275 minutes
 # /edge-lists/infectious.txt            |  |V| = 10.972  | |E| = 415.912    234.74493443965912 minutes
+# /edge-lists/email-dnc.txt             |  |V| = 1.891   | |E| = 39.264     67.2289342880249 minutes
 # /edge-lists/ht09_contact_list.txt     |  |V| = 5.351   | |E| = 20.817     2.914724922180176 minutes
 # /edge-lists/tij_SFHH.txt              |  |V| = 3.906   | |E| = 70.261     2.8707066059112547 minutes
-# /edge-lists/twitter.txt               |  |V| = 4.605   | |E| = 23.736     402.64135769208275 minutes
-# /edge-lists/email-dnc.txt             |  |V| = 1.891   | |E| = 39.264     67.2289342880249 minutes
 # /edge-lists/aves-weaver-social.txt    |  |V| = 445     | |E| = 1.426      0.021833324432373048 minutes

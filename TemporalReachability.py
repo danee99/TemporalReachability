@@ -24,7 +24,7 @@ class TemporalGraph:
     def outdegree(self, node):
         return len(self.incidence_list[node])
 
-    # returns the out-degree of a node
+    # returns a list with every out-degree for each node
     def degree_centrality(self, output_name):
         res = []
         for node in range(0, len(self.nodes)):
@@ -32,14 +32,14 @@ class TemporalGraph:
         with open(os.getcwd() + output_name, 'w') as f:
             f.write(str(res) + "\n")
 
-    # returns the out-degree of a node
+    # normalized out-degrees of every node
     def degree_centrality_normalized(self, output_name):
         res = []
-        for node in range(0, len(self.nodes)):
+        for node in range(0, self.n):
             res.append(self.outdegree(node))
         maximum = max(res)
         minimum = min(res)
-        for j in range(0, len(self.nodes)):
+        for j in range(0, self.n):
             res[j] = (res[j]-minimum)/(maximum-minimum)
         with open(os.getcwd() + output_name, 'w') as f:
             f.write(str(res) + "\n")
@@ -67,7 +67,7 @@ class TemporalGraph:
 
     # calculates for a given source node the earliest arrival times to all other nodes in a time interval [a,b]
     def temporal_earliest_arrival(self, source, a, b):
-        earliest_arrival_time = [np.inf for _ in range(len(self.nodes))]
+        earliest_arrival_time = [np.inf for _ in range(self.n)]
         earliest_arrival_time[source] = 0
         PQ = PriorityQueue()
         PQ.put((earliest_arrival_time[source], source))
@@ -83,7 +83,7 @@ class TemporalGraph:
     # calculates for a given node "source" the number of nodes that "source" can reach
     def number_of_reachable_nodes(self, source, a, b):
         reach_set = {source}  # each node can reach itself
-        earliest_arrival_time = [np.inf for _ in range(len(self.nodes))]
+        earliest_arrival_time = [np.inf for _ in range(self.n)]
         earliest_arrival_time[source] = 0
         PQ = PriorityQueue()
         PQ.put((earliest_arrival_time[source], source))
@@ -100,7 +100,7 @@ class TemporalGraph:
     # calculates the total reachability of the given temporal graph in a time interval [a,b]
     def total_reachability(self, a, b):
         total = 0
-        helper = [np.inf for _ in range(len(self.nodes))]
+        helper = [np.inf for _ in range(self.n)]
         for node in self.nodes:
             reach_set = {node}
             earliest_arrival_time = helper.copy()
@@ -115,29 +115,6 @@ class TemporalGraph:
                         reach_set.add(v)
                         earliest_arrival_time[v] = t + l
                         PQ.put((earliest_arrival_time[v], v))
-            total = total + len(reach_set)
-        return total
-
-    # calculates the total reachability of a given graph in a time interval [a,b] after deleting the node "x"
-    def total_reachability_after(self, x, a, b, helper):
-        total = 0
-        for node in self.nodes:
-            if node == x:
-                continue
-            reach_set = {node}
-            earliest_arrival_time = helper.copy()
-            earliest_arrival_time[node] = 0
-            PQ = PriorityQueue()
-            PQ.put((earliest_arrival_time[node], node))
-            while not PQ.empty():
-                (current_arrival_time, current_node) = PQ.get()
-                for (u, v, t, l) in self.outgoing_edges_from_node(current_node):
-                    if u != x and v != x:
-                        if t < a or t + l > b: continue
-                        if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                            reach_set.add(v)
-                            earliest_arrival_time[v] = t + l
-                            PQ.put((earliest_arrival_time[v], v))
             total = total + len(reach_set)
         return total
 
@@ -168,29 +145,14 @@ class TemporalGraph:
             total = total + len(reach_set)
         return 1 - (total / before)
 
-    # node ranking with multiprocessing
-    def fast_node_ranking(self, a, b, output_name):
+    # node ranking, but with asynchronous multiprocessing
+    def node_ranking(self, a, b, output_name):
         start_time = time.time()
         before = self.total_reachability(a, b)
-        helper = [np.inf for _ in range(len(self.nodes))]
-        pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        ranking = [pool.apply(self.rank_node, args=(node, a, b, before, helper)) for node in range(0, len(self.nodes))]
-        pool.close()
-        with open(os.getcwd() + output_name, 'w') as f:
-            f.write(str(ranking) + "\n")
-            finish = time.time() - start_time
-            f.write("--- finished in %s seconds ---" % finish + "\n")
-            f.write("--- finished in %s minutes ---" % (finish / 60) + "\n")
-            f.write("--- finished in %s hours ---" % (finish / 3600))
-
-    # alternative node ranking, but with asynchronous multiprocessing
-    def alternative_node_ranking(self, a, b, output_name):
-        start_time = time.time()
-        before = self.total_reachability(a, b)
-        helper = [np.inf for _ in range(len(self.nodes))]
+        helper = [np.inf for _ in range(self.n)]
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
         result_objects = [pool.apply_async(self.rank_node, args=(node, a, b, before, helper)) for node in
-                          range(0, len(self.nodes))]
+                          range(0, self.n)]
         ranking = [r.get() for r in result_objects]
         pool.close()
         pool.join()
@@ -202,6 +164,7 @@ class TemporalGraph:
             f.write("--- finished in %s hours ---" % (finish / 3600))
 
 
+
 if __name__ == '__main__':
     input_graph = input('Edgeliste eingeben: ')
     a = int(input('Intervall a eingeben: '))
@@ -210,9 +173,11 @@ if __name__ == '__main__':
     degree_output_file = input_graph.split(".")[0] + '-Outdegrees' + '.txt'
     G = TemporalGraph()
     G.import_edgelist(input_graph)
-    # G.alternative_node_ranking(a, b, output_file)
-    G.degree_centrality_normalized(degree_output_file)
+    G.node_ranking(a, b, output_file)
     # DATASETS:
+    # [0.29166666666666663, 0.125, 0.45833333333333337, 0.25, 0.5, 0.25, 0.25]
+    # [0.05555555555555558, 0.11111111111111116, 0.33333333333333337, 0.2777777777777778, 0.5, 0.2777777777777778, 0.2777777777777778]
+    # e > c > d,f,g > b > a
     # /edge-lists/wiki_talk_nl.txt          |  |V| = 225.749 | |E| = 1.554.698
     # /edge-lists/wikipediasg.txt           |  |V| = 208.142 | |E| = 810.702
     # /edge-lists/facebook.txt              |  |V| = 63.731  | |E| = 817.035
