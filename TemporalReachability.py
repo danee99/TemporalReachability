@@ -40,7 +40,7 @@ class TemporalGraph:
         maximum = max(res)
         minimum = min(res)
         for j in range(0, self.n):
-            res[j] = (res[j]-minimum)/(maximum-minimum)
+            res[j] = (res[j] - minimum) / (maximum - minimum)
         with open(os.getcwd() + output_name, 'w') as f:
             f.write(str(res) + "\n")
 
@@ -164,7 +164,6 @@ class TemporalGraph:
             f.write("--- finished in %s hours ---" % (finish / 3600))
 
 
-
 if __name__ == '__main__':
     input_graph = input('Edgeliste eingeben: ')
     a = int(input('Intervall a eingeben: '))
@@ -175,17 +174,19 @@ if __name__ == '__main__':
     G.import_edgelist(input_graph)
     G.node_ranking(a, b, output_file)
     # DATASETS:
-    # [0.29166666666666663, 0.125, 0.45833333333333337, 0.25, 0.5, 0.25, 0.25]
-    # [0.05555555555555558, 0.11111111111111116, 0.33333333333333337, 0.2777777777777778, 0.5, 0.2777777777777778, 0.2777777777777778]
-    # e > c > d,f,g > b > a
     # /edge-lists/wiki_talk_nl.txt          |  |V| = 225.749 | |E| = 1.554.698
     # /edge-lists/wikipediasg.txt           |  |V| = 208.142 | |E| = 810.702
     # /edge-lists/facebook.txt              |  |V| = 63.731  | |E| = 817.035
-    # /edge-lists/infectious.txt            |  |V| = 10.972  | |E| = 415.912
-    # /edge-lists/ht09_contact_list.txt     |  |V| = 5.351   | |E| = 20.817
-    # /edge-lists/tij_SFHH.txt              |  |V| = 3.906   | |E| = 70.261
-    # /edge-lists/twitter.txt               |  |V| = 4.605   | |E| = 23.736
-    # /edge-lists/email-dnc.txt             |  |V| = 1.891   | |E| = 39.264
-    # /edge-lists/aves-weaver-social.txt    |  |V| = 445     | |E| = 1.426
-    # /edge-lists/example_graph1.txt        |  |V| = 7       | |E| = 18
-    # /edge-lists/example_graph2.txt        |  |V| = 7       | |E| = 9
+    # /edge-lists/infectious.txt            |  |V| = 10.972  | |E| = 415.912    234.7 min
+    # /edge-lists/ia-contacts_dublin.txt    |  |V| = 10.972  | |E| = 415.912
+    # /edge-lists/copresence-InVS13.txt     |  |V| = 95      | |E| = 394.247
+    # /edge-lists/ia-reality-call.txt       |  |V| = 6.809   | |E| = 52.050
+    # /edge-lists/ht09_contact_list.txt     |  |V| = 5.351   | |E| = 20.817     2.727 min
+    # /edge-lists/twitter.txt               |  |V| = 4.605   | |E| = 23.736     352.0 min
+    # /edge-lists/tij_SFHH.txt              |  |V| = 3.906   | |E| = 70.261     2.870 min
+    # /edge-lists/fb-messages.txt           |  |V| = 1.899   | |E| = 61.734
+    # /edge-lists/email-dnc.txt             |  |V| = 1.891   | |E| = 39.264     67.23 min
+    # /edge-lists/fb-forum.txt              |  |V| = 899     | |E| = 33.720
+    # /edge-lists/aves-weaver-social.txt    |  |V| = 445     | |E| = 1.426      0.022 min
+    # /edge-lists/example_graph1.txt        |  |V| = 7       | |E| = 18         0.005 min
+    # /edge-lists/example_graph2.txt        |  |V| = 7       | |E| = 9          0.005 min
