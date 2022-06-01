@@ -187,6 +187,7 @@ if __name__ == '__main__':
     # /edge-lists/fb-messages.txt           |  |V| = 1.899   | |E| = 61.734
     # /edge-lists/email-dnc.txt             |  |V| = 1.891   | |E| = 39.264     67.23 min
     # /edge-lists/fb-forum.txt              |  |V| = 899     | |E| = 33.720
+    # reptilia-tortoise-network-fi.txt      |  |V| = 787     | |E| = 1.713
     # /edge-lists/aves-weaver-social.txt    |  |V| = 445     | |E| = 1.426      0.022 min
     # /edge-lists/example_graph1.txt        |  |V| = 7       | |E| = 18         0.005 min
     # /edge-lists/example_graph2.txt        |  |V| = 7       | |E| = 9          0.005 min
