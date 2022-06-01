@@ -4,6 +4,7 @@ import time
 from queue import PriorityQueue
 import heapq_max
 import numpy as np
+import copy
 
 max_heap = []
 k = 1
@@ -22,6 +23,11 @@ class TemporalGraph:
         self.n = 0
         self.nodes = []
         self.incidence_list = []
+        self.outdegree = []
+
+    def print_graph(self):
+        for node in range(0, self.n):
+            print(str(node) + ": " + str(self.incidence_list[node]))
 
     # scans the edgelist and creates TemporalGraph object
     def import_edgelist(self, file_name):
@@ -29,6 +35,7 @@ class TemporalGraph:
             n = int(f.readline())
             self.n = n
             self.incidence_list = [[] for _ in range(n)]
+            self.outdegree = [0 for _ in range(n)]
             for line in f:
                 arr = line.split()
                 u = int(arr[0])
@@ -42,7 +49,15 @@ class TemporalGraph:
                     self.nodes.append(u)
                 if v not in self.nodes:
                     self.nodes.append(v)
+                self.outdegree[u] = self.outdegree[u] + 1
                 self.incidence_list[u].append((u, v, t, l))
+
+    def k_core_decomposition(self, k):
+        new = copy.deepcopy(self)
+        for node in range(0, new.n):
+            new.incidence_list[node] = [(u, v, t, l) for (u, v, t, l) in new.incidence_list[node] if
+                                         new.outdegree[v] >= k and new.outdegree[u] >= k]
+        return new
 
     def top_k_util(self, alpha, beta, k, x, helper):
         total = 0
@@ -89,7 +104,7 @@ if __name__ == '__main__':
     output_file = input_graph.split(".")[0] + '-Top' + str(k) + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
-    G.top_k_reachability(0, np.inf, k, output_file)
+    G.k_core_decomposition(1)
     # DATASETS:
     # /edge-lists/wiki_talk_nl.txt          |  |V| = 225.749 | |E| = 1.554.698
     # /edge-lists/wikipediasg.txt           |  |V| = 208.142 | |E| = 810.702

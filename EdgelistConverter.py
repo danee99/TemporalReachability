@@ -36,8 +36,8 @@ def swap(file_name, output):
                 o.write((str(u)+" "+str(v)+" "+str(t)+" "+str(l)+"\n"))
 
 if __name__ == '__main__':
-    convert('/edge-lists/reptilia-tortoise-network-fi.edges', '/edge-lists/reptilia-tortoise-network-fi.txt')
-    # swap('/edge-lists/edit-enwikibooks.txt', '/edge-lists/edit-enwikibooksAAA.txt')
+    convert('/edge-lists/help1.txt', '/edge-lists/tij_SFHH2.txt')
+    # swap('/edge-lists/help.txt', '/edge-lists/help1.txt')
 
 
     # DATASETS:
