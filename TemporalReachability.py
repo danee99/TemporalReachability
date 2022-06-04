@@ -179,8 +179,9 @@ if __name__ == '__main__':
     # /edge-lists/facebook.txt              |  |V| = 63.731  | |E| = 817.035
     # /edge-lists/infectious.txt            |  |V| = 10.972  | |E| = 415.912    234.7 min
     # /edge-lists/ia-contacts_dublin.txt    |  |V| = 10.972  | |E| = 415.912
-    # /edge-lists/copresence-InVS13.txt     |  |V| = 95      | |E| = 394.247
-    # /edge-lists/ia-reality-call.txt       |  |V| = 6.809   | |E| = 52.050
+    # /edge-lists/copresence-InVS15.txt     |  |V| = 219     | |E| = 1.283.194
+    # /edge-lists/copresence-InVS13.txt     |  |V| = 95      | |E| = 394.247    0.772 min
+    # /edge-lists/ia-reality-call.txt       |  |V| = 6.809   | |E| = 52.050     307.1 min
     # /edge-lists/ht09_contact_list.txt     |  |V| = 5.351   | |E| = 20.817     2.727 min
     # /edge-lists/twitter.txt               |  |V| = 4.605   | |E| = 23.736     352.0 min
     # /edge-lists/fb-messages.txt           |  |V| = 1.899   | |E| = 61.734
