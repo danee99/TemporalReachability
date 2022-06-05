@@ -184,9 +184,9 @@ if __name__ == '__main__':
     # /edge-lists/ia-reality-call.txt       |  |V| = 6.809   | |E| = 52.050     307.1 min
     # /edge-lists/ht09_contact_list.txt     |  |V| = 5.351   | |E| = 20.817     2.727 min
     # /edge-lists/twitter.txt               |  |V| = 4.605   | |E| = 23.736     352.0 min
-    # /edge-lists/fb-messages.txt           |  |V| = 1.899   | |E| = 61.734
+    # /edge-lists/fb-messages.txt           |  |V| = 1.899   | |E| = 61.734     125.2 min
     # /edge-lists/email-dnc.txt             |  |V| = 1.891   | |E| = 39.264     67.23 min
-    # /edge-lists/tij_SFHH.txt              |  |V| = 403     | |E| = 70.261
+    # /edge-lists/tij_SFHH.txt              |  |V| = 403     | |E| = 70.261     5.790 min
     # /edge-lists/fb-forum.txt              |  |V| = 899     | |E| = 33.720     9.164 min
     # reptilia-tortoise-network-fi.txt      |  |V| = 787     | |E| = 1.713      0.053 min
     # /edge-lists/aves-weaver-social.txt    |  |V| = 445     | |E| = 1.426      0.022 min

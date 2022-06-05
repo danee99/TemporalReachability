@@ -85,8 +85,8 @@ class TemporalGraph:
 
 
 if __name__ == '__main__':
-    input_graph = '/edge-lists/reptilia-tortoise-network-fi.txt'
-    output_file = input_graph.split(".")[0] + '-Top' + str(k) + '.txt'
+    input_graph = '/edge-lists/infectious.txt'
+    output_file = input_graph.split(".")[0] + '-Top' + str(10) + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
     G.top_k_reachability(0, np.inf, k, output_file)
