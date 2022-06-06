@@ -10,11 +10,10 @@ k = 3
 
 
 def log_result(result):
-    if len(max_heap) < k:
+    if len(max_heap) < k and result[0] < max_heap[0][0]:
         heapq_max.heappush_max(max_heap, (result[0], result[1]))
-    if len(max_heap) >= k:
-        if result[0] < max_heap[0][0]:
-            heapq_max.heappushpop_max(max_heap, (result[0], result[1]))
+    if len(max_heap) >= k and result[0] < max_heap[0][0]:
+        heapq_max.heappushpop_max(max_heap, (result[0], result[1]))
 
 
 class TemporalGraph:
@@ -94,7 +93,7 @@ if __name__ == '__main__':
     # /edge-lists/wiki_talk_nl.txt          |  |V| = 225.749 | |E| = 1.554.698
     # /edge-lists/wikipediasg.txt           |  |V| = 208.142 | |E| = 810.702
     # /edge-lists/facebook.txt              |  |V| = 63.731  | |E| = 817.035
-    # /edge-lists/infectious.txt            |  |V| = 10.972  | |E| = 415.912    234.7 min
+    # /edge-lists/infectious.txt            |  |V| = 10.972  | |E| = 415.912    234.7 min   vs
     # /edge-lists/ia-contacts_dublin.txt    |  |V| = 10.972  | |E| = 415.912
     # /edge-lists/copresence-InVS15.txt     |  |V| = 219     | |E| = 1.283.194
     # /edge-lists/copresence-InVS13.txt     |  |V| = 95      | |E| = 394.247    0.772 min
