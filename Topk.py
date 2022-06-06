@@ -10,10 +10,11 @@ k = 3
 
 
 def log_result(result):
-    if len(max_heap) < k and result[0] < max_heap[0][0]:
+    if len(max_heap) < k:
         heapq_max.heappush_max(max_heap, (result[0], result[1]))
-    if len(max_heap) >= k and result[0] < max_heap[0][0]:
-        heapq_max.heappushpop_max(max_heap, (result[0], result[1]))
+    if len(max_heap) >= k:
+        if result[0] < max_heap[0][0]:
+            heapq_max.heappushpop_max(max_heap, (result[0], result[1]))
 
 
 class TemporalGraph:
@@ -84,8 +85,8 @@ class TemporalGraph:
 
 
 if __name__ == '__main__':
-    input_graph = '/edge-lists/infectious.txt'
-    output_file = input_graph.split(".")[0] + '-Top' + str(10) + '.txt'
+    input_graph = '/edge-lists/twitter.txt'
+    output_file = input_graph.split(".")[0] + '-Top' + str(3) + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
     G.top_k_reachability(0, np.inf, k, output_file)

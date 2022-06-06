@@ -180,7 +180,7 @@ if __name__ == '__main__':
     # /edge-lists/twitter.txt               |  |V| = 4.605   | |E| = 23.736     352.0 min
     # /edge-lists/ia-reality-call.txt       |  |V| = 6.809   | |E| = 52.050     307.1 min
     # /edge-lists/infectious.txt            |  |V| = 10.972  | |E| = 415.912    234.7 min vs 230.6 min
-    # /edge-lists/ia-contacts_dublin.txt    |  |V| = 10.972  | |E| = 415.912
+    # /edge-lists/ia-contacts_dublin.txt    |  |V| = 10.972  | |E| = 415.912    185.7 min
     # /edge-lists/fb-messages.txt           |  |V| = 1.899   | |E| = 61.734     125.2 min
     # /edge-lists/email-dnc.txt             |  |V| = 1.891   | |E| = 39.264     67.23 min
     # /edge-lists/copresence-InVS15.txt     |  |V| = 219     | |E| = 1.283.194  11.76 min
