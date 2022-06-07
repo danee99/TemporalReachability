@@ -86,7 +86,7 @@ class TemporalGraph:
 
 
 if __name__ == '__main__':
-    input_graph = '/edge-lists/twitter.txt'
+    input_graph = input('Edgeliste eingeben: ')
     output_file = input_graph.split(".")[0] + '-Top' + str(3) + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
