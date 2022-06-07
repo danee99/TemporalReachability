@@ -10,11 +10,12 @@ k = 3
 
 
 def log_result(result):
-    if len(max_heap) < k:
-        heapq_max.heappush_max(max_heap, (result[0], result[1]))
-    if len(max_heap) >= k:
-        if result[0] < max_heap[0][0]:
-            heapq_max.heappushpop_max(max_heap, (result[0], result[1]))
+    if result[0] != -1:
+        if len(max_heap) < k:
+            heapq_max.heappush_max(max_heap, (result[0], result[1]))
+        if len(max_heap) >= k:
+            if result[0] < max_heap[0][0]:
+                heapq_max.heappushpop_max(max_heap, (result[0], result[1]))
 
 
 class TemporalGraph:
@@ -67,7 +68,7 @@ class TemporalGraph:
             total = total + len(reach_set)
             if max_heap != [] and len(max_heap) >= k:
                 if total > max_heap[0][0]:
-                    return np.inf, x
+                    return -1, x
         return total, x
 
     def top_k_reachability(self, alpha, beta, k, output_name):

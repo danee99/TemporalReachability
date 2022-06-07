@@ -177,7 +177,7 @@ if __name__ == '__main__':
     # /edge-lists/wiki_talk_nl.txt          |  |V| = 225.749 | |E| = 1.554.698
     # /edge-lists/wikipediasg.txt           |  |V| = 208.142 | |E| = 810.702
     # /edge-lists/facebook.txt              |  |V| = 63.731  | |E| = 817.035
-    # /edge-lists/twitter.txt               |  |V| = 4.605   | |E| = 23.736     352.0 min
+    # /edge-lists/twitter.txt               |  |V| = 4.605   | |E| = 23.736     352.0 min 393.8 min
     # /edge-lists/ia-reality-call.txt       |  |V| = 6.809   | |E| = 52.050     307.1 min
     # /edge-lists/infectious.txt            |  |V| = 10.972  | |E| = 415.912    234.7 min vs 230.6 min
     # /edge-lists/ia-contacts_dublin.txt    |  |V| = 10.972  | |E| = 415.912    185.7 min
