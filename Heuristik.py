@@ -7,7 +7,7 @@ import numpy as np
 import copy
 
 max_heap = []
-k = 1
+k = 10
 
 
 def log_result(result):
@@ -100,11 +100,12 @@ class TemporalGraph:
 
 
 if __name__ == '__main__':
-    input_graph = '/edge-lists/aves-weaver-social.txt'
-    output_file = input_graph.split(".")[0] + '-Top' + str(k) + '.txt'
+    input_graph = '/edge-lists/infectious.txt'
+    output_file = input_graph.split(".")[0] + '-Heuristik-Top-' + str(k) + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
-    G.k_core_decomposition(1)
+    my = G.k_core_decomposition(1)
+    my.top_k_reachability(0, np.inf, k, output_file)
     # DATASETS:
     # /edge-lists/wiki_talk_nl.txt          |  |V| = 225.749 | |E| = 1.554.698
     # /edge-lists/wikipediasg.txt           |  |V| = 208.142 | |E| = 810.702

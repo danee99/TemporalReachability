@@ -36,7 +36,7 @@ def swap(file_name, output):
                 o.write((str(u)+" "+str(v)+" "+str(t)+" "+str(l)+"\n"))
 
 if __name__ == '__main__':
-    convert('/edge-lists/copresence-InVS15.edges', '/edge-lists/copresence-InVS15.txt')
+    convert('/edge-lists/complete.txt', '/edge-lists/complete2.txt')
     # DATASETS:
     # /edge-lists/wiki_talk_nl.txt          |  |V| = 225.749 | |E| = 1.554.698
     # /edge-lists/wikipediasg.txt           |  |V| = 208.142 | |E| = 810.702
