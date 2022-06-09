@@ -165,7 +165,7 @@ class TemporalGraph:
 
 
 if __name__ == '__main__':
-    input_graph = input('Edgeliste eingeben: ')
+    input_graph = '/edge-lists/'+input('Edgeliste eingeben:')
     a = int(input('Intervall a eingeben: '))
     b = np.inf
     output_file = input_graph.split(".")[0] + '-Rangliste' + '.txt'
