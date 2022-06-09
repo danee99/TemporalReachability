@@ -11,11 +11,12 @@ k = 10
 
 
 def log_result(result):
-    if len(max_heap) < k:
-        heapq_max.heappush_max(max_heap, (result[0], result[1]))
-    if len(max_heap) >= k:
-        if result[0] < max_heap[0][0]:
-            heapq_max.heappushpop_max(max_heap, (result[0], result[1]))
+    if result[0] != -1:
+        if len(max_heap) < k:
+            heapq_max.heappush_max(max_heap, (result[0], result[1]))
+        if len(max_heap) >= k:
+            if result[0] < max_heap[0][0]:
+                heapq_max.heappushpop_max(max_heap, (result[0], result[1]))
 
 
 class TemporalGraph:
@@ -56,7 +57,7 @@ class TemporalGraph:
     def k_core_decomposition(self, k):
         for node in range(0, self.n):
             if self.outdegree[node] == 0:
-                self.num_nodes.add(node)
+                self.deleted_nodes.add(node)
             self.incidence_list[node] = [(u, v, t, l) for (u, v, t, l) in self.incidence_list[node] if self.outdegree[u] >= k and self.outdegree[v] >= k]
 
 
@@ -83,7 +84,7 @@ class TemporalGraph:
             total = total + len(reach_set)
             if max_heap != [] and len(max_heap) >= k:
                 if total > max_heap[0][0]:
-                    return np.inf, x
+                    return -1, x
         return total, x
 
     def top_k_reachability(self, alpha, beta, k, output_name):
@@ -107,7 +108,6 @@ if __name__ == '__main__':
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
     G.k_core_decomposition(1)
-    G.print_graph()
     G.top_k_reachability(0, np.inf, k, output_file)
     # DATASETS:
     # wiki_talk_nl.txt                      |  |V| = 225.749 | |E| = 1.554.698
