@@ -84,33 +84,6 @@ class TemporalGraph:
             f.write("--- finished in %s seconds ---" % finish + "\n")
             f.write(str(max_heap))
 
-    def temporal_min_duration_paths(self, alpha, beta, u):
-        Q = PriorityQueue()
-        l = (u, 0, 0)
-        Q.put(l)
-        d = [np.inf for _ in range(self.n)]
-        d[u] = 0
-        F = set()
-        Pi = dict()
-        for node in self.nodes:
-            Pi[node] = []
-        while not Q.empty():
-            (v, s, a) = Q.get()
-            if v not in F:
-                d[v] = a - s
-                F.add(v)
-            for (v, w, t, l) in self.incidence_list[v]:
-                if a <= t and alpha <= t <= beta - l:
-                    if s == 0:
-                        new_l = (w, t, t + l)
-                    else:
-                        new_l = (w, s, t + l)
-                    Pi[w] = [(j, k, n) for (j, k, n) in Pi[w] if (k >= s and a <= n) or (k != s and a != n)]
-                    Q.put(new_l)
-                    Pi[w].append(new_l)
-            return d
-
-
 if __name__ == '__main__':
     input_graph = '/edge-lists/'+input('Edgeliste eingeben:')
     output_file = input_graph.split(".")[0] + '-Top' + str(k) + '.txt'

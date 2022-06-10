@@ -61,6 +61,11 @@ class TemporalGraph:
             self.incidence_list[node] = [(u, v, t, l) for (u, v, t, l) in self.incidence_list[node] if
                                          self.outdegree[u] >= k and self.outdegree[v] >= k]
 
+    def k_largest_outdegrees(self, k):
+        self.outdegree.sort(reverse=True)
+        print(self.outdegree[:k][-1])
+        # print(max(self.outdegree, key=self.outdegree.count))
+
     def top_k_util(self, alpha, beta, k, x, helper):
         total = 0
         for node in range(0, self.n):
@@ -87,29 +92,30 @@ class TemporalGraph:
                     return -1, x
         return total, x
 
-    def top_k_reachability(self, alpha, beta, k, output_name):
+    def top_k_reachability(self, alpha, beta, k, output_name, h):
         start_time = time.time()
         helper = [np.inf for _ in range(self.n)]
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
         for node in range(0, self.n):
-            if node not in self.deleted_nodes:
+            if node not in self.deleted_nodes and self.outdegree[node] >= h:
                 pool.apply_async(self.top_k_util, args=(alpha, beta, k, node, helper), callback=log_result)
         pool.close()
         pool.join()
         finish = time.time() - start_time
         with open(os.getcwd() + output_name, 'w') as f:
             f.write("--- finished in %s seconds ---" % finish + "\n")
+            top_nodes = [element[1] for element in max_heap]
+            f.write(str(top_nodes) + "\n")
             f.write(str(max_heap) + "\n")
             # f.write("Anzahl Knoten mit outgrad = 0: " + str(len(self.deleted_nodes)))
 
 
 if __name__ == '__main__':
     input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
-    output_file = input_graph.split(".")[0] + '-Heuristik-Top-' + str(k) + '.txt'
+    output_file = input_graph.split(".")[0] + '-Heuristik2-Top-' + str(k) + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
-    G.k_core_decomposition(1)
-    G.top_k_reachability(0, np.inf, k, output_file)
+    G.top_k_reachability(0, np.inf, k, output_file, 10)
     # DATASETS:
     # wiki_talk_nl.txt                      |  |V| = 225.749 | |E| = 1.554.698
     # wikipediasg.txt                       |  |V| = 208.142 | |E| = 810.702
