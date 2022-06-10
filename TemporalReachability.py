@@ -178,12 +178,12 @@ if __name__ == '__main__':
     # /edge-lists/wikipediasg.txt           |  |V| = 208.142 | |E| = 810.702
     # /edge-lists/facebook.txt              |  |V| = 63.731  | |E| = 817.035
     # /edge-lists/twitter.txt               |  |V| = 4.605   | |E| = 23.736     352.0 min vs 393.8 min vs 396.1 min
-    # /edge-lists/ia-reality-call.txt       |  |V| = 6.809   | |E| = 52.050     307.1 min
+    # /edge-lists/ia-reality-call.txt       |  |V| = 6.809   | |E| = 52.050     307.1 min vs xx.xx min vs xx.xx
     # /edge-lists/infectious.txt            |  |V| = 10.972  | |E| = 415.912    234.7 min vs 230.6 min vs
-    # /edge-lists/ia-contacts_dublin.txt    |  |V| = 10.972  | |E| = 415.912    185.7 min
-    # /edge-lists/fb-messages.txt           |  |V| = 1.899   | |E| = 61.734     125.2 min
-    # /edge-lists/email-dnc.txt             |  |V| = 1.891   | |E| = 39.264     67.23 min
-    # /edge-lists/copresence-InVS15.txt     |  |V| = 219     | |E| = 1.283.194  11.76 min
+    # /edge-lists/ia-contacts_dublin.txt    |  |V| = 10.972  | |E| = 415.912    185.7 min vs xx.xx min vs xx.xx
+    # /edge-lists/fb-messages.txt           |  |V| = 1.899   | |E| = 61.734     125.2 min vs xx.xx min vs xx.xx
+    # /edge-lists/email-dnc.txt             |  |V| = 1.891   | |E| = 39.264     67.23 min vs xx.xx min vs 29.14 min
+    # /edge-lists/copresence-InVS15.txt     |  |V| = 219     | |E| = 1.283.194  11.76 min vs xx.xx min vs xx.xx
     # /edge-lists/fb-forum.txt              |  |V| = 899     | |E| = 33.720     9.164 min vs 12.03 min vs 12.06 min
     # /edge-lists/tij_SFHH.txt              |  |V| = 403     | |E| = 70.261     5.790 min vs 10.61 min vs 10.25 min
     # /edge-lists/ht09_contact_list.txt     |  |V| = 5.351   | |E| = 20.817     2.727 min vs 2.701 min vs 1.932 min
