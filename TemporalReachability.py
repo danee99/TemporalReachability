@@ -174,11 +174,11 @@ if __name__ == '__main__':
     G.import_edgelist(input_graph)
     G.node_ranking(a, b, output_file)
     # DATASETS:
-    # /edge-lists/wiki_talk_nl.txt          |  |V| = 225.749 | |E| = 1.554.698
+    # /edge-lists/wiki_talk_nl.txt          |  |V| = 225.749 | |E| = 1.554.698  Knoten Ranking | Top k | Heuristik 1 | Heuristik 2
     # /edge-lists/wikipediasg.txt           |  |V| = 208.142 | |E| = 810.702
     # /edge-lists/facebook.txt              |  |V| = 63.731  | |E| = 817.035
-    # /edge-lists/twitter.txt               |  |V| = 4.605   | |E| = 23.736     352.0 min vs 393.8 min vs 396.1 min
-    # /edge-lists/ia-reality-call.txt       |  |V| = 6.809   | |E| = 52.050     307.1 min vs xx.xx min vs xx.xx
+    # /edge-lists/twitter.txt               |  |V| = 4.605   | |E| = 23.736     352.0 min vs 393.8 min vs 396.1 min vs
+    # /edge-lists/ia-reality-call.txt       |  |V| = 6.809   | |E| = 52.050     307.1 min vs 343.0 min vs xx.xx
     # /edge-lists/infectious.txt            |  |V| = 10.972  | |E| = 415.912    234.7 min vs 230.6 min vs
     # /edge-lists/ia-contacts_dublin.txt    |  |V| = 10.972  | |E| = 415.912    185.7 min vs xx.xx min vs xx.xx
     # /edge-lists/fb-messages.txt           |  |V| = 1.899   | |E| = 61.734     125.2 min vs xx.xx min vs xx.xx
