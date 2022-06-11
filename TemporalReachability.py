@@ -159,10 +159,10 @@ if __name__ == '__main__':
     # facebook.txt                          |  |V| = 63.731  | |E| = 817.035
     # twitter.txt                           |  |V| = 4.605   | |E| = 23.736     352.0 min | 393.8 min | 396.1 min | 33.5 min
     # ia-reality-call.txt                   |  |V| = 6.809   | |E| = 52.050     307.1 min | 343.0 min | xx.xx
-    # infectious.txt                        |  |V| = 10.972  | |E| = 415.912    234.7 min | 230.6 min |
+    # infectious.txt                        |  |V| = 10.972  | |E| = 415.912    234.7 min | 230.6 min |	xx.xx
     # ia-contacts_dublin.txt                |  |V| = 10.972  | |E| = 415.912    185.7 min | xx.xx min | xx.xx
     # fb-messages.txt                       |  |V| = 1.899   | |E| = 61.734     125.2 min | xx.xx min | xx.xx
-    # email-dnc.txt                         |  |V| = 1.891   | |E| = 39.264     67.23 min | xx.xx min | 29.14 min
+    # email-dnc.txt                         |  |V| = 1.891   | |E| = 39.264     67.23 min | 66.62 min | 29.14 min
     # copresence-InVS15.txt                 |  |V| = 219     | |E| = 1.283.194  11.76 min | xx.xx min | xx.xx
     # fb-forum.txt                          |  |V| = 899     | |E| = 33.720     9.164 min | 12.03 min | 12.06 min
     # tij_SFHH.txt                          |  |V| = 403     | |E| = 70.261     5.790 min | 10.61 min | 10.25 min

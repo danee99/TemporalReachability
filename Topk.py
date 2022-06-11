@@ -84,8 +84,9 @@ class TemporalGraph:
             f.write("--- finished in %s seconds ---" % finish + "\n")
             f.write(str(max_heap))
 
+
 if __name__ == '__main__':
-    input_graph = '/edge-lists/'+input('Edgeliste eingeben:')
+    input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
     output_file = input_graph.split(".")[0] + '-Top' + str(k) + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)

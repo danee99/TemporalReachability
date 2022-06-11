@@ -115,4 +115,5 @@ if __name__ == '__main__':
     output_file = input_graph.split(".")[0] + '-Heuristik2-Top-' + str(k) + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
-    G.top_k_reachability(0, np.inf, k, output_file, 10)
+    G.largest_outdegrees(5000)
+    # G.top_k_reachability(0, np.inf, k, output_file, 10)
