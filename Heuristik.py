@@ -5,6 +5,7 @@ from queue import PriorityQueue
 import heapq_max
 import numpy as np
 import copy
+import interval
 
 max_heap = []
 k = 10
@@ -58,8 +59,9 @@ class TemporalGraph:
         for node in range(0, self.n):
             if self.outdegree[node] == 0:
                 self.deleted_nodes.add(node)
+                continue
             self.incidence_list[node] = [(u, v, t, l) for (u, v, t, l) in self.incidence_list[node] if
-                                         self.outdegree[u] >= k and self.outdegree[v] >= k]
+                                         self.outdegree[u] > k and self.outdegree[v] > k]
 
     def top_k_util(self, alpha, beta, k, x, helper):
         total = 0
@@ -108,7 +110,9 @@ if __name__ == '__main__':
     output_file = input_graph.split(".")[0] + '-Heuristik-Top-' + str(k) + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
-    G.k_core_decomposition(1)
+    # G.k_core_decomposition(2)
+    # G.print_graph()
+    G.k_core_decomposition(2)
     G.top_k_reachability(0, np.inf, k, output_file)
     # DATASETS:
     # wiki_talk_nl.txt                      |  |V| = 225.749 | |E| = 1.554.698
