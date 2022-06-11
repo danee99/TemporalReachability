@@ -114,22 +114,3 @@ if __name__ == '__main__':
     # G.print_graph()
     G.k_core_decomposition(2)
     G.top_k_reachability(0, np.inf, k, output_file)
-    # DATASETS:
-    # wiki_talk_nl.txt                      |  |V| = 225.749 | |E| = 1.554.698
-    # wikipediasg.txt                       |  |V| = 208.142 | |E| = 810.702
-    # facebook.txt                          |  |V| = 63.731  | |E| = 817.035
-    # infectious.txt                        |  |V| = 10.972  | |E| = 415.912    234.7 min
-    # ia-contacts_dublin.txt                |  |V| = 10.972  | |E| = 415.912
-    # copresence-InVS15.txt                 |  |V| = 219     | |E| = 1.283.194
-    # copresence-InVS13.txt                 |  |V| = 95      | |E| = 394.247    0.772 min
-    # ia-reality-call.txt                   |  |V| = 6.809   | |E| = 52.050
-    # ht09_contact_list.txt                 |  |V| = 5.351   | |E| = 20.817     2.727 min
-    # twitter.txt                           |  |V| = 4.605   | |E| = 23.736     352.0 min
-    # fb-messages.txt                       |  |V| = 1.899   | |E| = 61.734
-    # email-dnc.txt                         |  |V| = 1.891   | |E| = 39.264     67.23 min
-    # tij_SFHH.txt                          |  |V| = 403     | |E| = 70.261
-    # fb-forum.txt                          |  |V| = 899     | |E| = 33.720     9.164 min
-    # reptilia-tortoise-network-fi.txt      |  |V| = 787     | |E| = 1.713      0.053 min
-    # aves-weaver-social.txt                |  |V| = 445     | |E| = 1.426      0.022 min
-    # example_graph1.txt                    |  |V| = 7       | |E| = 18         0.005 min
-    # example_graph2.txt                    |  |V| = 7       | |E| = 9          0.005 min
