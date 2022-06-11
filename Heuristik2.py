@@ -61,10 +61,10 @@ class TemporalGraph:
             self.incidence_list[node] = [(u, v, t, l) for (u, v, t, l) in self.incidence_list[node] if
                                          self.outdegree[u] >= k and self.outdegree[v] >= k]
 
-    def k_largest_outdegrees(self, k):
+    def largest_outdegrees(self, n):
         self.outdegree.sort(reverse=True)
-        print(self.outdegree[:k][-1])
-        # print(max(self.outdegree, key=self.outdegree.count))
+        print(self.outdegree[:n][-1])
+        print(max(self.outdegree, key=self.outdegree.count))
 
     def top_k_util(self, alpha, beta, k, x, helper):
         total = 0

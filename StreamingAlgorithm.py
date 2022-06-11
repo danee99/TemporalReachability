@@ -80,7 +80,7 @@ class TemporalGraph:
 
 if __name__ == '__main__':
     input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
-    a = int(input('Intervall a eingeben: '))
+    a = 0
     b = np.inf
     output_file = input_graph.split(".")[0] + '-Streaming-Rangliste' + '.txt'
     G = TemporalGraph()

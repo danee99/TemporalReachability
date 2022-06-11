@@ -16,11 +16,7 @@ class TemporalGraph:
         for node in range(0, self.n):
             print(str(node) + ": " + str(self.incidence_list[node]))
 
-    # returns the list of the incident edges (sorted by timestamps) for a given node
-    def outgoing_edges_from_node(self, node):
-        return self.incidence_list[node]
-
-    # returns the out-degree of a node
+    # returns the outdegree of a node
     def outdegree(self, node):
         return len(self.incidence_list[node])
 
@@ -65,21 +61,6 @@ class TemporalGraph:
                     self.nodes.append(v)
                 self.incidence_list[u].append((u, v, t, l))
 
-    # calculates for a given source node the earliest arrival times to all other nodes in a time interval [a,b]
-    def temporal_earliest_arrival(self, source, a, b):
-        earliest_arrival_time = [np.inf for _ in range(self.n)]
-        earliest_arrival_time[source] = 0
-        PQ = PriorityQueue()
-        PQ.put((earliest_arrival_time[source], source))
-        while not PQ.empty():
-            (current_arrival_time, current_node) = PQ.get()
-            for (u, v, t, l) in self.outgoing_edges_from_node(current_node):
-                if t < a or t + l > b: continue
-                if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                    earliest_arrival_time[v] = t + l
-                    PQ.put((earliest_arrival_time[v], v))
-        return earliest_arrival_time
-
     # calculates for a given node "source" the number of nodes that "source" can reach
     def number_of_reachable_nodes(self, source, a, b):
         reach_set = {source}  # each node can reach itself
@@ -89,7 +70,7 @@ class TemporalGraph:
         PQ.put((earliest_arrival_time[source], source))
         while not PQ.empty():
             (current_arrival_time, current_node) = PQ.get()
-            for (u, v, t, l) in self.outgoing_edges_from_node(current_node):
+            for (u, v, t, l) in self.incidence_list[current_node]:
                 if t < a or t + l > b: continue
                 if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                     reach_set.add(v)
@@ -109,7 +90,7 @@ class TemporalGraph:
             PQ.put((earliest_arrival_time[node], node))
             while not PQ.empty():
                 (current_arrival_time, current_node) = PQ.get()
-                for (u, v, t, l) in self.outgoing_edges_from_node(current_node):
+                for (u, v, t, l) in self.incidence_list[current_node]:
                     if t < a or t + l > b: continue
                     if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                         reach_set.add(v)
@@ -132,20 +113,19 @@ class TemporalGraph:
             PQ.put((earliest_arrival_time[node], node))
             while not PQ.empty():
                 (current_arrival_time, current_node) = PQ.get()
-                if current_node in visited: continue
-                for (u, v, t, l) in self.outgoing_edges_from_node(current_node):
-                    if u != x and v != x:
-                        if t < a or t + l > b:
-                            continue
-                        if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                            reach_set.add(v)
-                            earliest_arrival_time[v] = t + l
-                            PQ.put((earliest_arrival_time[v], v))
-                visited.add(current_node)
+                if current_node not in visited:
+                    for (u, v, t, l) in self.incidence_list[current_node]:
+                        if u != x and v != x:
+                            if t < a or t + l > b: continue
+                            if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+                                reach_set.add(v)
+                                earliest_arrival_time[v] = t + l
+                                PQ.put((earliest_arrival_time[v], v))
+                    visited.add(current_node)
             total = total + len(reach_set)
         return 1 - (total / before)
 
-    # node ranking, but with asynchronous multiprocessing
+    # node ranking, with asynchronous multiprocessing
     def node_ranking(self, a, b, output_name):
         start_time = time.time()
         before = self.total_reachability(a, b)
@@ -173,23 +153,22 @@ if __name__ == '__main__':
     G = TemporalGraph()
     G.import_edgelist(input_graph)
     G.node_ranking(a, b, output_file)
-    # DATASETS:
-    #                                                                           Node Ranking vs. top k vs. Heuristik 1 vs. Heuristik 2
+    # DATASETS:                                                                 Node Ranking | Top k | Heuristik 1 | Heuristik 2
     # wiki_talk_nl.txt                      |  |V| = 225.749 | |E| = 1.554.698
     # wikipediasg.txt                       |  |V| = 208.142 | |E| = 810.702
     # facebook.txt                          |  |V| = 63.731  | |E| = 817.035
-    # twitter.txt                           |  |V| = 4.605   | |E| = 23.736     352.0 min vs 393.8 min vs 396.1 min vs 33.5 min
-    # ia-reality-call.txt                   |  |V| = 6.809   | |E| = 52.050     307.1 min vs 343.0 min vs xx.xx
-    # infectious.txt                        |  |V| = 10.972  | |E| = 415.912    234.7 min vs 230.6 min vs
-    # ia-contacts_dublin.txt                |  |V| = 10.972  | |E| = 415.912    185.7 min vs xx.xx min vs xx.xx
-    # fb-messages.txt                       |  |V| = 1.899   | |E| = 61.734     125.2 min vs xx.xx min vs xx.xx
-    # email-dnc.txt                         |  |V| = 1.891   | |E| = 39.264     67.23 min vs xx.xx min vs 29.14 min
-    # copresence-InVS15.txt                 |  |V| = 219     | |E| = 1.283.194  11.76 min vs xx.xx min vs xx.xx
-    # fb-forum.txt                          |  |V| = 899     | |E| = 33.720     9.164 min vs 12.03 min vs 12.06 min
-    # tij_SFHH.txt                          |  |V| = 403     | |E| = 70.261     5.790 min vs 10.61 min vs 10.25 min
-    # ht09_contact_list.txt                 |  |V| = 5.351   | |E| = 20.817     2.727 min vs 2.701 min vs 1.932 min
-    # copresence-InVS13.txt                 |  |V| = 95      | |E| = 394.247    0.772 min vs 1.189 min vs 1.235 min
-    # reptilia-tortoise-network-fi.txt      |  |V| = 787     | |E| = 1.713      0.053 min
-    # aves-weaver-social.txt                |  |V| = 445     | |E| = 1.426      0.022 min
+    # twitter.txt                           |  |V| = 4.605   | |E| = 23.736     352.0 min | 393.8 min | 396.1 min | 33.5 min
+    # ia-reality-call.txt                   |  |V| = 6.809   | |E| = 52.050     307.1 min | 343.0 min | xx.xx
+    # infectious.txt                        |  |V| = 10.972  | |E| = 415.912    234.7 min | 230.6 min |
+    # ia-contacts_dublin.txt                |  |V| = 10.972  | |E| = 415.912    185.7 min | xx.xx min | xx.xx
+    # fb-messages.txt                       |  |V| = 1.899   | |E| = 61.734     125.2 min | xx.xx min | xx.xx
+    # email-dnc.txt                         |  |V| = 1.891   | |E| = 39.264     67.23 min | xx.xx min | 29.14 min
+    # copresence-InVS15.txt                 |  |V| = 219     | |E| = 1.283.194  11.76 min | xx.xx min | xx.xx
+    # fb-forum.txt                          |  |V| = 899     | |E| = 33.720     9.164 min | 12.03 min | 12.06 min
+    # tij_SFHH.txt                          |  |V| = 403     | |E| = 70.261     5.790 min | 10.61 min | 10.25 min
+    # ht09_contact_list.txt                 |  |V| = 5.351   | |E| = 20.817     2.727 min | 2.701 min | 1.932 min
+    # copresence-InVS13.txt                 |  |V| = 95      | |E| = 394.247    0.772 min | 1.189 min | 1.235 min
+    # reptilia-tortoise-network-fi.txt      |  |V| = 787     | |E| = 1.713      0.053 min | 0.036 min | 0.018 min
+    # aves-weaver-social.txt                |  |V| = 445     | |E| = 1.426      0.022 min | 0,013 min | 0.008 min
     # example_graph1.txt                    |  |V| = 7       | |E| = 18         0.005 min
     # example_graph2.txt                    |  |V| = 7       | |E| = 9          0.005 min

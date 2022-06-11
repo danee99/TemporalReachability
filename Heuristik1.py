@@ -35,10 +35,9 @@ class TemporalGraph:
     # scans the edgelist and creates TemporalGraph object
     def import_edgelist(self, file_name):
         with open(os.getcwd() + file_name, "r") as f:
-            n = int(f.readline())
-            self.n = n
-            self.incidence_list = [[] for _ in range(n)]
-            self.outdegree = [0 for _ in range(n)]
+            self.n = int(f.readline())
+            self.incidence_list = [[] for _ in range(self.n)]
+            self.outdegree = [0 for _ in range(self.n)]
             for line in f:
                 arr = line.split()
                 u = int(arr[0])
@@ -110,7 +109,5 @@ if __name__ == '__main__':
     output_file = input_graph.split(".")[0] + '-Heuristik-Top-' + str(k) + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
-    # G.k_core_decomposition(2)
-    # G.print_graph()
     G.k_core_decomposition(2)
     G.top_k_reachability(0, np.inf, k, output_file)
