@@ -65,6 +65,7 @@ class TemporalGraph:
         self.outdegree.sort(reverse=True)
         print(self.outdegree[:n][-1])
         print(max(self.outdegree, key=self.outdegree.count))
+        print(self.outdegree)
 
     def top_k_util(self, alpha, beta, k, x, helper):
         total = 0
@@ -115,5 +116,4 @@ if __name__ == '__main__':
     output_file = input_graph.split(".")[0] + '-Heuristik2-Top-' + str(k) + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
-    G.largest_outdegrees(5000)
-    # G.top_k_reachability(0, np.inf, k, output_file, 10)
+    G.top_k_reachability(0, np.inf, k, output_file, 3)
