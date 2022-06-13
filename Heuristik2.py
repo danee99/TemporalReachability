@@ -5,6 +5,7 @@ from queue import PriorityQueue
 import heapq_max
 import numpy as np
 import copy
+from timeit import default_timer as timer
 
 max_heap = []
 k = 10
@@ -54,12 +55,76 @@ class TemporalGraph:
                 self.outdegree[u] = self.outdegree[u] + 1
                 self.incidence_list[u].append((u, v, t, l))
 
-    def k_core_decomposition(self, k):
-        for node in range(0, self.n):
-            if self.outdegree[node] == 0:
-                self.deleted_nodes.add(node)
-            self.incidence_list[node] = [(u, v, t, l) for (u, v, t, l) in self.incidence_list[node] if
-                                         self.outdegree[u] >= k and self.outdegree[v] >= k]
+    def k_core_decomposition(self):
+        core = [None for _ in range(self.n)]
+        deg = self.outdegree.copy()
+        V = list(map(lambda x, y: (x, y), self.nodes, self.outdegree))
+        V.sort(key=lambda a: a[1])
+        for (v, degree) in V:
+            core[v] = self.outdegree[v]
+            for edge in self.incidence_list[v]:
+                if deg[edge[1]] > deg[v]:
+                    deg[edge[1]] = deg[edge[1]] - 1
+                    V.sort(key=lambda a: a[1])
+        print(deg)
+
+    def k_core_decomposition2(self):
+        n = self.n
+        # compute the degree for each node v and store it in the array deg
+        # at the same time calculate the maximum degree md
+        deg = self.outdegree.copy()
+        md = max(self.outdegree)
+        md += 1
+
+        # vert = contains the set of nodes sorted by their degree
+        # pos = contains the positions of the nodes in the array vert
+        # bin = contains for each possible degree the position of the first occurring node with this degree
+        # now sort the nodes in ascending order of their degree with bin-sort.
+        # to do this, first count how many nodes will be in each bin.
+        bin = [0] * md
+        for v in range(n):
+            bin[deg[v]] += 1
+        # using the bin sizes, we can determine the starting positions of the bins in the array vert
+        start = 0
+        for d in range(md):
+            num = bin[d]
+            bin[d] = start
+            start += num
+        valBucket = [0] * md
+        vert = [0] * n
+        pos = [0] * n
+        # insert nodes into the array vert
+        # for each node we know to which field it belongs and what is the starting position of this field
+        # so now we can sort the nodes by their degree
+        for v in range(n):
+            pos[v] = bin[deg[v]] + valBucket[deg[v]]
+            vert[pos[v]] = v
+            valBucket[deg[v]] += 1
+        # now comes the core decomposition
+        # at first, the core number of node v its degree
+        # for each neighbor u of the node v with higher degree we must decrease its degree
+        # in addition, it must be shifted one field to the left
+        # the shift can be done in constant time:
+        # --> swap node u and the first node in the field
+        # --> in the field pos we have to swap their positions too
+        # --> increase the initial position of the bin
+        for i in range(n):
+            v = vert[i]
+            for edge in G.incidence_list[v]:
+                u = edge[1]
+                if deg[u] > deg[v]:
+                    du = deg[u]
+                    pu = pos[u]
+                    pw = bin[du]
+                    w = vert[pw]
+                    if u != w:
+                        pos[u] = pw
+                        vert[pu] = w
+                        pos[w] = pu
+                        vert[pw] = u
+                    bin[du] += 1
+                    deg[u] -= 1
+        print(deg)
 
     def largest_outdegrees(self, n):
         self.outdegree.sort(reverse=True)
@@ -105,8 +170,7 @@ class TemporalGraph:
         finish = time.time() - start_time
         with open(os.getcwd() + output_name, 'w') as f:
             f.write("--- finished in %s seconds ---" % finish + "\n")
-            top_nodes = [element[1] for element in max_heap]
-            f.write(str(top_nodes) + "\n")
+            f.write(str([element[1] for element in max_heap]) + "\n")
             f.write(str(max_heap) + "\n")
             # f.write("Anzahl Knoten mit outgrad = 0: " + str(len(self.deleted_nodes)))
 
@@ -116,4 +180,7 @@ if __name__ == '__main__':
     output_file = input_graph.split(".")[0] + '-Heuristik2-Top-' + str(k) + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
-    G.top_k_reachability(0, np.inf, k, output_file, 3)
+    # G.top_k_reachability(0, np.inf, k, output_file, 3)
+    G.k_core_decomposition2()
+    # example_graph2.txt
+    # twitter.txt

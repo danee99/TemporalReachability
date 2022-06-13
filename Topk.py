@@ -6,7 +6,7 @@ import heapq_max
 import numpy as np
 
 max_heap = []
-k = 10
+k = 9
 
 
 def log_result(result):
@@ -21,15 +21,14 @@ def log_result(result):
 class TemporalGraph:
     def __init__(self, nodes, incidence_list):
         self.n = 0
-        self.nodes = []
+        self.nodes = {}
         self.incidence_list = []
 
     # scans the edgelist and creates TemporalGraph object
     def import_edgelist(self, file_name):
         with open(os.getcwd() + file_name, "r") as f:
-            n = int(f.readline())
-            self.n = n
-            self.incidence_list = [[] for _ in range(n)]
+            self.n = int(f.readline())
+            self.incidence_list = [[] for _ in range(self.n)]
             for line in f:
                 arr = line.split()
                 u = int(arr[0])
@@ -40,14 +39,16 @@ class TemporalGraph:
                 except IndexError:
                     l = 1
                 if u not in self.nodes:
-                    self.nodes.append(u)
+                    self.nodes[u] = 0
                 if v not in self.nodes:
-                    self.nodes.append(v)
+                    self.nodes[v] = 0
+                self.nodes[u] += 1
                 self.incidence_list[u].append((u, v, t, l))
+            self.nodes = {node: degree for node, degree in sorted(self.nodes.items(), key=lambda item: item[1], reverse=True)}
 
     def top_k_util(self, alpha, beta, k, x, helper):
         total = 0
-        for node in range(0, self.n):
+        for node in self.nodes:
             if node == x:
                 continue
             reach_set = {node}
@@ -75,7 +76,7 @@ class TemporalGraph:
         start_time = time.time()
         helper = [np.inf for _ in range(self.n)]
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        for node in range(0, self.n):
+        for node in self.nodes:
             pool.apply_async(self.top_k_util, args=(alpha, beta, k, node, helper), callback=log_result)
         pool.close()
         pool.join()
