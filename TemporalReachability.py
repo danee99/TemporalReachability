@@ -165,7 +165,7 @@ if __name__ == '__main__':
     # fb-forum.txt                          |  |V| = 899     | |E| = 33.720     9.164 min | 12.03 min | 12.06 min
     # tij_SFHH.txt                          |  |V| = 403     | |E| = 70.261     5.790 min | 10.61 min | 10.25 min
     # ht09_contact_list.txt                 |  |V| = 5.351   | |E| = 20.817     2.727 min | 2.701 min | 1.932 min
-    # copresence-InVS13.txt                 |  |V| = 95      | |E| = 394.247    0.772 min | 1.189 min | 1.235 min
+    # copresence-InVS13.txt                 |  |V| = 95      | |E| = 394.247    0.771 min | 1.189 min | 1.235 min
     # reptilia-tortoise-network-fi.txt      |  |V| = 787     | |E| = 1.713      0.053 min | 0.036 min | 0.018 min
     # aves-weaver-social.txt                |  |V| = 445     | |E| = 1.426      0.022 min | 0.013 min | 0.008 min
     # example_graph1.txt                    |  |V| = 7       | |E| = 18         0.005 min
