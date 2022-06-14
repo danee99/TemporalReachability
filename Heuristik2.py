@@ -187,17 +187,20 @@ class TemporalGraph:
         return total, x
 
     def top_k_reachability(self, alpha, beta, k, output_name):
+        start_time1 = time.time()
         self.k_core_decomposition4(1)
-        start_time = time.time()
+        start_time2 = time.time()
         helper = [np.inf for _ in range(self.n)]
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
         for node in self.nodes:
             pool.apply_async(self.top_k_util, args=(alpha, beta, k, node, helper), callback=log_result)
         pool.close()
         pool.join()
-        finish = time.time() - start_time
+        finish1 = time.time() - start_time1
+        finish2 = time.time() - start_time2
         with open(os.getcwd() + output_name, 'w') as f:
-            f.write("--- finished in %s seconds ---" % (finish/60) + "\n")
+            f.write("--- Total: finished in %s seconds ---" % (finish1 / 60) + "\n")
+            f.write("--- Ohne k core decomp: finished in %s seconds ---" % (finish2 / 60) + "\n")
             f.write(str([element[1] for element in max_heap]) + "\n")
             f.write(str(max_heap) + "\n")
             f.write(str(len(self.deleted_nodes)) + "\n")
