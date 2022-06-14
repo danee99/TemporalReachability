@@ -16,23 +16,19 @@ class TemporalGraph:
         for node in self.nodes:
             print(str(node) + ": " + str(self.incidence_list[node]))
 
-    # returns the outdegree of a node
-    def outdegree(self, node):
-        return len(self.incidence_list[node])
-
     # returns a list with every out-degree for each node
     def degree_centrality(self, output_name):
         res = []
-        for node in range(0, len(self.nodes)):
-            res.append(self.outdegree(node))
+        for node in range(0, self.n):
+            res.append(len(self.incidence_list[node]))
         with open(os.getcwd() + output_name, 'w') as f:
             f.write(str(res) + "\n")
 
-    # normalized out-degrees of every node
+    # normalized version of the outdegrees for every node
     def degree_centrality_normalized(self, output_name):
         res = []
         for node in range(0, self.n):
-            res.append(self.outdegree(node))
+            res.append(len(self.incidence_list[node]))
         maximum = max(res)
         minimum = min(res)
         for j in range(0, self.n):
@@ -61,7 +57,7 @@ class TemporalGraph:
 
     # calculates for a given node "source" the number of nodes that "source" can reach
     def number_of_reachable_nodes(self, source, a, b):
-        reach_set = {source}  # each node can reach itself
+        reach_set = {source}
         earliest_arrival_time = [np.inf for _ in range(self.n)]
         earliest_arrival_time[source] = 0
         PQ = PriorityQueue()
@@ -79,10 +75,9 @@ class TemporalGraph:
     # calculates the total reachability of the given temporal graph in a time interval [a,b]
     def total_reachability(self, a, b):
         total = 0
-        helper = [np.inf for _ in range(self.n)]
         for node in self.nodes:
             reach_set = {node}
-            earliest_arrival_time = helper.copy()
+            earliest_arrival_time = [np.inf for _ in range(self.n)]
             earliest_arrival_time[node] = 0
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
