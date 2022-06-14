@@ -7,13 +7,13 @@ import numpy as np
 
 class TemporalGraph:
     def __init__(self):
-        self.nodes = []
+        self.nodes = set()
         self.incidence_list = []
         self.n = 0
 
     # prints each node and the corresponding set of outgoing edges of the node
     def print_graph(self):
-        for node in range(0, self.n):
+        for node in self.nodes:
             print(str(node) + ": " + str(self.incidence_list[node]))
 
     # returns the outdegree of a node
@@ -55,10 +55,8 @@ class TemporalGraph:
                     l = int(arr[3])
                 except IndexError:
                     l = 1
-                if u not in self.nodes:
-                    self.nodes.append(u)
-                if v not in self.nodes:
-                    self.nodes.append(v)
+                self.nodes.add(u)
+                self.nodes.add(v)
                 self.incidence_list[u].append((u, v, t, l))
 
     # calculates for a given node "source" the number of nodes that "source" can reach
@@ -169,6 +167,6 @@ if __name__ == '__main__':
     # ht09_contact_list.txt                 |  |V| = 5.351   | |E| = 20.817     2.727 min | 2.701 min | 1.932 min
     # copresence-InVS13.txt                 |  |V| = 95      | |E| = 394.247    0.772 min | 1.189 min | 1.235 min
     # reptilia-tortoise-network-fi.txt      |  |V| = 787     | |E| = 1.713      0.053 min | 0.036 min | 0.018 min
-    # aves-weaver-social.txt                |  |V| = 445     | |E| = 1.426      0.022 min | 0,013 min | 0.008 min
+    # aves-weaver-social.txt                |  |V| = 445     | |E| = 1.426      0.022 min | 0.013 min | 0.008 min
     # example_graph1.txt                    |  |V| = 7       | |E| = 18         0.005 min
     # example_graph2.txt                    |  |V| = 7       | |E| = 9          0.005 min

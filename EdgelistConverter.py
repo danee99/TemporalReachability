@@ -1,5 +1,6 @@
 import os
 
+
 def convert(file_name, output):
     nodemanager = {}
     with open(os.getcwd() + output, "w") as o:
@@ -21,8 +22,9 @@ def convert(file_name, output):
                 if v not in nodemanager.keys():
                     nodemanager[v] = id
                     id = id + 1
-                o.write((str(nodemanager[u])+" "+str(nodemanager[v])+" "+str(t)+" "+str(l)+"\n"))
+                o.write((str(nodemanager[u]) + " " + str(nodemanager[v]) + " " + str(t) + " " + str(l) + "\n"))
         o.write(str(len(nodemanager.keys())))
+
 
 def swap(file_name, output):
     with open(os.getcwd() + output, "w") as o:
@@ -33,7 +35,8 @@ def swap(file_name, output):
                 v = int(arr[1])
                 l = int(arr[2])
                 t = int(arr[3])
-                o.write((str(u)+" "+str(v)+" "+str(t)+" "+str(l)+"\n"))
+                o.write((str(u) + " " + str(v) + " " + str(t) + " " + str(l) + "\n"))
+
 
 if __name__ == '__main__':
-    convert('/edge-lists/complete.txt', '/edge-lists/complete2.txt')
+    convert('/edge-lists/example_graph2.txt', '/edge-lists/example_graph.txt')

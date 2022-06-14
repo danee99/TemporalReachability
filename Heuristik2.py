@@ -8,7 +8,7 @@ import copy
 from timeit import default_timer as timer
 
 max_heap = []
-k = 10
+k = 11
 
 
 def log_result(result):
@@ -55,7 +55,7 @@ class TemporalGraph:
                 self.outdegree[u] = self.outdegree[u] + 1
                 self.incidence_list[u].append((u, v, t, l))
 
-    def k_core_decomposition(self):
+    def k_core_decomposition1(self):
         core = [None for _ in range(self.n)]
         deg = self.outdegree.copy()
         V = list(map(lambda x, y: (x, y), self.nodes, self.outdegree))
@@ -126,11 +126,39 @@ class TemporalGraph:
                     deg[u] -= 1
         print(deg)
 
-    def largest_outdegrees(self, n):
-        self.outdegree.sort(reverse=True)
-        print(self.outdegree[:n][-1])
-        print(max(self.outdegree, key=self.outdegree.count))
-        print(self.outdegree)
+    def k_core_decomposition3(self, k):
+        for node in range(0, self.n):
+            if self.outdegree[node] == 0:
+                self.deleted_nodes.add(node)
+                continue
+            for edge in self.incidence_list[node]:
+                if self.outdegree[edge[1]] < k:
+                    self.incidence_list[node].remove(edge)
+                    self.outdegree[node] -= 1
+        self.print_graph()
+
+    def k_core_decomposition4(self, k):
+        min_deg = min(self.outdegree)
+        while min_deg < k:
+            for node in self.nodes:
+                if self.outdegree[node] < k:
+                    self.nodes.remove(node)
+                    self.deleted_nodes.add(node)
+            for node in self.nodes:
+                for edge in self.incidence_list[node]:
+                    if self.outdegree[edge[1]] < k:
+                        self.incidence_list[node].remove(edge)
+                        self.outdegree[node] -= 1
+            try:
+                min_deg = min([self.outdegree[x] for x in self.nodes])
+            except ValueError:
+                min_deg = k
+
+    # def largest_outdegrees(self, n):
+    #     self.outdegree.sort(reverse=True)
+    #     print(self.outdegree[:n][-1])
+    #     print(max(self.outdegree, key=self.outdegree.count))
+    #     print(self.outdegree)
 
     def top_k_util(self, alpha, beta, k, x, helper):
         total = 0
@@ -158,20 +186,22 @@ class TemporalGraph:
                     return -1, x
         return total, x
 
-    def top_k_reachability(self, alpha, beta, k, output_name, h):
+    def top_k_reachability(self, alpha, beta, k, output_name):
+        self.k_core_decomposition4(1)
         start_time = time.time()
         helper = [np.inf for _ in range(self.n)]
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        for node in range(0, self.n):
-            if node not in self.deleted_nodes and self.outdegree[node] >= h:
-                pool.apply_async(self.top_k_util, args=(alpha, beta, k, node, helper), callback=log_result)
+        for node in self.nodes:
+            pool.apply_async(self.top_k_util, args=(alpha, beta, k, node, helper), callback=log_result)
         pool.close()
         pool.join()
         finish = time.time() - start_time
         with open(os.getcwd() + output_name, 'w') as f:
-            f.write("--- finished in %s seconds ---" % finish + "\n")
+            f.write("--- finished in %s seconds ---" % (finish/60) + "\n")
             f.write(str([element[1] for element in max_heap]) + "\n")
             f.write(str(max_heap) + "\n")
+            f.write(str(len(self.deleted_nodes)) + "\n")
+            f.write(str(len(self.nodes)) + "\n")
             # f.write("Anzahl Knoten mit outgrad = 0: " + str(len(self.deleted_nodes)))
 
 
@@ -180,7 +210,4 @@ if __name__ == '__main__':
     output_file = input_graph.split(".")[0] + '-Heuristik2-Top-' + str(k) + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
-    # G.top_k_reachability(0, np.inf, k, output_file, 3)
-    G.k_core_decomposition2()
-    # example_graph2.txt
-    # twitter.txt
+    G.top_k_reachability(0, np.inf, k, output_file)
