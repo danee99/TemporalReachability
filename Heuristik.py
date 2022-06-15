@@ -8,7 +8,7 @@ import copy
 from timeit import default_timer as timer
 
 max_heap = []
-k = 11
+k = 10
 
 
 def log_result(result):
