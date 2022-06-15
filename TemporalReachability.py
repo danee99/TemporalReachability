@@ -129,9 +129,9 @@ class TemporalGraph:
         ranking = [r.get() for r in result_objects]
         pool.close()
         pool.join()
+        finish = time.time() - start_time
         with open(os.getcwd() + output_name, 'w') as f:
             f.write(str(ranking) + "\n")
-            finish = time.time() - start_time
             f.write("--- finished in %s seconds ---" % finish + "\n")
             f.write("--- finished in %s minutes ---" % (finish / 60) + "\n")
             f.write("--- finished in %s hours ---" % (finish / 3600))

@@ -85,8 +85,10 @@ class TemporalGraph:
         finish = time.time() - start_time
         with open(os.getcwd() + output_name, 'w') as f:
             f.write("--- finished in %s seconds ---" % finish + "\n")
+            f.write("--- finished in %s minutes ---" % (finish / 60) + "\n")
+            f.write("--- finished in %s hours ---" % (finish / 3600))
             f.write(str(max_heap))
-
+            f.write(str([element[1] for element in max_heap]) + "\n")
 
 if __name__ == '__main__':
     input_graph = '/edge-lists/' + input('Edgeliste eingeben:')

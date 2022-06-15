@@ -187,30 +187,28 @@ class TemporalGraph:
         return total, x
 
     def top_k_reachability(self, alpha, beta, k, output_name):
-        start_time1 = time.time()
         self.k_core_decomposition4(1)
-        start_time2 = time.time()
+        start_time = time.time()
         helper = [np.inf for _ in range(self.n)]
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
         for node in self.nodes:
             pool.apply_async(self.top_k_util, args=(alpha, beta, k, node, helper), callback=log_result)
         pool.close()
         pool.join()
-        finish1 = time.time() - start_time1
-        finish2 = time.time() - start_time2
+        finish = time.time() - start_time
         with open(os.getcwd() + output_name, 'w') as f:
-            f.write("--- Total: finished in %s seconds ---" % (finish1 / 60) + "\n")
-            f.write("--- Ohne k core decomp: finished in %s minutes ---" % (finish2 / 60) + "\n")
-            f.write(str([element[1] for element in max_heap]) + "\n")
+            f.write("--- finished in %s seconds ---" % finish + "\n")
+            f.write("--- finished in %s minutes ---" % (finish / 60) + "\n")
+            f.write("--- finished in %s hours ---" % (finish / 3600))
             f.write(str(max_heap) + "\n")
-            f.write(str(len(self.deleted_nodes)) + "\n")
-            f.write(str(len(self.nodes)) + "\n")
-            # f.write("Anzahl Knoten mit outgrad = 0: " + str(len(self.deleted_nodes)))
+            f.write(str([element[1] for element in max_heap]) + "\n")
+            f.write("gelöschte Knoten Anzahl " + str(len(self.deleted_nodes)) + "\n")
+            f.write("Knotenanzahl des Graphen " + str(len(self.nodes)) + "\n")
 
 
 if __name__ == '__main__':
     input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
-    output_file = input_graph.split(".")[0] + '-Heuristik2-Top-' + str(k) + '.txt'
+    output_file = input_graph.split(".")[0] + '-Heuristik-Top-' + str(k) + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
     G.top_k_reachability(0, np.inf, k, output_file)
