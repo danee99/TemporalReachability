@@ -145,23 +145,24 @@ if __name__ == '__main__':
     degree_output_file = input_graph.split(".")[0] + '-Outdegrees' + '.txt'
     G = TemporalGraph()
     G.import_edgelist(input_graph)
-    G.node_ranking(a, b, output_file)
-    # DATASETS:                                                                 Node Ranking | Top k | Heuristik 1 | Heuristik 2
+    # G.node_ranking(a, b, output_file)
+    G.degree_centrality_normalized(degree_output_file)
+    # DATASETS:                                                                 Node Ranking | Top k | Heuristik
     # wiki_talk_nl.txt                      |  |V| = 225.749 | |E| = 1.554.698
     # wikipediasg.txt                       |  |V| = 208.142 | |E| = 810.702
     # facebook.txt                          |  |V| = 63.731  | |E| = 817.035
-    # twitter.txt                           |  |V| = 4.605   | |E| = 23.736     352.0 min | 393.8 min | 396.1 min | 33.5 min
-    # ia-reality-call.txt                   |  |V| = 6.809   | |E| = 52.050     307.1 min | 343.0 min | xx.xx
-    # infectious.txt                        |  |V| = 10.972  | |E| = 415.912    234.7 min | 230.6 min |	xx.xx     | 192.70 min
-    # ia-contacts_dublin.txt                |  |V| = 10.972  | |E| = 415.912    185.7 min | 230.5 min | xx.xx
-    # fb-messages.txt                       |  |V| = 1.899   | |E| = 61.734     125.2 min | xx.xx min | xx.xx
-    # email-dnc.txt                         |  |V| = 1.891   | |E| = 39.264     67.23 min | 66.62 min | 29.14 min
-    # copresence-InVS15.txt                 |  |V| = 219     | |E| = 1.283.194  11.76 min | xx.xx min | xx.xx
-    # fb-forum.txt                          |  |V| = 899     | |E| = 33.720     9.164 min | 12.03 min | 12.06 min
-    # tij_SFHH.txt                          |  |V| = 403     | |E| = 70.261     5.790 min | 10.61 min | 10.25 min
-    # ht09_contact_list.txt                 |  |V| = 5.351   | |E| = 20.817     2.727 min | 2.701 min | 1.932 min
-    # copresence-InVS13.txt                 |  |V| = 95      | |E| = 394.247    0.771 min | 1.189 min | 1.235 min
-    # reptilia-tortoise-network-fi.txt      |  |V| = 787     | |E| = 1.713      0.053 min | 0.036 min | 0.018 min
-    # aves-weaver-social.txt                |  |V| = 445     | |E| = 1.426      0.022 min | 0.013 min | 0.008 min
+    # twitter.txt                           |  |V| = 4.605   | |E| = 23.736     352.0 min | 392.4 min | 
+    # ia-reality-call.txt                   |  |V| = 6.809   | |E| = 52.050     307.1 min | 343.0 min |
+    # infectious.txt                        |  |V| = 10.972  | |E| = 415.912    234.7 min | 230.4 min | 191.51 min
+    # ia-contacts_dublin.txt                |  |V| = 10.972  | |E| = 415.912    185.8 min | 230.5 min |
+    # fb-messages.txt                       |  |V| = 1.899   | |E| = 61.734     125.3 min |       min |
+    # email-dnc.txt                         |  |V| = 1.891   | |E| = 39.264     67.23 min | 66.62 min |
+    # copresence-InVS15.txt                 |  |V| = 219     | |E| = 1.283.194  11.76 min |       min |
+    # fb-forum.txt                          |  |V| = 899     | |E| = 33.720     9.164 min | 12.03 min |
+    # tij_SFHH.txt                          |  |V| = 403     | |E| = 70.261     5.790 min | 10.63 min |
+    # ht09_contact_list.txt                 |  |V| = 5.351   | |E| = 20.817     2.727 min | 2.701 min |
+    # copresence-InVS13.txt                 |  |V| = 95      | |E| = 394.247    0.771 min | 1.235 min |
+    # reptilia-tortoise-network-fi.txt      |  |V| = 787     | |E| = 1.713      0.053 min | 0.036 min |
+    # aves-weaver-social.txt                |  |V| = 445     | |E| = 1.426      0.022 min | 0.013 min |
     # example_graph1.txt                    |  |V| = 7       | |E| = 18         0.005 min
     # example_graph2.txt                    |  |V| = 7       | |E| = 9          0.005 min
