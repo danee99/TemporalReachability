@@ -67,6 +67,7 @@ class TemporalGraph:
                     deg[edge[1]] = deg[edge[1]] - 1
                     V.sort(key=lambda a: a[1])
         print(deg)
+        print(core)
 
     def k_core_decomposition2(self):
         n = self.n
@@ -82,24 +83,24 @@ class TemporalGraph:
         # now sort the nodes in ascending order of their degree with bin-sort.
         # to do this, first count how many nodes will be in each bin.
         bin = [0] * md
-        for v in range(n):
+        for v in range(0, n):
             bin[deg[v]] += 1
         # using the bin sizes, we can determine the starting positions of the bins in the array vert
         start = 0
-        for d in range(md):
+        for d in range(0, md):
             num = bin[d]
             bin[d] = start
             start += num
-        valBucket = [0] * md
+        helper = [0] * md
         vert = [0] * n
         pos = [0] * n
         # insert nodes into the array vert
         # for each node we know to which field it belongs and what is the starting position of this field
         # so now we can sort the nodes by their degree
-        for v in range(n):
-            pos[v] = bin[deg[v]] + valBucket[deg[v]]
+        for v in range(0, n):
+            pos[v] = bin[deg[v]] + helper[deg[v]]
             vert[pos[v]] = v
-            valBucket[deg[v]] += 1
+            helper[deg[v]] += 1
         # now comes the core decomposition
         # at first, the core number of node v its degree
         # for each neighbor u of the node v with higher degree we must decrease its degree
@@ -117,27 +118,16 @@ class TemporalGraph:
                     pu = pos[u]
                     pw = bin[du]
                     w = vert[pw]
-                    if u != w:
+                    if w != u:
                         pos[u] = pw
                         vert[pu] = w
                         pos[w] = pu
                         vert[pw] = u
                     bin[du] += 1
                     deg[u] -= 1
-        print(deg)
+        return deg
 
     def k_core_decomposition3(self, k):
-        for node in range(0, self.n):
-            if self.outdegree[node] == 0:
-                self.deleted_nodes.add(node)
-                continue
-            for edge in self.incidence_list[node]:
-                if self.outdegree[edge[1]] < k:
-                    self.incidence_list[node].remove(edge)
-                    self.outdegree[node] -= 1
-        self.print_graph()
-
-    def k_core_decomposition4(self, k):
         min_deg = min(self.outdegree)
         while min_deg < k:
             for node in self.nodes:
@@ -187,7 +177,7 @@ class TemporalGraph:
         return total, x
 
     def top_k_reachability(self, alpha, beta, k, output_name):
-        self.k_core_decomposition4(1)
+        self.k_core_decomposition3(1)
         start_time = time.time()
         helper = [np.inf for _ in range(self.n)]
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
@@ -199,11 +189,12 @@ class TemporalGraph:
         with open(os.getcwd() + output_name, 'w') as f:
             f.write("--- finished in %s seconds ---" % finish + "\n")
             f.write("--- finished in %s minutes ---" % (finish / 60) + "\n")
-            f.write("--- finished in %s hours ---" % (finish / 3600))
+            f.write("--- finished in %s hours ---" % (finish / 3600)+ "\n")
             f.write(str(max_heap) + "\n")
             f.write(str([element[1] for element in max_heap]) + "\n")
-            f.write("gelöschte Knoten Anzahl " + str(len(self.deleted_nodes)) + "\n")
+            f.write("geloeschte Knoten Anzahl " + str(len(self.deleted_nodes)) + "\n")
             f.write("Knotenanzahl des Graphen " + str(len(self.nodes)) + "\n")
+            f.write("Kantenanzahl des Graphen " + str(len([self.incidence_list[i] for i in self.nodes])) + "\n")
 
 
 if __name__ == '__main__':
@@ -212,3 +203,8 @@ if __name__ == '__main__':
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
     G.top_k_reachability(0, np.inf, k, output_file)
+    # kCore = G.k_core_decomposition2()
+    # for v in G.nodes:
+    #     print("Knoten (" + str(v) + ") gehört zum " + str(kCore[v]) + "-Core")
+    # example_graph2.txt
+    # example_graph1.txt

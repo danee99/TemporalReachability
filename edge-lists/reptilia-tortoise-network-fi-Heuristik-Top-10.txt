@@ -1,0 +1,8 @@
+--- finished in 0.5592007637023926 seconds ---
+--- finished in 0.00932001272837321 minutes ---
+--- finished in 0.00015533354547288681 hours ---
+[(961, 378), (960, 178), (947, 355), (957, 285), (958, 287), (946, 201), (946, 185), (951, 174), (947, 276), (941, 286)]
+[378, 178, 355, 285, 287, 201, 185, 174, 276, 286]
+geloeschte Knoten Anzahl 584
+Knotenanzahl des Graphen 203
+Kantenanzahl des Graphen 203

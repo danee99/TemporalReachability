@@ -1,0 +1,8 @@
+--- finished in 0.36855101585388184 seconds ---
+--- finished in 0.00614251693089803 minutes ---
+--- finished in 0.00010237528218163385 hours ---
+[(29, 4), (29, 1), (28, 6), (21, 3), (27, 0), (25, 2), (26, 5)]
+[4, 1, 6, 3, 0, 2, 5]
+geloeschte Knoten Anzahl 0
+Knotenanzahl des Graphen 7
+Kantenanzahl des Graphen 7

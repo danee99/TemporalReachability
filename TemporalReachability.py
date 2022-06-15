@@ -155,13 +155,14 @@ if __name__ == '__main__':
     # infectious.txt                        |  |V| = 10.972  | |E| = 415.912    234.7 min | 230.4 min | 191.51 min
     # ia-contacts_dublin.txt                |  |V| = 10.972  | |E| = 415.912    185.8 min | 230.5 min |
     # fb-messages.txt                       |  |V| = 1.899   | |E| = 61.734     125.3 min |       min |
-    # email-dnc.txt                         |  |V| = 1.891   | |E| = 39.264     67.23 min | 66.62 min |
+    # email-dnc.txt                         |  |V| = 1.891   | |E| = 39.264     67.23 min | 66.62 min | 26.14 min
     # copresence-InVS15.txt                 |  |V| = 219     | |E| = 1.283.194  11.76 min |       min |
     # fb-forum.txt                          |  |V| = 899     | |E| = 33.720     9.164 min | 12.03 min |
     # tij_SFHH.txt                          |  |V| = 403     | |E| = 70.261     5.790 min | 10.63 min |
-    # ht09_contact_list.txt                 |  |V| = 5.351   | |E| = 20.817     2.727 min | 2.701 min |
-    # copresence-InVS13.txt                 |  |V| = 95      | |E| = 394.247    0.771 min | 1.235 min |
-    # reptilia-tortoise-network-fi.txt      |  |V| = 787     | |E| = 1.713      0.053 min | 0.036 min |
-    # aves-weaver-social.txt                |  |V| = 445     | |E| = 1.426      0.022 min | 0.013 min |
-    # example_graph1.txt                    |  |V| = 7       | |E| = 18         0.005 min
-    # example_graph2.txt                    |  |V| = 7       | |E| = 9          0.005 min
+    # ht09_contact_list.txt                 |  |V| = 5.351   | |E| = 20.817     2.727 min | 2.701 min | x
+    # copresence-InVS13.txt                 |  |V| = 95      | |E| = 394.247    0.771 min | 1.235 min | 0.947 min
+    # reptilia-tortoise-network-fi.txt      |  |V| = 787     | |E| = 1.713      0.053 min | 0.036 min | 0.009 min
+    # aves-weaver-social.txt                |  |V| = 445     | |E| = 1.426      0.022 min | 0.013 min | 0.006 min
+    # -----------------------------------------------------------------------------------------------------------------
+    # example_graph1.txt                    |  |V| = 7       | |E| = 18
+    # example_graph2.txt                    |  |V| = 7       | |E| = 9
