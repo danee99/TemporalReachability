@@ -200,7 +200,7 @@ class TemporalGraph:
         finish2 = time.time() - start_time2
         with open(os.getcwd() + output_name, 'w') as f:
             f.write("--- Total: finished in %s seconds ---" % (finish1 / 60) + "\n")
-            f.write("--- Ohne k core decomp: finished in %s seconds ---" % (finish2 / 60) + "\n")
+            f.write("--- Ohne k core decomp: finished in %s minutes ---" % (finish2 / 60) + "\n")
             f.write(str([element[1] for element in max_heap]) + "\n")
             f.write(str(max_heap) + "\n")
             f.write(str(len(self.deleted_nodes)) + "\n")
