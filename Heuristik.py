@@ -177,7 +177,8 @@ class TemporalGraph:
         return total, x
 
     def top_k_reachability(self, alpha, beta, k, output_name):
-        self.k_core_decomposition3(1)
+        min_deg = min(self.outdegree)
+        self.k_core_decomposition3(min_deg+1)
         start_time = time.time()
         helper = [np.inf for _ in range(self.n)]
         pool = multiprocessing.Pool(multiprocessing.cpu_count())

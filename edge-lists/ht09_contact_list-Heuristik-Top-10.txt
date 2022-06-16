@@ -1,8 +1,0 @@
---- finished in 0.3712787628173828 seconds ---
---- finished in 0.0061879793802897135 minutes ---
---- finished in 0.00010313298967149523 hours ---
-[]
-[]
-geloeschte Knoten Anzahl 5351
-Knotenanzahl des Graphen 0
-Kantenanzahl des Graphen 0
