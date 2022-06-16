@@ -1,0 +1,8 @@
+--- finished in 0.36812472343444824 seconds ---
+--- finished in 0.006135412057240804 minutes ---
+--- finished in 0.00010225686762068007 hours ---
+[]
+[]
+geloeschte Knoten Anzahl 7
+Knotenanzahl des Graphen 0
+Kantenanzahl des Graphen 0
