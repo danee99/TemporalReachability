@@ -4,6 +4,8 @@ import time
 from queue import PriorityQueue
 import heapq_max
 import numpy as np
+import copy
+from timeit import default_timer as timer
 
 max_heap = []
 k = 10
@@ -47,13 +49,34 @@ class TemporalGraph:
             self.nodes = {node: degree for node, degree in
                           sorted(self.nodes.items(), key=lambda item: item[1], reverse=True)}
 
+    def k_core_decomposition3(self, k):
+        min_deg = next(iter(self.nodes.values()))
+        while min_deg < k:
+            for v in self.nodes:
+                if self.nodes[v] < k:
+                    del self.nodes[v]
+            for v in self.nodes:
+                for edge in self.incidence_list[v]:
+                    if self.nodes[edge[1]] < k:
+                        self.incidence_list[v].remove(edge)
+                        self.nodes[v] -= 1
+            try:
+                min_deg = min(self.nodes.values())
+            except ValueError:
+                min_deg = k
+
+    # def largest_outdegrees(self, n):
+    #     self.outdegree.sort(reverse=True)
+    #     print(self.outdegree[:n][-1])
+    #     print(max(self.outdegree, key=self.outdegree.count))
+    #     print(self.outdegree)
+
     def top_k_util(self, alpha, beta, k, x, helper):
         total = 0
-        for node in self.nodes:
-            if node == x:
+        for node in range(0, self.n):
+            if node == x or node in self.deleted_nodes:
                 continue
             reach_set = {node}
-            visited = set()
             earliest_arrival_time = helper.copy()
             earliest_arrival_time[node] = 0
             PQ = PriorityQueue()
@@ -61,19 +84,22 @@ class TemporalGraph:
             while not PQ.empty():
                 (current_arrival_time, current_node) = PQ.get()
                 for (u, v, t, l) in self.incidence_list[current_node]:
-                    if u != x and v != x and current_node not in visited:
-                        if t < alpha or t + l > beta: continue
+                    if u != x and v != x:
+                        if t < alpha or t + l > beta:
+                            continue
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                             reach_set.add(v)
                             earliest_arrival_time[v] = t + l
                             PQ.put((earliest_arrival_time[v], v))
-                        visited.add(current_node)
             total = total + len(reach_set)
-            if max_heap != [] and len(max_heap) >= k and total > max_heap[0][0]:
-                return -1, x
+            if max_heap != [] and len(max_heap) >= k:
+                if total > max_heap[0][0]:
+                    return -1, x
         return total, x
 
     def top_k_reachability(self, alpha, beta, k, output_name):
+        min_deg = min(self.outdegree)
+        self.k_core_decomposition3(min_deg+1)
         start_time = time.time()
         helper = [np.inf for _ in range(self.n)]
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
@@ -85,13 +111,22 @@ class TemporalGraph:
         with open(os.getcwd() + output_name, 'w') as f:
             f.write("--- finished in %s seconds ---" % finish + "\n")
             f.write("--- finished in %s minutes ---" % (finish / 60) + "\n")
-            f.write("--- finished in %s hours ---" % (finish / 3600))
-            f.write(str(max_heap))
+            f.write("--- finished in %s hours ---" % (finish / 3600)+ "\n")
+            f.write(str(max_heap) + "\n")
             f.write(str([element[1] for element in max_heap]) + "\n")
+            f.write("geloeschte Knoten Anzahl " + str(len(self.deleted_nodes)) + "\n")
+            f.write("Knotenanzahl des Graphen " + str(len(self.nodes)) + "\n")
+            f.write("Kantenanzahl des Graphen " + str(len([self.incidence_list[i] for i in self.nodes])) + "\n")
+
 
 if __name__ == '__main__':
     input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
-    output_file = input_graph.split(".")[0] + '-Top' + str(k) + '.txt'
+    output_file = input_graph.split(".")[0] + '-Heuristik-Top-' + str(k) + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
     G.top_k_reachability(0, np.inf, k, output_file)
+    # kCore = G.k_core_decomposition2()
+    # for v in G.nodes:
+    #     print("Knoten (" + str(v) + ") gehört zum " + str(kCore[v]) + "-Core")
+    # example_graph2.txt
+    # example_graph1.txt
