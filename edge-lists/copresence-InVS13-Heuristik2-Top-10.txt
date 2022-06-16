@@ -1,8 +1,0 @@
---- finished in 56.55589270591736 seconds ---
---- finished in 0.9425982117652894 minutes ---
---- finished in 0.015709970196088156 hours ---
-[(4403, 41), (4403, 0), (4402, 24), (4402, 20), (4402, 44), (4393, 39), (4402, 15), (4402, 11), (4400, 69), (4402, 9)]
-[41, 0, 24, 20, 44, 39, 15, 11, 69, 9]
-geloeschte Knoten Anzahl 1
-Knotenanzahl des Graphen 94
-Kantenanzahl des Graphen 94

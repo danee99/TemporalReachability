@@ -1,0 +1,8 @@
+--- finished in 0.5757632255554199 seconds ---
+--- finished in 0.009596053759257 minutes ---
+--- finished in 0.00015993422932094998 hours ---
+[(1001, 238), (1001, 133), (1000, 252), (1000, 203), (994, 245), (963, 235), (996, 328), (997, 233), (997, 31), (986, 239)]
+[238, 133, 252, 203, 245, 235, 328, 233, 31, 239]
+geloeschte Knoten Anzahl 207
+Knotenanzahl des Graphen 238
+Kantenanzahl des Graphen 238
