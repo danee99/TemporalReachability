@@ -151,7 +151,7 @@ if __name__ == '__main__':
     # wikipediasg.txt                       |  |V| = 208.142 | |E| = 810.702
     # facebook.txt                          |  |V| = 63.731  | |E| = 817.035
     # twitter.txt                           |  |V| = 4.605   | |E| = 23.736     352.0 min | 392.4 min | 393.5 min --> gelöschte Knoten Anzahl: 0 --> 64.09 min (2 core)
-    # ia-reality-call.txt                   |  |V| = 6.809   | |E| = 52.050     307.1 min | 343.0 min |
+    # ia-reality-call.txt                   |  |V| = 6.809   | |E| = 52.050     307.1 min | 343.0 min | 107.3 min --> geloeschte Knoten Anzahl 3209
     # infectious.txt                        |  |V| = 10.972  | |E| = 415.912    234.7 min | 230.4 min | 191.51 min --> gelöschte Knoten Anzahl: 1296
     # ia-contacts_dublin.txt                |  |V| = 10.972  | |E| = 415.912    185.8 min | 230.5 min |
     # fb-messages.txt                       |  |V| = 1.899   | |E| = 61.734     125.3 min |       min |
