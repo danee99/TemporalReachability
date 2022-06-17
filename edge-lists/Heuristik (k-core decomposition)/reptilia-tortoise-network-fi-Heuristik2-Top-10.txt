@@ -1,8 +1,0 @@
---- finished in 0.9712023735046387 seconds ---
---- finished in 0.01618670622507731 minutes ---
---- finished in 0.00026977843708462184 hours ---
-[(1678, 285), (1678, 285), (1675, 287), (1677, 298), (1666, 276), (1665, 355), (1654, 201), (1662, 174), (1662, 286), (1662, 185)]
-[285, 285, 287, 298, 276, 355, 201, 174, 286, 185]
-geloeschte Knoten Anzahl 415
-Knotenanzahl des Graphen 372
-Kantenanzahl des Graphen 372

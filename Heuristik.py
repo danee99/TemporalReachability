@@ -203,7 +203,8 @@ if __name__ == '__main__':
     output_file = input_graph.split(".")[0] + '-Heuristik-Top-' + str(k) + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
-    G.top_k_reachability(0, np.inf, k, output_file)
+    # G.top_k_reachability(0, np.inf, k, output_file)
+    print(min(G.outdegree))
     # kCore = G.k_core_decomposition2()
     # for v in G.nodes:
     #     print("Knoten (" + str(v) + ") gehört zum " + str(kCore[v]) + "-Core")
