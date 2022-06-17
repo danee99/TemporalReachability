@@ -146,7 +146,7 @@ if __name__ == '__main__':
     G = TemporalGraph()
     G.import_edgelist(input_graph)
     G.node_ranking(a, b, output_file)
-    # DATASETS:                                                              Node Ranking |   Top k   | Heuristik (1-core)
+    # DATASETS:                                                                 Node Ranking | Top k  | Heuristik (k-core)
     # wiki_talk_nl.txt                      |  |V| = 225.749 | |E| = 1.554.698
     # wikipediasg.txt                       |  |V| = 208.142 | |E| = 810.702
     # facebook.txt                          |  |V| = 63.731  | |E| = 817.035
@@ -157,7 +157,7 @@ if __name__ == '__main__':
     # fb-messages.txt                       |  |V| = 1.899   | |E| = 61.734     125.3 min |       min | 146.44 min (2-core) geloeschte Knoten Anzahl: 562
     # email-dnc.txt                         |  |V| = 1.891   | |E| = 39.264     67.23 min | 66.62 min | 26.14 min (1-core) gelöschte Knoten Anzahl: 912
     # copresence-InVS15.txt                 |  |V| = 219     | |E| = 1.283.194  11.76 min |       min |
-    # fb-forum.txt                          |  |V| = 899     | |E| = 33.720     9.164 min | 12.03 min | x
+    # fb-forum.txt                          |  |V| = 899     | |E| = 33.720     9.164 min | 12.03 min | 7.557 min (2-core)
     # tij_SFHH.txt                          |  |V| = 403     | |E| = 70.261     5.790 min | 10.63 min | 10.23 min (1-core) --> gelöschte Knoten Anzahl: 7
     # ht09_contact_list.txt                 |  |V| = 5.351   | |E| = 20.817     2.727 min | 2.701 min | 0.0005 min (1-core) --> gelöschte Knoten Anzahl: Alle
     # copresence-InVS13.txt                 |  |V| = 95      | |E| = 394.247    0.771 min | 1.235 min | 0.947 min --> gelöschte Knoten Anzahl: 1
