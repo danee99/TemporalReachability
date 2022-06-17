@@ -1,8 +1,0 @@
---- finished in 602.5312714576721 seconds ---
---- finished in 10.04218785762787 minutes ---
---- finished in 0.16736979762713114 hours ---
-[(138147, 20), (138140, 58), (138115, 141), (137813, 52), (138059, 13), (138053, 91), (137271, 35), (137799, 71), (137540, 30), (137474, 82)]
-[20, 58, 141, 52, 13, 91, 35, 71, 30, 82]
-geloeschte Knoten Anzahl 12
-Knotenanzahl des Graphen 391
-Kantenanzahl des Graphen 391
