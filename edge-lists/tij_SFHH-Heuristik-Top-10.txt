@@ -1,0 +1,8 @@
+--- finished in 612.9759759902954 seconds ---
+--- finished in 10.216266266504924 minutes ---
+--- finished in 0.17027110444174873 hours ---
+[(138686, 135), (138641, 20), (138635, 58), (137992, 30), (138303, 71), (138613, 141), (138558, 13), (137973, 82), (137721, 35), (138301, 52)]
+[135, 20, 58, 30, 71, 141, 13, 82, 35, 52]
+geloeschte Knoten Anzahl 7
+Knotenanzahl des Graphen 396
+Kantenanzahl des Graphen 396
