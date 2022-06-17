@@ -1,0 +1,8 @@
+--- finished in 453.4666955471039 seconds ---
+--- finished in 7.557778259118398 minutes ---
+--- finished in 0.12596297098530662 hours ---
+[(211053, 33), (211041, 15), (209917, 23), (210833, 142), (211011, 163), (208566, 84), (209814, 87), (206922, 1), (210602, 27), (210183, 403)]
+[33, 15, 23, 142, 163, 84, 87, 1, 27, 403]
+geloeschte Knoten Anzahl 179
+Knotenanzahl des Graphen 720
+Kantenanzahl des Graphen 720
