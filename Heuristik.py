@@ -178,7 +178,7 @@ class TemporalGraph:
 
     def top_k_reachability(self, alpha, beta, k, output_name):
         min_deg = min(self.outdegree)
-        self.k_core_decomposition3(min_deg+1)
+        self.k_core_decomposition3(min_deg+2)
         start_time = time.time()
         helper = [np.inf for _ in range(self.n)]
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
@@ -200,7 +200,7 @@ class TemporalGraph:
 
 if __name__ == '__main__':
     input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
-    output_file = input_graph.split(".")[0] + '-Heuristik-Top-' + str(k) + '.txt'
+    output_file = input_graph.split(".")[0] + '-Heuristik-Top-' + str(k) + ' (2-core).txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
     G.top_k_reachability(0, np.inf, k, output_file)
