@@ -153,7 +153,7 @@ if __name__ == '__main__':
     # twitter.txt                           |  |V| = 4.605   | |E| = 23.736     352.0 min --> 167.3 min | 392.4 min | 393.5 min (1-core) --> 64.09 min (2-core)
     # ia-reality-call.txt                   |  |V| = 6.809   | |E| = 52.050     307.1 min --> 134.7 min | 343.0 min | 107.3 min (1-core) geloeschte Knoten Anzahl: 3209
     # infectious.txt                        |  |V| = 10.972  | |E| = 415.912    234.7 min --> 128.6 min | 230.4 min | 191.51 min (1-core) gelöschte Knoten Anzahl: 1296
-    # ia-contacts_dublin.txt                |  |V| = 10.972  | |E| = 415.912    185.8 min | 230.5 min | 194.25 min (1-core) geloeschte Knoten Anzahl: 1296
+    # ia-contacts_dublin.txt                |  |V| = 10.972  | |E| = 415.912    185.8 min --> 221.79524776538213 min | 230.5 min | 194.25 min (1-core) geloeschte Knoten Anzahl: 1296
     # fb-messages.txt                       |  |V| = 1.899   | |E| = 61.734     125.3 min |       min | 146.44 min (2-core) geloeschte Knoten Anzahl: 562
     # email-dnc.txt                         |  |V| = 1.891   | |E| = 39.264     67.23 min | 66.62 min | 26.14 min (1-core) gelöschte Knoten Anzahl: 912
     # copresence-InVS15.txt                 |  |V| = 219     | |E| = 1.283.194  11.76 min |       min |
