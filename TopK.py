@@ -60,14 +60,15 @@ class TemporalGraph:
             PQ.put((earliest_arrival_time[node], node))
             while not PQ.empty():
                 (current_arrival_time, current_node) = PQ.get()
-                for (u, v, t, l) in self.incidence_list[current_node]:
-                    if u != x and v != x and current_node not in visited:
-                        if t < alpha or t + l > beta: continue
-                        if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                            reach_set.add(v)
-                            earliest_arrival_time[v] = t + l
-                            PQ.put((earliest_arrival_time[v], v))
-                        visited.add(current_node)
+                if current_node not in visited:
+                    for (u, v, t, l) in self.incidence_list[current_node]:
+                        if u != x and v != x:
+                            if t < alpha or t + l > beta: continue
+                            if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+                                reach_set.add(v)
+                                earliest_arrival_time[v] = t + l
+                                PQ.put((earliest_arrival_time[v], v))
+                    visited.add(current_node)
             total = total + len(reach_set)
             if max_heap != [] and len(max_heap) >= k and total > max_heap[0][0]:
                 return -1, x

@@ -137,20 +137,23 @@ class TemporalGraph:
             if node == x or node in self.deleted_nodes:
                 continue
             reach_set = {node}
+            visited = set()
             earliest_arrival_time = helper.copy()
             earliest_arrival_time[node] = 0
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
             while not PQ.empty():
                 (current_arrival_time, current_node) = PQ.get()
-                for (u, v, t, l) in self.incidence_list[current_node]:
-                    if u != x and v != x:
-                        if t < alpha or t + l > beta:
-                            continue
-                        if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                            reach_set.add(v)
-                            earliest_arrival_time[v] = t + l
-                            PQ.put((earliest_arrival_time[v], v))
+                if current_node not in visited:
+                    for (u, v, t, l) in self.incidence_list[current_node]:
+                        if u != x and v != x:
+                            if t < alpha or t + l > beta:
+                                continue
+                            if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+                                reach_set.add(v)
+                                earliest_arrival_time[v] = t + l
+                                PQ.put((earliest_arrival_time[v], v))
+                    visited.add(current_node)
             total = total + len(reach_set)
             if max_heap != [] and len(max_heap) >= k:
                 if total > max_heap[0][0]:
@@ -159,8 +162,8 @@ class TemporalGraph:
 
     def top_k_reachability(self, alpha, beta, k, output_name):
         min_deg = min(self.outdegree)
-        self.k_core_decomposition(min_deg + 2)
         start_time = time.time()
+        self.k_core_decomposition(min_deg + 1)
         helper = [np.inf for _ in range(self.n)]
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
         for node in self.nodes:

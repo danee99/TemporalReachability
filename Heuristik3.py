@@ -154,7 +154,7 @@ class TemporalGraph:
             i += 1
         # print(self.change_in_reachability)
 
-    def util(self, x, a, b, helper, before):
+    def util(self, x, a, b, helper):
         result = 0
         for node in self.nodes:
             if node == x:
@@ -177,20 +177,16 @@ class TemporalGraph:
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
             # result += len(reach_set) + self.change_in_reachability[node]
-            result += len(reach_set)
-        # return 1 - (result / before)
-        return 1 - (result / before)
+            result += len(reach_set) + self.change_in_reachability[node]
+        return result + len(self.deleted_nodes)
 
     def node_ranking(self, a, b, output_name, depth):
         start_time = time.time()
-        G.calc_reachabilities(0, np.inf)
-        n = self.n
-        before = self.total_reachability
-        # helper = {v: np.inf for v in self.nodes}
-        helper = [np.inf for _ in range(self.n)]
+        G.filter_nodes(depth)
+        helper = {v: np.inf for v in self.nodes}
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        result_objects = [pool.apply_async(self.util, args=(node, a, b, helper, before)) for node in
-                          range(0, self.n)]
+        result_objects = [pool.apply_async(self.util, args=(node, a, b, helper)) for node in
+                          self.nodes]
         ranking = [r.get() for r in result_objects]
         pool.close()
         pool.join()
@@ -209,10 +205,7 @@ if __name__ == '__main__':
     output_file = input_graph.split(".")[0] + '-Rangliste3' + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
-    G.filter_nodes(depth)
-    G.print_graph()
-    for i in G.nodes:
-        print(i, G.calc_total_reachability_after(0, np.inf, i))
+    G.node_ranking(0, np.inf, output_file, depth)
     # start_time = time.time()
     # finish = time.time() - start_time
     # example_graph1.txt

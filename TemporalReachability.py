@@ -154,9 +154,9 @@ if __name__ == '__main__':
     # ia-reality-call.txt                   |  |V| = 6.809   | |E| = 52.050     307.1 min --> 134.7 min | 343.0 min | 107.3 min (1-core) geloeschte Knoten Anzahl: 3209
     # infectious.txt                        |  |V| = 10.972  | |E| = 415.912    234.7 min --> 128.6 min | 230.4 min | 191.51 min (1-core) gelöschte Knoten Anzahl: 1296
     # ia-contacts_dublin.txt                |  |V| = 10.972  | |E| = 415.912    185.8 min --> 221.7 min | 230.5 min | 194.25 min (1-core) geloeschte Knoten Anzahl: 1296
-    # fb-messages.txt                       |  |V| = 1.899   | |E| = 61.734     125.3 min --> 47.2 min |       min | 146.44 min (2-core) geloeschte Knoten Anzahl: 562
-    # email-dnc.txt                         |  |V| = 1.891   | |E| = 39.264     67.23 min | 66.62 min | 26.14 min (1-core) gelöschte Knoten Anzahl: 912
-    # copresence-InVS15.txt                 |  |V| = 219     | |E| = 1.283.194  11.76 min |       min |
+    # fb-messages.txt                       |  |V| = 1.899   | |E| = 61.734     125.3 min --> 47.2 min  |       min | 146.44 min (2-core) geloeschte Knoten Anzahl: 562
+    # email-dnc.txt                         |  |V| = 1.891   | |E| = 39.264     67.23 min --> 13.9 min  | 66.62 min | 26.14 min (1-core) gelöschte Knoten Anzahl: 912
+    # copresence-InVS15.txt                 |  |V| = 219     | |E| = 1.283.194  11.76 min --> 7.2 min   |       min |
     # fb-forum.txt                          |  |V| = 899     | |E| = 33.720     9.164 min | 12.03 min | 7.557 min (2-core)
     # tij_SFHH.txt                          |  |V| = 403     | |E| = 70.261     5.790 min | 10.63 min | 10.23 min (1-core) --> gelöschte Knoten Anzahl: 7
     # ht09_contact_list.txt                 |  |V| = 5.351   | |E| = 20.817     2.727 min | 2.701 min | 0.0005 min (1-core) --> gelöschte Knoten Anzahl: Alle
