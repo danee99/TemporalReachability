@@ -208,8 +208,7 @@ if __name__ == '__main__':
     output_file = input_graph.split(".")[0] + '-Rangliste3' + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
-    # G.node_ranking(0, np.inf, output_file, depth)
-    G.quick_node_ranking_test(0, np.inf)
+    G.node_ranking(0, np.inf, output_file, depth)
     # start_time = time.time()
     # finish = time.time() - start_time
     # example_graph1.txt
