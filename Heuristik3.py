@@ -17,17 +17,15 @@ class TemporalGraph:
         self.deleted_nodes = set()
         self.total_reachability = 0
         self.change_in_reachability = {}
+        # set-of-reachable-nodes(v) = self.nodes[node][0]
+        # outdegree(v) = self.nodes[v][1]
+        # indegree(v) = self.nodes[v][2]
 
     def add_edge(self, u, v, t, l):
         if u in self.graph:
             self.graph[u].append((u, v, t, l))
         else:
             self.graph[u] = [(u, v, t, l)]
-
-    def remove_node(self, node):
-        del self.nodes[node]
-        del self.graph[node]
-        self.n -= 1
 
     def print_graph(self):
         print(self.n)
@@ -37,19 +35,11 @@ class TemporalGraph:
             print(str(v) + " " + str(self.graph[v]))
             print(str(v) + " " + str(self.nodes[v]))
 
-    def print_reachable_nodes(self, node):
-        print("Knoten " + str(node) + " erreicht die Knoten: " + str(self.nodes[node][0]))
+    def print_reachable_nodes(self):
+        for node in self.nodes:
+            print("Knoten " + str(node) + " erreicht die Knoten: " + str(self.nodes[node][0]))
 
-    def outdegree(self, node):
-        return self.nodes[node][1]
-
-    def indegree(self, node):
-        return self.nodes[node][2]
-
-    def reach_set(self, node):
-        return self.nodes[node][0]
-
-    def num_reachable_nodes(self):
+    def print_num_reachable_nodes(self):
         for node in self.nodes:
             print("Knoten " + str(node) + " erreicht " + str(len(self.nodes[node][0])) + " Knoten")
 
@@ -89,9 +79,10 @@ class TemporalGraph:
                         reach_set.add(v)
                         earliest_arrival_time[v] = t + l
                         PQ.put((earliest_arrival_time[v], v))
-            self.total_reachability += len(reach_set)
+            self.total_reachability += len(reach_set) + self.change_in_reachability[node]
             self.nodes[node][0] = reach_set
             self.nodes[node][3] = len(reach_set)
+        self.total_reachability += len(self.deleted_nodes)
 
     def calc_total_reachability_after(self, a, b, x):
         result = 0
@@ -115,71 +106,53 @@ class TemporalGraph:
                                 earliest_arrival_time[v] = t + l
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
-            result += len(reach_set)
-            result += self.change_in_reachability[node]
-            # self.nodes[node][0] = reach_set
-        return result
+            result += len(reach_set) + self.change_in_reachability[node]
+            self.nodes[node][0] = reach_set
+            self.nodes[node][3] = len(reach_set)
+        return result + len(self.deleted_nodes)
 
-    def node_ranking(self, a, b):
-        ranking = []
-        for node in G.nodes:
-            ranking.append((node, G.calc_total_reachability_after(0, np.inf, node)))
-        ranking.sort(key=lambda tup: tup[1])
+    def quick_node_ranking_test(self, a, b):
+        pool = multiprocessing.Pool(multiprocessing.cpu_count())
+        result_objects = [pool.apply_async(self.calc_total_reachability_after, args=(0, np.inf, node))
+                          for node in range(0, self.n)]
+        rankings = [r.get() for r in result_objects]
+        result = list(zip([v for v in range(0, self.n)], rankings))
+        pool.close()
+        pool.join()
+        result.sort(key=lambda tup: tup[1])
         i = 1
         print("        | v | R(G-v)")
         print("--------|---|-------")
-        for item in ranking:
+        for item in result:
             print(str(i) + ".Platz | " + str(item[0]) + " | " + str(item[1]))
             i += 1
 
-    def filter_nodes(self):
-        upper_bound = 0
-        for node in self.nodes:
-            if self.outdegree(node) == 0:
-                self.deleted_nodes.add(node)
-        for node in self.nodes:
-            if node not in self.deleted_nodes:
-                self.nodes[node][3] -= len(self.deleted_nodes)
-                upper_bound += self.nodes[node][3]
-        # upper_bound = upper_bound+len(self.deleted_nodes)*(self.n-len(self.deleted_nodes)+1)
-        print(self.deleted_nodes)
-        print(upper_bound)
-
-    # O(depth * n * d_max)
-    def stubborn(self, depth):
+    def filter_nodes(self, depth):
         i = 0
         while i != depth:
             for node in self.nodes:
-                if self.outdegree(node) == 0:
+                if self.nodes[node][1] == 0:
                     self.deleted_nodes.add(node)
                     self.nodes[node][0].discard(node)
                     self.nodes[node][3] = 0
             for node in self.nodes:
-                for edge in self.graph[node][:]:
-                    if edge[1] in self.deleted_nodes:
-                        self.change_in_reachability[edge[0]] += 1 + self.change_in_reachability[edge[1]]
-                        self.nodes[edge[0]][0].discard(edge[1])
-                        self.nodes[edge[0]][1] -= 1
-                        self.nodes[edge[1]][2] -= 1
-                        self.nodes[edge[0]][3] -= 1
-                        self.graph[edge[0]].remove((edge[0], edge[1], edge[2], edge[3]))
+                for (u, v, t, l) in self.graph[node][:]:
+                    if v in self.deleted_nodes:
+                        self.change_in_reachability[u] += 1 + self.change_in_reachability[v]
+                        # self.nodes[u][0].discard(v)
+                        # self.nodes[u][3] -= 1
+                        self.nodes[u][1] -= 1
+                        self.nodes[v][2] -= 1
+                        self.graph[u].remove((u, v, t, l))
             for node in self.deleted_nodes:
-                del self.nodes[node]
-                del self.graph[node]
-                self.n -= 1
+                try:
+                    del self.nodes[node]
+                    del self.graph[node]
+                    self.n -= 1
+                except KeyError:
+                    continue
             i += 1
-
-    def stubborn_ranking(self, a, b):
-        start_time = time.time()
-        G.calc_reachabilities(0, np.inf)
-        G.stubborn(1)
-        finish = time.time() - start_time
-        print(finish)
-        ranking = []
-        for i in self.nodes:
-            ranking.append((i, self.calc_total_reachability_after(a, b, i)))
-        ranking.sort(key=lambda tup: tup[1])
-        print(ranking)
+        # print(self.change_in_reachability)
 
     def util(self, x, a, b, helper, before):
         result = 0
@@ -208,7 +181,7 @@ class TemporalGraph:
         # return 1 - (result / before)
         return 1 - (result / before)
 
-    def alternative(self, a, b, output_name, depth):
+    def node_ranking(self, a, b, output_name, depth):
         start_time = time.time()
         G.calc_reachabilities(0, np.inf)
         n = self.n
@@ -224,7 +197,7 @@ class TemporalGraph:
         finish = time.time() - start_time
         with open(os.getcwd() + output_name, 'w') as f:
             f.write(str(ranking) + "\n")
-            f.write("R(G) = "+ str(self.total_reachability) + "\n")
+            f.write("R(G) = " + str(self.total_reachability) + "\n")
             f.write("--- finished in %s seconds ---" % finish + "\n")
             f.write("--- finished in %s minutes ---" % (finish / 60) + "\n")
             f.write("--- finished in %s hours ---" % (finish / 3600))
@@ -236,8 +209,11 @@ if __name__ == '__main__':
     output_file = input_graph.split(".")[0] + '-Rangliste3' + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
+    G.filter_nodes(depth)
+    G.print_graph()
+    for i in G.nodes:
+        print(i, G.calc_total_reachability_after(0, np.inf, i))
     # start_time = time.time()
-    G.alternative(0, np.inf, output_file, depth)
     # finish = time.time() - start_time
     # example_graph1.txt
     # example_graph2.txt
