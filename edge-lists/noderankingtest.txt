@@ -1,0 +1,11 @@
+        | v | R(G-v)
+--------|---|-------
+1.Platz | 2 | 12
+2.Platz | 3 | 13
+3.Platz | 0 | 14
+4.Platz | 1 | 14
+5.Platz | 4 | 15
+6.Platz | 5 | 15
+7.Platz | 6 | 15
+8.Platz | 7 | 15
+9.Platz | 8 | 15

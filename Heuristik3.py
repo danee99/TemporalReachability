@@ -112,6 +112,7 @@ class TemporalGraph:
         return result + len(self.deleted_nodes)
 
     def quick_node_ranking_test(self, a, b):
+        file = "/edge-lists/noderankingtest.txt"
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
         result_objects = [pool.apply_async(self.calc_total_reachability_after, args=(0, np.inf, node))
                           for node in range(0, self.n)]
@@ -121,11 +122,12 @@ class TemporalGraph:
         pool.join()
         result.sort(key=lambda tup: tup[1])
         i = 1
-        print("        | v | R(G-v)")
-        print("--------|---|-------")
-        for item in result:
-            print(str(i) + ".Platz | " + str(item[0]) + " | " + str(item[1]))
-            i += 1
+        with open(os.getcwd() + file, 'w') as f:
+            f.write("        | v | R(G-v)" + "\n")
+            f.write("--------|---|-------" + "\n")
+            for item in result:
+                f.write(str(i) + ".Platz | " + str(item[0]) + " | " + str(item[1]) + "\n")
+                i += 1
 
     def filter_nodes(self, depth):
         i = 0
@@ -194,7 +196,7 @@ class TemporalGraph:
         with open(os.getcwd() + output_name, 'w') as f:
             ranking.sort(key=lambda tup: tup[1])
             f.write(str(ranking) + "\n")
-            f.write("R(G) = " + str(self.total_reachability) + "\n")
+            f.write("mit Tiefe = " + str(depth) + "\n")
             f.write("--- finished in %s seconds ---" % finish + "\n")
             f.write("--- finished in %s minutes ---" % (finish / 60) + "\n")
             f.write("--- finished in %s hours ---" % (finish / 3600))
@@ -206,7 +208,8 @@ if __name__ == '__main__':
     output_file = input_graph.split(".")[0] + '-Rangliste3' + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
-    G.node_ranking(0, np.inf, output_file, depth)
+    # G.node_ranking(0, np.inf, output_file, depth)
+    G.quick_node_ranking_test(0, np.inf)
     # start_time = time.time()
     # finish = time.time() - start_time
     # example_graph1.txt
