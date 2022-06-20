@@ -181,9 +181,7 @@ class TemporalGraph:
         ranking.sort(key=lambda tup: tup[1])
         print(ranking)
 
-    def util(self, x, a, b, helper):
-        if x not in self.nodes:
-            return 0
+    def util(self, x, a, b, helper, before):
         result = 0
         for node in self.nodes:
             if node == x:
@@ -205,27 +203,28 @@ class TemporalGraph:
                                 earliest_arrival_time[v] = t + l
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
-            result += len(reach_set) + self.change_in_reachability[node]
+            # result += len(reach_set) + self.change_in_reachability[node]
+            result += len(reach_set)
         # return 1 - (result / before)
-        return result
+        return 1 - (result / before)
 
     def alternative(self, a, b, output_name, depth):
         start_time = time.time()
         G.calc_reachabilities(0, np.inf)
         n = self.n
-        # before = self.total_reachability
-        G.stubborn(depth)
-        helper = {v: np.inf for v in self.nodes}
+        before = self.total_reachability
+        # helper = {v: np.inf for v in self.nodes}
+        helper = [np.inf for _ in range(self.n)]
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        result_objects = [pool.apply_async(self.util, args=(node, a, b, helper)) for node in
-                          range(0, n)]
+        result_objects = [pool.apply_async(self.util, args=(node, a, b, helper, before)) for node in
+                          range(0, self.n)]
         ranking = [r.get() for r in result_objects]
         pool.close()
         pool.join()
         finish = time.time() - start_time
         with open(os.getcwd() + output_name, 'w') as f:
             f.write(str(ranking) + "\n")
-            f.write(str(self.total_reachability) + "\n")
+            f.write("R(G) = "+ str(self.total_reachability) + "\n")
             f.write("--- finished in %s seconds ---" % finish + "\n")
             f.write("--- finished in %s minutes ---" % (finish / 60) + "\n")
             f.write("--- finished in %s hours ---" % (finish / 3600))
