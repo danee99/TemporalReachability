@@ -178,7 +178,7 @@ class TemporalGraph:
                     visited.add(current_node)
             # result += len(reach_set) + self.change_in_reachability[node]
             result += len(reach_set) + self.change_in_reachability[node]
-        return result + len(self.deleted_nodes)
+        return x, result + len(self.deleted_nodes)
 
     def node_ranking(self, a, b, output_name, depth):
         start_time = time.time()
@@ -192,6 +192,7 @@ class TemporalGraph:
         pool.join()
         finish = time.time() - start_time
         with open(os.getcwd() + output_name, 'w') as f:
+            ranking.sort(key=lambda tup: tup[1])
             f.write(str(ranking) + "\n")
             f.write("R(G) = " + str(self.total_reachability) + "\n")
             f.write("--- finished in %s seconds ---" % finish + "\n")
