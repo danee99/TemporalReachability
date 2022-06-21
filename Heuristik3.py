@@ -215,5 +215,5 @@ if __name__ == '__main__':
     #     if G.nodes[v][1] == 0:
     #         print(v, G.nodes[v][1])
     #         i += 1
-    # print(i)
+    #  print(i)
     # finish = time.time() - start_time
