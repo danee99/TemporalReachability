@@ -210,7 +210,10 @@ if __name__ == '__main__':
     G.import_edgelist(input_graph)
     G.node_ranking(0, np.inf, output_file, depth)
     # start_time = time.time()
+    # i = 0
+    # for v in G.nodes:
+    #     if G.nodes[v][1] == 0:
+    #         print(v, G.nodes[v][1])
+    #         i += 1
+    # print(i)
     # finish = time.time() - start_time
-    # example_graph1.txt
-    # example_graph2.txt
-    # g.txt
