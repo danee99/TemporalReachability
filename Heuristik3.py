@@ -12,6 +12,7 @@ import intervals as I
 class TemporalGraph:
     def __init__(self, nodes, incidence_list):
         self.n = 0
+        self.m = 0
         self.nodes = {}
         self.graph = {}
         self.deleted_nodes = set()
@@ -46,6 +47,7 @@ class TemporalGraph:
     def import_edgelist(self, file_name):
         with open(os.getcwd() + file_name, "r") as f:
             self.n = int(f.readline())
+            # t_max = int(f.readline())
             for line in f:
                 arr = line.split()
                 u = int(arr[0])
@@ -62,6 +64,34 @@ class TemporalGraph:
                 else:
                     self.nodes[v] = [set(), 0, 1, 0]
                     self.graph[v] = []
+                self.m += 1
+        self.change_in_reachability = {v: 0 for v in self.nodes}
+
+    def import_transpose(self, file_name):
+        with open(os.getcwd() + file_name, "r") as f:
+            self.n = int(f.readline())
+            t_max = int(f.readline())
+            # t_max = max{t + l | (u, v, t, l) ∈ E}
+            for line in f:
+                arr = line.split()
+                v = int(arr[0])
+                u = int(arr[1])
+                t = int(arr[2])
+                l = int(arr[3])
+                if u in self.graph:
+                    self.graph[u].append((u, v, t_max - t))
+                else:
+                    self.graph[u] = [(u, v, t_max - t)]
+                if u in self.nodes:
+                    self.nodes[u][1] += 1
+                else:
+                    self.nodes[u] = [set(), 1, 0, 0]
+                if v in self.nodes:
+                    self.nodes[v][2] += 1
+                else:
+                    self.nodes[v] = [set(), 0, 1, 0]
+                    self.graph[v] = []
+                self.m += 1
         self.change_in_reachability = {v: 0 for v in self.nodes}
 
     def calc_reachabilities(self, a, b):
@@ -146,6 +176,7 @@ class TemporalGraph:
                         self.nodes[u][1] -= 1
                         self.nodes[v][2] -= 1
                         self.graph[u].remove((u, v, t, l))
+                        self.m -= 1
             for node in self.deleted_nodes:
                 try:
                     del self.nodes[node]
@@ -209,11 +240,4 @@ if __name__ == '__main__':
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
     G.node_ranking(0, np.inf, output_file, depth)
-    # start_time = time.time()
-    # i = 0
-    # for v in G.nodes:
-    #     if G.nodes[v][1] == 0:
-    #         print(v, G.nodes[v][1])
-    #         i += 1
-    #  print(i)
     # finish = time.time() - start_time
