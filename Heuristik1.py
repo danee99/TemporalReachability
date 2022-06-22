@@ -36,6 +36,7 @@ class TemporalGraph:
     def import_edgelist(self, file_name):
         with open(os.getcwd() + file_name, "r") as f:
             n = int(f.readline())
+            # t_max = int(f.readline())
             self.n = n
             self.incidence_list = [[] for _ in range(n)]
             self.outdegree = [0 for _ in range(n)]
@@ -178,8 +179,8 @@ class TemporalGraph:
 
     def top_k_reachability(self, alpha, beta, k, output_name):
         min_deg = min(self.outdegree)
-        self.k_core_decomposition3(min_deg+1)
         start_time = time.time()
+        self.k_core_decomposition3(min_deg+1)
         helper = [np.inf for _ in range(self.n)]
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
         for node in self.nodes:
@@ -200,7 +201,7 @@ class TemporalGraph:
 
 if __name__ == '__main__':
     input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
-    output_file = input_graph.split(".")[0] + '-Heuristik-Top-' + str(k) + '.txt'
+    output_file = input_graph.split(".")[0] + '-Heuristik1-Top-' + str(k) + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
     G.top_k_reachability(0, np.inf, k, output_file)

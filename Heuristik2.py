@@ -184,7 +184,7 @@ class TemporalGraph:
 
 if __name__ == '__main__':
     input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
-    output_file = input_graph.split(".")[0] + '-Heuristik-Top-' + str(k) + '.txt'
+    output_file = input_graph.split(".")[0] + '-Heuristik2-Top-' + str(k) + '.txt'
     G = TemporalGraph([], [])
     G.import_edgelist(input_graph)
     G.heuristik(0, np.inf)

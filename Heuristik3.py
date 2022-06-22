@@ -2,15 +2,12 @@ import multiprocessing
 import os
 import time
 from queue import PriorityQueue
-import heapq_max
+
 import numpy as np
-import copy
-from timeit import default_timer as timer
-import intervals as I
 
 
 class TemporalGraph:
-    def __init__(self, nodes, incidence_list):
+    def __init__(self):
         self.n = 0
         self.m = 0
         self.nodes = {}
@@ -236,8 +233,8 @@ class TemporalGraph:
 if __name__ == '__main__':
     input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
     depth = int(input('Tiefe eingeben:'))
-    output_file = input_graph.split(".")[0] + '-Rangliste3' + '.txt'
-    G = TemporalGraph([], [])
+    output_file = input_graph.split(".")[0] + '-Heuristik3' + '.txt'
+    G = TemporalGraph()
     G.import_edgelist(input_graph)
     G.node_ranking(0, np.inf, output_file, depth)
     # finish = time.time() - start_time
