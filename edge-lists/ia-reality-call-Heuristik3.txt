@@ -3,3 +3,15 @@ mit Tiefe = 6
 --- finished in 2640.856496334076 seconds ---
 --- finished in 44.014274938901266 minutes ---
 --- finished in 0.7335712489816878 hours ---
+
+Im Vergleich zu den Top-K-Knoten mit den realen Werten für R(G-v) also Vergleich mit optimaler Lösung:
+1. Platz 1027 mit 1886086
+2. Platz 170 mit 2140269
+3. Platz 17 mit 2168223
+4. Platz 22 mit 2183288
+5. Platz 142 mit 2230903
+6. Platz 172 mit 2212530
+7. Platz 53 mit 2235792
+8. Platz 68 mit 2236926
+9. Platz 25 mit 2246828
+10. Platz 105 mit 2250093

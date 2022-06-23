@@ -3,3 +3,17 @@ mit Tiefe = 1
 --- finished in 348.9331705570221 seconds ---
 --- finished in 5.815552842617035 minutes ---
 --- finished in 0.09692588071028392 hours ---
+
+Vergleich mit optimaler Lösung:
+        | v | R(G-v)
+--------|---|-------
+1.Platz | 100 | 481326
+2.Platz | 62 | 515440
+3.Platz | 5 | 559134
+4.Platz | 353 | 560383
+5.Platz | 16 | 561901
+6.Platz | 341 | 576521
+7.Platz | 49 | 579780
+8.Platz | 4 | 591009
+9.Platz | 182 | 594056
+10.Platz | 3 | 600653

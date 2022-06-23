@@ -151,18 +151,18 @@ if __name__ == '__main__':
     # wikipediasg.txt                       |  |V| = 208.142 | |E| = 810.702
     # facebook.txt                          |  |V| = 63.731  | |E| = 817.035
     # twitter.txt                           |  |V| = 4.605   | |E| = 23.736     352.0 min --> 167.3 min | 392.4 min | 64.09 min (2-core)
-    # ia-reality-call.txt                   |  |V| = 6.809   | |E| = 52.050     307.1 min --> 134.7 min | 343.0 min | 107.3 min (1-core) geloeschte Knoten Anzahl: 3209
-    # infectious.txt                        |  |V| = 10.972  | |E| = 415.912    234.7 min --> 128.6 min | 230.4 min | 191.51 min (1-core)
+    # ia-reality-call.txt                   |  |V| = 6.809   | |E| = 52.050     307.1 min --> 134.7 min | 343.0 min | 107.3 min (1-core) geloeschte Knoten Anzahl: 3209 | [44.01 min]
+    # infectious.txt                        |  |V| = 10.972  | |E| = 415.912    234.7 min --> 128.6 min | 230.4 min | 191.51 min (1-core) | [258.20 min]
     # ia-contacts_dublin.txt                |  |V| = 10.972  | |E| = 415.912    185.8 min --> 221.7 min | 230.5 min | 194.25 min (1-core)
     # fb-messages.txt                       |  |V| = 1.899   | |E| = 61.734     125.3 min --> 47.2 min  |       min | 146.44 min (2-core)
-    # email-dnc.txt                         |  |V| = 1.891   | |E| = 39.264     67.23 min --> 13.9 min  | 66.62 min | 26.14 min (1-core)
+    # email-dnc.txt                         |  |V| = 1.891   | |E| = 39.264     67.23 min --> 13.9 min  | 66.62 min | 26.14 min (1-core) | [5.81 min]
     # copresence-InVS15.txt                 |  |V| = 219     | |E| = 1.283.194  11.76 min --> 7.2 min   |       min |
     # fb-forum.txt                          |  |V| = 899     | |E| = 33.720     9.164 min | 12.03 min | 7.557 min (2-core)
-    # tij_SFHH.txt                          |  |V| = 403     | |E| = 70.261     5.790 min | 10.63 min | 10.23 min (1-core)
+    # tij_SFHH.txt                          |  |V| = 403     | |E| = 70.261     5.790 min | 10.63 min | 10.23 min (1-core) | [1.75 min]
     # ht09_contact_list.txt                 |  |V| = 5.351   | |E| = 20.817     2.727 min | 2.701 min | 0.0005 min (1-core)
-    # copresence-InVS13.txt                 |  |V| = 95      | |E| = 394.247    0.771 min | 1.235 min | 0.947 min
-    # reptilia-tortoise-network-fi.txt      |  |V| = 787     | |E| = 1.713      0.053 min | 0.036 min | 0.009 min
-    # aves-weaver-social.txt                |  |V| = 445     | |E| = 1.426      0.022 min | 0.013 min | 0.006 min
+    # copresence-InVS13.txt                 |  |V| = 95      | |E| = 394.247    0.771 min | 1.235 min | 0.947 min | [0.88 min]
+    # reptilia-tortoise-network-fi.txt      |  |V| = 787     | |E| = 1.713      0.053 min | 0.036 min | 0.009 min | [0.04 min]
+    # aves-weaver-social.txt                |  |V| = 445     | |E| = 1.426      0.022 min | 0.013 min | 0.006 min | [0.03 min]
     # -----------------------------------------------------------------------------------------------------------------
     # example_graph1.txt                    |  |V| = 7       | |E| = 18
     # example_graph2.txt                    |  |V| = 7       | |E| = 9
