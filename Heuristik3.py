@@ -215,6 +215,7 @@ class TemporalGraph:
     def node_ranking(self, a, b, output_name, depth):
         start_time = time.time()
         G.filter_nodes(depth)
+        finish1 = time.time() - start_time
         helper = {v: np.inf for v in self.nodes}
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
         result_objects = [pool.apply_async(self.util, args=(node, a, b, helper)) for node in
@@ -222,14 +223,15 @@ class TemporalGraph:
         ranking = [r.get() for r in result_objects]
         pool.close()
         pool.join()
-        finish = time.time() - start_time
+        finish2 = time.time() - start_time
         with open(os.getcwd() + output_name, 'w') as f:
             ranking.sort(key=lambda tup: tup[1])
             f.write(str(ranking) + "\n")
             f.write("mit Tiefe = " + str(depth) + "\n")
-            f.write("--- finished in %s seconds ---" % finish + "\n")
-            f.write("--- finished in %s minutes ---" % (finish / 60) + "\n")
-            f.write("--- finished in %s hours ---" % (finish / 3600))
+            f.write("--- finished in %s seconds ---" % finish2 + "\n")
+            f.write("--- filter_nodes() finished in %s minutes ---" % (finish1 / 60) + "\n")
+            f.write("--- finished in %s minutes ---" % (finish2 / 60) + "\n")
+            f.write("--- finished in %s hours ---" % (finish2 / 3600))
 
 
 if __name__ == '__main__':
