@@ -64,10 +64,11 @@ class TemporalGraph:
                 self.m += 1
         self.change_in_reachability = {v: 0 for v in self.nodes}
 
-    def import_transpose(self, file_name):
+    def compute_inverse(self, file_name, t_max):
+        new = TemporalGraph()
         with open(os.getcwd() + file_name, "r") as f:
-            self.n = int(f.readline())
-            t_max = int(f.readline())
+            new.n = int(f.readline())
+            # t_max = int(f.readline())
             # t_max = max{t + l | (u, v, t, l) ∈ E}
             for line in f:
                 arr = line.split()
@@ -75,21 +76,22 @@ class TemporalGraph:
                 u = int(arr[1])
                 t = int(arr[2])
                 l = int(arr[3])
-                if u in self.graph:
-                    self.graph[u].append((u, v, t_max - t))
+                if u in new.graph:
+                    new.graph[u].append((u, v, t_max - t, l))
                 else:
-                    self.graph[u] = [(u, v, t_max - t)]
-                if u in self.nodes:
-                    self.nodes[u][1] += 1
+                    new.graph[u] = [(u, v, t_max - t, l)]
+                if u in new.nodes:
+                    new.nodes[u][1] += 1
                 else:
-                    self.nodes[u] = [set(), 1, 0, 0]
-                if v in self.nodes:
-                    self.nodes[v][2] += 1
+                    new.nodes[u] = [set(), 1, 0, 0]
+                if v in new.nodes:
+                    new.nodes[v][2] += 1
                 else:
-                    self.nodes[v] = [set(), 0, 1, 0]
-                    self.graph[v] = []
-                self.m += 1
-        self.change_in_reachability = {v: 0 for v in self.nodes}
+                    new.nodes[v] = [set(), 0, 1, 0]
+                    new.graph[v] = []
+                new.m += 1
+        new.change_in_reachability = {v: 0 for v in new.nodes}
+        return new
 
     def calc_reachabilities(self, a, b):
         for node in self.nodes:
@@ -236,6 +238,20 @@ if __name__ == '__main__':
     output_file = input_graph.split(".")[0] + '-Heuristik3' + '.txt'
     G = TemporalGraph()
     G.import_edgelist(input_graph)
+    # G_R = G.compute_inverse(input_graph, 6)
+    # G.calc_reachabilities(0, 99)
+    # G_R.calc_reachabilities(0, 99)
+    # ranking = []
+    # # for node in G.nodes:
+    # #     print(str(node) + " erreicht " + str(len(G.nodes[node][0])) + " Knoten.")
+    # #     print(str(node) + " wird von " + str(len(G_R.nodes[node][0])) + " Knoten erreicht.")
+    # # for node in G.nodes:
+    # #     print(str(node) + " Bewertung " + str(len(G.nodes[node][0])*len(G_R.nodes[node][0])))
+    # for node in G.nodes:
+    #     ranking.append((node, len(G.nodes[node][0])*len(G_R.nodes[node][0])))
+    # ranking.sort(key=lambda tup: tup[1], reverse=True)
+    # print(ranking)
     # G.quick_node_ranking_test(0, np.inf)
     G.node_ranking(0, np.inf, output_file, depth)
     # finish = time.time() - start_time
+    # example_graph2.txt
