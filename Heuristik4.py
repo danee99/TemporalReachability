@@ -84,7 +84,7 @@ class TemporalGraph:
         lower_bound += len(self.deleted_nodes)
         # upper_bound += len(self.deleted_nodes)
         upper_bound += len(self.deleted_nodes) * (self.before - len(self.deleted_nodes) + 1)
-        return x, I.closed(lower_bound, upper_bound)
+        return x, (lower_bound, upper_bound)
 
     def quick_node_ranking_test(self, a, b, depth):
         self.filter_nodes(depth)
@@ -133,7 +133,7 @@ class TemporalGraph:
         pool.close()
         pool.join()
         finish2 = time.time() - start_time
-        ranking.sort(key=lambda tup: tup[:][1].lower)
+        ranking.sort(key=lambda tup: tup[:][1][0])
         with open(os.getcwd() + output_name, 'w') as f:
             f.write(str(ranking) + "\n")
             f.write("mit Tiefe = " + str(depth) + "\n")
