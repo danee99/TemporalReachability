@@ -210,7 +210,8 @@ class TemporalGraph:
                     visited.add(current_node)
             # result += len(reach_set) + self.change_in_reachability[node]
             result += len(reach_set) + self.change_in_reachability[node]
-        return x, result + len(self.deleted_nodes)
+        result += len(self.deleted_nodes)
+        return x, result
 
     def node_ranking(self, a, b, output_name, depth):
         start_time = time.time()
