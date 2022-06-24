@@ -115,7 +115,7 @@ class TemporalGraph:
                                 earliest_arrival_time[v] = t + l
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
-            total = total + len(reach_set)
+            total += len(reach_set)
         # return 1 - (total / before)
         return x, total
 
@@ -140,10 +140,10 @@ class TemporalGraph:
 
 
 if __name__ == '__main__':
-    input_graph = '/edge-lists/'+input('Edgeliste eingeben:')
+    input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
     a = int(input('Intervall a eingeben: '))
     b = np.inf
-    output_file = input_graph.split(".")[0] + '-Rangliste2' + '.txt'
+    output_file = input_graph.split(".")[0] + '-RanglisteTest' + '.txt'
     degree_output_file = input_graph.split(".")[0] + '-Outdegrees' + '.txt'
     G = TemporalGraph()
     G.import_edgelist(input_graph)

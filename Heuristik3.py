@@ -241,9 +241,7 @@ if __name__ == '__main__':
     output_file = input_graph.split(".")[0] + '-Heuristik3' + '.txt'
     G = TemporalGraph()
     G.import_edgelist(input_graph)
-    G.filter_nodes(6)
-    print(len(G.deleted_nodes))
-    print(G.m)
+    G.node_ranking(0, np.inf, output_file, depth)
     # G_R = G.compute_inverse(input_graph, 6)
     # G.calc_reachabilities(0, 99)
     # G_R.calc_reachabilities(0, 99)
@@ -258,6 +256,5 @@ if __name__ == '__main__':
     # ranking.sort(key=lambda tup: tup[1], reverse=True)
     # print(ranking)
     # G.quick_node_ranking_test(0, np.inf)
-    G.node_ranking(0, np.inf, output_file, depth)
     # finish = time.time() - start_time
     # example_graph2.txt
