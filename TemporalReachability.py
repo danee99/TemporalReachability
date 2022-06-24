@@ -116,7 +116,8 @@ class TemporalGraph:
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
             total = total + len(reach_set)
-        return 1 - (total / before)
+        # return 1 - (total / before)
+        return x, total
 
     # node ranking, with asynchronous multiprocessing
     def node_ranking(self, a, b, output_name):
@@ -131,6 +132,7 @@ class TemporalGraph:
         pool.join()
         finish = time.time() - start_time
         with open(os.getcwd() + output_name, 'w') as f:
+            ranking.sort(key=lambda tup: tup[:][1])
             f.write(str(ranking) + "\n")
             f.write("--- finished in %s seconds ---" % finish + "\n")
             f.write("--- finished in %s minutes ---" % (finish / 60) + "\n")
