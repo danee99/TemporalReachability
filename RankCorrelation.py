@@ -5,7 +5,7 @@ import seaborn as sns
 import os
 
 
-def import_ranking(degree_input, reachability_input, output_name, number_of_nodes):
+def import_ranking(degree_input, reachability_input, output_name, number_of_nodes, betweenness_input):
     with open(os.getcwd() + output_name, 'w') as f:
         f.write("Degree Centrality,Reachability Centrality\n")
         with open(os.getcwd() + degree_input, "r") as a:
@@ -18,12 +18,13 @@ def import_ranking(degree_input, reachability_input, output_name, number_of_node
                     f.write(str(j) + "," + str(arr1[j]) + "," + str(arr2[j]) + '\n')
 
 
-mydataframe = pd.read_csv(os.getcwd() + "/Dataframes/email-dnc")
-sns.heatmap(data=mydataframe.corr(method='kendall'))
-plt.show()
+# mydataframe = pd.read_csv(os.getcwd() + "/Dataframes/email-dnc")
+# sns.heatmap(data=mydataframe.corr(method='kendall'))
+# plt.show()
 
-# name = "infectious"
-# import_ranking("/edge-lists/" + name + "-Outdegrees.txt",
-#                "/edge-lists/" + name + "-Rangliste.txt",
-#                "/Dataframes/" + name,
-#                10972)
+name = "aves-weaver-social"
+import_ranking("/edge-lists/Degree Centrality/" + name + "-Outdegrees.txt",
+               "/edge-lists/" + name + "-Rangliste.txt",
+               "/Dataframes/" + name,
+               445,
+               "/edge-lists/Temporal Betweenness Centrality/" + name + "-Outdegrees.txt")

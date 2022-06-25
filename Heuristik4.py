@@ -99,12 +99,13 @@ class TemporalGraph:
     def filter_nodes(self, depth):
         i = 0
         while i != depth:
+            deletion = set()
             for node in self.nodes:
                 if self.nodes[node][0] == 0:
-                    self.deleted_nodes.add(node)
+                    deletion.add(node)
             for node in self.nodes:
                 for (u, v, t, l) in self.graph[node][:]:
-                    if v in self.deleted_nodes:
+                    if u not in self.deleted_nodes and v in deletion:
                         if u not in self.change_in_reachability:
                             self.change_in_reachability[u] = 0
                         self.change_in_reachability[u] += 1
@@ -113,6 +114,7 @@ class TemporalGraph:
                         self.nodes[v][1] -= 1
                         self.graph[u].remove((u, v, t, l))
                         self.m -= 1
+            self.deleted_nodes = self.deleted_nodes | deletion
             for node in self.deleted_nodes:
                 try:
                     del self.nodes[node]
@@ -169,7 +171,7 @@ class TemporalGraph:
                     visited.add(current_node)
             total += len(reach_set)
         # return 1 - (total / before)
-        return x, total
+        return total
 
     # node ranking, with asynchronous multiprocessing
     def deleteme(self, a, b, output_name):
@@ -177,8 +179,7 @@ class TemporalGraph:
         before = self.total_reachability
         helper = [np.inf for _ in range(self.n)]
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        result_objects = [pool.apply_async(self.deletemeutil, args=(node, a, b, helper)) for node in
-                          self.nodes]
+        result_objects = [pool.apply_async(self.deletemeutil, args=(node, a, b, helper)) for node in range(0, self.n)]
         ranking = [r.get() for r in result_objects]
         pool.close()
         pool.join()
