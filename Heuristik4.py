@@ -16,9 +16,8 @@ class TemporalGraph:
         self.deleted_nodes = set()
         self.total_reachability = 0
         self.change_in_reachability = {}
-        # set-of-reachable-nodes(v) = self.nodes[node][0]
-        # outdegree(v) = self.nodes[v][1]
-        # indegree(v) = self.nodes[v][2]
+        # outdegree(v) = self.nodes[v][0]
+        # indegree(v) = self.nodes[v][1]
 
     def add_edge(self, u, v, t, l):
         if u in self.graph:
@@ -53,7 +52,7 @@ class TemporalGraph:
                     self.nodes[v] = [0, 1]
                     self.graph[v] = []
                 self.m += 1
-        self.change_in_reachability = {v: 0 for v in self.nodes}
+        # self.change_in_reachability = {v: 0 for v in self.nodes}
 
     def calc_total_reachability_after(self, a, b, x, helper):
         upper_bound = 0
@@ -78,12 +77,12 @@ class TemporalGraph:
                                 earliest_arrival_time[v] = t + l
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
-            lower_bound += len(reach_set) + self.change_in_reachability[node]
-            # upper_bound += len(reach_set) + len(self.deleted_nodes)
-            upper_bound += len(reach_set)
-        lower_bound += len(self.deleted_nodes)
-        # upper_bound += len(self.deleted_nodes)
-        upper_bound += len(self.deleted_nodes) * (self.before - len(self.deleted_nodes) + 1)
+            lower_bound += len(reach_set)
+            upper_bound += len(reach_set) + len(self.deleted_nodes)
+        part1 = sum(value for key, value in self.change_in_reachability.items() if key != x)
+        part2 = sum(value for key, value in self.change_in_reachability.items() if key in self.deleted_nodes)
+        lower_bound += len(self.deleted_nodes) + part1
+        upper_bound += len(self.deleted_nodes) + part2
         return x, (lower_bound, upper_bound)
 
     def quick_node_ranking_test(self, a, b, depth):
@@ -95,7 +94,7 @@ class TemporalGraph:
         rankings = [r.get() for r in result_objects]
         rankings.sort(key=lambda tup: tup[:][1].lower)
         print(rankings)
-        #example_graph2.txt
+        # example_graph2.txt
 
     def filter_nodes(self, depth):
         i = 0
@@ -106,7 +105,10 @@ class TemporalGraph:
             for node in self.nodes:
                 for (u, v, t, l) in self.graph[node][:]:
                     if v in self.deleted_nodes:
-                        self.change_in_reachability[u] += 1 + self.change_in_reachability[v]
+                        if u not in self.change_in_reachability:
+                            self.change_in_reachability[u] = 0
+                        self.change_in_reachability[u] += 1
+                        # self.change_in_reachability[u] += 1 + self.change_in_reachability[v]
                         self.nodes[u][0] -= 1
                         self.nodes[v][1] -= 1
                         self.graph[u].remove((u, v, t, l))
@@ -188,12 +190,12 @@ class TemporalGraph:
             f.write("--- finished in %s minutes ---" % (finish / 60) + "\n")
             f.write("--- finished in %s hours ---" % (finish / 3600))
 
+
 if __name__ == '__main__':
     input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
     depth = int(input('Tiefe eingeben:'))
-    # output_file = input_graph.split(".")[0] + '-Heuristik4' + '.txt'
-    test = input_graph.split(".")[0] + '-_TEST' + '.txt'
+    output_file = input_graph.split(".")[0] + '-Heuristik4' + '.txt'
+    # test = input_graph.split(".")[0] + '-_TEST' + '.txt'
     G = TemporalGraph()
     G.import_edgelist(input_graph)
-    # G.node_ranking(0, np.inf, output_file, depth)
-    G.deleteme(0, np.inf, test)
+    G.node_ranking(0, np.inf, output_file, depth)
