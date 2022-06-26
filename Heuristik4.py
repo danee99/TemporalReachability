@@ -79,10 +79,10 @@ class TemporalGraph:
                     visited.add(current_node)
             lower_bound += len(reach_set)
             upper_bound += len(reach_set) + len(self.deleted_nodes)
-        part1 = sum(value for key, value in self.change_in_reachability.items() if key != x)
-        part2 = sum(value for key, value in self.change_in_reachability.items() if key in self.deleted_nodes)
-        lower_bound += len(self.deleted_nodes) + part1
-        upper_bound += len(self.deleted_nodes) + part2
+        lower_bound += sum(len(value) for key, value in self.change_in_reachability.items()
+                           if key != x)
+        upper_bound += sum(len(value) for key, value in self.change_in_reachability.items()
+                           if key in self.deleted_nodes)
         return x, (lower_bound, upper_bound)
 
     def quick_node_ranking_test(self, a, b, depth):
@@ -105,7 +105,7 @@ class TemporalGraph:
                     deletion.add(node)
             for node in self.nodes:
                 for (u, v, t, l) in self.graph[node][:]:
-                    if u not in self.deleted_nodes and v in deletion:
+                    if v in deletion:
                         if u not in self.change_in_reachability:
                             self.change_in_reachability[u] = 0
                         self.change_in_reachability[u] += 1
@@ -123,11 +123,35 @@ class TemporalGraph:
                 except KeyError:
                     continue
             i += 1
-        # print(self.change_in_reachability)
+
+    def filter_nodes2(self, depth):
+        for i in range(0, depth):
+            for node in self.nodes:
+                if self.nodes[node][0] == 0:
+                    self.deleted_nodes.add(node)
+                    if node not in self.change_in_reachability:
+                        self.change_in_reachability[node] = set()
+                    self.change_in_reachability[node].add(node)
+            for node in self.nodes:
+                for (u, v, t, l) in self.graph[node][:]:
+                    if v in self.deleted_nodes:
+                        if u not in self.change_in_reachability:
+                            self.change_in_reachability[u] = set()
+                        self.change_in_reachability[u].add(v)
+                        self.nodes[u][0] -= 1
+                        self.graph[u].remove((u, v, t, l))
+                        self.m -= 1
+            for node in self.deleted_nodes:
+                try:
+                    del self.nodes[node]
+                    del self.graph[node]
+                    self.n -= 1
+                except KeyError:
+                    continue
 
     def node_ranking(self, a, b, output_name, depth):
         start_time = time.time()
-        G.filter_nodes(depth)
+        G.filter_nodes2(depth)
         finish1 = time.time() - start_time
         helper = {v: np.inf for v in self.nodes}
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
@@ -145,51 +169,6 @@ class TemporalGraph:
             f.write("--- filter_nodes() finished in %s minutes ---" % (finish1 / 60) + "\n")
             f.write("--- finished in %s minutes ---" % (finish2 / 60) + "\n")
             f.write("--- finished in %s hours ---" % (finish2 / 3600))
-
-    ################################################################
-    def deletemeutil(self, x, a, b, helper):
-        total = 0
-        for node in self.nodes:
-            if node == x:
-                continue
-            reach_set = {node}
-            visited = set()
-            earliest_arrival_time = helper.copy()
-            earliest_arrival_time[node] = 0
-            PQ = PriorityQueue()
-            PQ.put((earliest_arrival_time[node], node))
-            while not PQ.empty():
-                (current_arrival_time, current_node) = PQ.get()
-                if current_node not in visited:
-                    for (u, v, t, l) in self.graph[current_node]:
-                        if u != x and v != x:
-                            if t < a or t + l > b: continue
-                            if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                                reach_set.add(v)
-                                earliest_arrival_time[v] = t + l
-                                PQ.put((earliest_arrival_time[v], v))
-                    visited.add(current_node)
-            total += len(reach_set)
-        # return 1 - (total / before)
-        return total
-
-    # node ranking, with asynchronous multiprocessing
-    def deleteme(self, a, b, output_name):
-        start_time = time.time()
-        before = self.total_reachability
-        helper = [np.inf for _ in range(self.n)]
-        pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        result_objects = [pool.apply_async(self.deletemeutil, args=(node, a, b, helper)) for node in range(0, self.n)]
-        ranking = [r.get() for r in result_objects]
-        pool.close()
-        pool.join()
-        finish = time.time() - start_time
-        with open(os.getcwd() + output_name, 'w') as f:
-            ranking.sort(key=lambda tup: tup[:][1])
-            f.write(str(ranking) + "\n")
-            f.write("--- finished in %s seconds ---" % finish + "\n")
-            f.write("--- finished in %s minutes ---" % (finish / 60) + "\n")
-            f.write("--- finished in %s hours ---" % (finish / 3600))
 
 
 if __name__ == '__main__':
