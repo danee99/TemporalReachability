@@ -78,12 +78,12 @@ class TemporalGraph:
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
             lower_bound += len(reach_set)
-            upper_bound += len(reach_set) + len(self.deleted_nodes)
+            # upper_bound += len(reach_set) + len(self.deleted_nodes)
         lower_bound += sum(len(value) for key, value in self.change_in_reachability.items()
                            if key != x)
-        upper_bound += sum(len(value) for key, value in self.change_in_reachability.items()
-                           if key in self.deleted_nodes)
-        return x, (lower_bound, upper_bound)
+        # upper_bound += sum(len(value) for key, value in self.change_in_reachability.items()
+        #                    if key in self.deleted_nodes)
+        return 1-(lower_bound/500000)
 
     def quick_node_ranking_test(self, a, b, depth):
         self.filter_nodes(depth)
@@ -156,12 +156,11 @@ class TemporalGraph:
         helper = {v: np.inf for v in self.nodes}
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
         result_objects = [pool.apply_async(self.calc_total_reachability_after, args=(a, b, node, helper)) for node in
-                          self.nodes]
+                          range(0, self.n) if node in self.nodes]
         ranking = [r.get() for r in result_objects]
         pool.close()
         pool.join()
         finish2 = time.time() - start_time
-        ranking.sort(key=lambda tup: tup[:][1][0])
         with open(os.getcwd() + output_name, 'w') as f:
             f.write(str(ranking) + "\n")
             f.write("mit Tiefe = " + str(depth) + "\n")
