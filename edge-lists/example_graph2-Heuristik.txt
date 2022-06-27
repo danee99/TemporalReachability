@@ -1,0 +1,6 @@
+[(6, (10, 18)), (2, (11, 17)), (0, (12, 18)), (1, (12, 18)), (5, (12, 18))]
+mit Tiefe = 2
+--- finished in 0.36302947998046875 seconds ---
+--- filter_nodes() finished in 0.0 minutes ---
+--- finished in 0.006050491333007812 minutes ---
+--- finished in 0.00010084152221679687 hours ---
