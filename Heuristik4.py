@@ -77,8 +77,7 @@ class TemporalGraph:
                 continue
             reach_set = {node}
             visited = set()
-            # earliest_arrival_time = helper[:]
-            earliest_arrival_time = helper.copy()
+            earliest_arrival_time = helper[:]
             earliest_arrival_time[node] = 0
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
@@ -98,22 +97,21 @@ class TemporalGraph:
 
     def node_ranking(self, a, b, output_name):
         start_time = time.time()
-        self.filter_nodes(6)
-        helper = {v: np.inf for v in self.nodes}
+        helper = [np.inf for _ in range(self.n)]
         self.calc_total_reachability(a, b)
+        start_time2 = time.time()
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
         result_objects = [pool.apply_async(self.rank_node, args=(node, a, b, self.total_reachability, helper)) for node
-                          in
-                          range(0, self.n) if node in self.nodes]
+                          in range(0, self.n)]
         ranking = [r.get() for r in result_objects]
+        finish2 = time.time() - start_time2
         pool.close()
         pool.join()
         finish = time.time() - start_time
         with open(os.getcwd() + output_name, 'w') as f:
             f.write(str(ranking) + "\n")
-            f.write("mit Tiefe = " + str(6) + "\n")
-            f.write("gelöschte Knotenanzahl = " + str(len(self.deleted_nodes)) + "\n")
-            f.write("übrige Kanten (-Anzahl) = " + str(self.m) + "\n")
+            f.write("R(G) = " + str(self.total_reachability) + "\n")
+            f.write("--- ranking finished in %s seconds ---" % finish + "\n")
             f.write("--- finished in %s seconds ---" % finish + "\n")
             f.write("--- finished in %s minutes ---" % (finish / 60) + "\n")
             f.write("--- finished in %s hours ---" % (finish / 3600))
@@ -189,26 +187,37 @@ class TemporalGraph:
                     continue
 
     def heuristik(self, a, b, output_name, depth):
-        start_time = time.time()
+        start_time1 = time.time()
         self.filter_nodes(depth)
+        finish_filternodes = time.time() - start_time1
+
+        start_time2 = time.time()
         helper = {v: np.inf for v in self.nodes}
-        finish1 = time.time() - start_time
+        finish_helper = time.time() - start_time2
+
+        start_time3 = time.time()
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
         result_objects = [pool.apply_async(self.calculate_bounds, args=(a, b, node, helper)) for node in self.nodes]
         ranking = [r.get() for r in result_objects]
+        finish_rank = time.time() - start_time3
+
         pool.close()
         pool.join()
-        finish2 = time.time() - start_time
+        finish_total = time.time() - start_time1
         with open(os.getcwd() + output_name, 'w') as f:
             ranking.sort(key=lambda tup: tup[1][0])
             f.write(str(ranking) + "\n")
             f.write("mit Tiefe = " + str(depth) + "\n")
-            f.write("gelöschte Knotenanzahl = " + str(len(self.deleted_nodes)) + "\n")
-            f.write("übrige Kanten (-Anzahl) = " + str(self.m) + "\n")
-            f.write("--- finished in %s seconds ---" % finish2 + "\n")
-            f.write("--- filter_nodes() finished in %s minutes ---" % (finish1 / 60) + "\n")
-            f.write("--- finished in %s minutes ---" % (finish2 / 60) + "\n")
-            f.write("--- finished in %s hours ---" % (finish2 / 3600))
+            f.write("geloeschte Knotenanzahl = " + str(len(self.deleted_nodes)) + "\n")
+            f.write("uebrige Kanten = " + str(self.m) + "\n")
+            f.write("--- filter_nodes() finished in %s seconds ---" % finish_filternodes + "\n")
+            f.write("--- creating the helper finished in %s seconds ---" % finish_helper + "\n")
+            f.write("--- ranking finished in %s seconds ---" % finish_rank + "\n")
+            f.write("--- total finished in %s seconds ---" % finish_total + "\n")
+            # f.write("--- finished in %s seconds ---" % finish_total + "\n")
+            # f.write("--- filter_nodes() finished in %s minutes ---" % (finish1 / 60) + "\n")
+            # f.write("--- finished in %s minutes ---" % (finish2 / 60) + "\n")
+            # f.write("--- finished in %s hours ---" % (finish2 / 3600))
 
 
 if __name__ == '__main__':
@@ -220,6 +229,4 @@ if __name__ == '__main__':
     G = TemporalGraph()
     G.import_edgelist(input_graph)
     G.node_ranking(0, np.inf, ranking_output_file)
-    # G.heuristik(0, np.inf, heuristik_output_file, depth)
-    # Rangliste 13.939621333281199 min 13.853401001294454 min
-    # Heuristik  5.106800317764282 min 5.123348788420359 min
+    G.heuristik(0, np.inf, heuristik_output_file, depth)
