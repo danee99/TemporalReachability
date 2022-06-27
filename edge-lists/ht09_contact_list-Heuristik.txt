@@ -1,0 +1,6 @@
+[]
+mit Tiefe = 3
+--- finished in 0.06801509857177734 seconds ---
+--- filter_nodes() finished in 0.0006380001703898112 minutes ---
+--- finished in 0.0011335849761962891 minutes ---
+--- finished in 1.889308293660482e-05 hours ---
