@@ -55,7 +55,8 @@ class TemporalGraph:
     def calc_total_reachability(self, a, b):
         for node in self.nodes:
             reach_set = {node}
-            earliest_arrival_time = [np.inf for _ in range(len(self.nodes))]
+            # earliest_arrival_time = [np.inf for _ in range(len(self.nodes))]
+            earliest_arrival_time = {v: np.inf for v in self.nodes}
             earliest_arrival_time[node] = 0
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
@@ -101,7 +102,8 @@ class TemporalGraph:
         helper = {v: np.inf for v in self.nodes}
         self.calc_total_reachability(a, b)
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        result_objects = [pool.apply_async(self.rank_node, args=(node, a, b, self.total_reachability, helper)) for node in
+        result_objects = [pool.apply_async(self.rank_node, args=(node, a, b, self.total_reachability, helper)) for node
+                          in
                           range(0, self.n) if node in self.nodes]
         ranking = [r.get() for r in result_objects]
         pool.close()
