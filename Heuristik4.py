@@ -133,8 +133,12 @@ class TemporalGraph:
                                 earliest_arrival_time[v] = t + l
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
+            # first, we calculate all reachabilities normally
             lower_bound += len(reach_set)
+            # for the upper bound, we have to assume that the node for which the reachabilities are currently being
+            # calculated could theoretically reach any deleted node in the original graph
             upper_bound += len(reach_set) + len(self.deleted_nodes)
+        # finally, we need to add the part that definitely falls away for the "correct" total reachability
         lower_bound += sum(len(value) for key, value in self.change_in_reachability.items()
                            if key != x)
         upper_bound += sum(len(value) for key, value in self.change_in_reachability.items()
@@ -143,9 +147,13 @@ class TemporalGraph:
 
     def filter_nodes(self, depth):
         for i in range(0, depth):
+            # find all nodes that have a degree of 0 in the current graph
             for node in self.nodes:
+                # if outdegree = 0 --> add node to the set of nodes that will be deleted from the graph
                 if self.nodes[node][0] == 0:
                     self.deleted_nodes.add(node)
+                    # the fact that the node could reach itself would be omitted
+                    # so we have to remember that the node could reach itself
                     if node not in self.change_in_reachability:
                         self.change_in_reachability[node] = set()
                     self.change_in_reachability[node].add(node)
@@ -154,11 +162,16 @@ class TemporalGraph:
                     if v in self.deleted_nodes:
                         if u not in self.change_in_reachability:
                             self.change_in_reachability[u] = set()
+                        # this is the part that would be skipped when calculating r(u)
                         self.change_in_reachability[u].add(v)
+                        # outdegree of u is reduced
                         self.nodes[u][0] -= 1
+                        # indegree of v is reduced
                         self.nodes[v][1] -= 1
+                        # delete edge from the graph and decrease number of edges by 1
                         self.graph[u].remove((u, v, t, l))
                         self.m -= 1
+            # delete all nodes that were detected and decrease number of nodes
             for node in self.deleted_nodes:
                 try:
                     del self.nodes[node]
@@ -166,29 +179,6 @@ class TemporalGraph:
                     self.n -= 1
                 except KeyError:
                     continue
-
-    # def filter_nodes2(self, depth):
-    #     i = 0
-    #     while i != depth:
-    #         for node in self.nodes:
-    #             if self.nodes[node][1] == 0:
-    #                 self.deleted_nodes.add(node)
-    #         for node in self.nodes:
-    #             for (u, v, t, l) in self.graph[node][:]:
-    #                 if v in self.deleted_nodes:
-    #                     self.change_in_reachability[u] += 1
-    #                     self.nodes[u][1] -= 1
-    #                     self.nodes[v][2] -= 1
-    #                     self.graph[u].remove((u, v, t, l))
-    #                     self.m -= 1
-    #         for node in self.deleted_nodes:
-    #             try:
-    #                 del self.nodes[node]
-    #                 del self.graph[node]
-    #                 self.n -= 1
-    #             except KeyError:
-    #                 continue
-    #         i += 1
 
     def heuristik(self, a, b, output_name, depth):
         start_time = time.time()
