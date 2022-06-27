@@ -96,17 +96,21 @@ class TemporalGraph:
 
     def node_ranking(self, a, b, output_name):
         start_time = time.time()
+        self.filter_nodes(6)
         helper = [np.inf for _ in range(0, self.n)]
         self.calc_total_reachability(a, b)
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
         result_objects = [pool.apply_async(self.rank_node, args=(node, a, b, self.total_reachability, helper)) for node in
-                          range(0, self.n)]
+                          range(0, self.n) if node in self.nodes]
         ranking = [r.get() for r in result_objects]
         pool.close()
         pool.join()
         finish = time.time() - start_time
         with open(os.getcwd() + output_name, 'w') as f:
             f.write(str(ranking) + "\n")
+            f.write("mit Tiefe = " + str(6) + "\n")
+            f.write("gelöschte Knotenanzahl = " + str(len(self.deleted_nodes)) + "\n")
+            f.write("übrige Kanten (-Anzahl) = " + str(self.m) + "\n")
             f.write("--- finished in %s seconds ---" % finish + "\n")
             f.write("--- finished in %s minutes ---" % (finish / 60) + "\n")
             f.write("--- finished in %s hours ---" % (finish / 3600))
@@ -196,6 +200,8 @@ class TemporalGraph:
             ranking.sort(key=lambda tup: tup[1][0])
             f.write(str(ranking) + "\n")
             f.write("mit Tiefe = " + str(depth) + "\n")
+            f.write("gelöschte Knotenanzahl = " + str(len(self.deleted_nodes)) + "\n")
+            f.write("übrige Kanten (-Anzahl) = " + str(self.m) + "\n")
             f.write("--- finished in %s seconds ---" % finish2 + "\n")
             f.write("--- filter_nodes() finished in %s minutes ---" % (finish1 / 60) + "\n")
             f.write("--- finished in %s minutes ---" % (finish2 / 60) + "\n")
@@ -211,6 +217,6 @@ if __name__ == '__main__':
     G = TemporalGraph()
     G.import_edgelist(input_graph)
     G.node_ranking(0, np.inf, ranking_output_file)
-    G.heuristik(0, np.inf, heuristik_output_file, depth)
+    # G.heuristik(0, np.inf, heuristik_output_file, depth)
     # Rangliste 13.939621333281199 min 13.853401001294454 min
     # Heuristik  5.106800317764282 min 5.123348788420359 min
