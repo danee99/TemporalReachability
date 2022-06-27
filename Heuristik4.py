@@ -69,14 +69,14 @@ class TemporalGraph:
                         PQ.put((earliest_arrival_time[v], v))
             self.total_reachability += len(reach_set)
 
-    def rank_node(self, x, a, b, before):
+    def rank_node(self, x, a, b, before, helper):
         total = 0
         for node in self.nodes:
             if node == x:
                 continue
             reach_set = {node}
             visited = set()
-            earliest_arrival_time = [np.inf for _ in range(self.n)]
+            earliest_arrival_time = helper[:]
             earliest_arrival_time[node] = 0
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
@@ -96,9 +96,10 @@ class TemporalGraph:
 
     def node_ranking(self, a, b, output_name):
         start_time = time.time()
+        helper = [np.inf for _ in range(0, self.n)]
         self.calc_total_reachability(a, b)
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        result_objects = [pool.apply_async(self.rank_node, args=(node, a, b, self.total_reachability)) for node in
+        result_objects = [pool.apply_async(self.rank_node, args=(node, a, b, self.total_reachability, helper)) for node in
                           range(0, self.n)]
         ranking = [r.get() for r in result_objects]
         pool.close()
@@ -110,7 +111,7 @@ class TemporalGraph:
             f.write("--- finished in %s minutes ---" % (finish / 60) + "\n")
             f.write("--- finished in %s hours ---" % (finish / 3600))
 
-    def calculate_bounds(self, a, b, x):
+    def calculate_bounds(self, a, b, x, helper):
         upper_bound = 0
         lower_bound = 0
         for node in self.nodes:
@@ -118,7 +119,7 @@ class TemporalGraph:
                 continue
             reach_set = {node}
             visited = set()
-            earliest_arrival_time = {v: np.inf for v in self.nodes}
+            earliest_arrival_time = helper.copy()
             earliest_arrival_time[node] = 0
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
@@ -183,9 +184,10 @@ class TemporalGraph:
     def heuristik(self, a, b, output_name, depth):
         start_time = time.time()
         self.filter_nodes(depth)
+        helper = {v: np.inf for v in self.nodes}
         finish1 = time.time() - start_time
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        result_objects = [pool.apply_async(self.calculate_bounds, args=(a, b, node)) for node in self.nodes]
+        result_objects = [pool.apply_async(self.calculate_bounds, args=(a, b, node, helper)) for node in self.nodes]
         ranking = [r.get() for r in result_objects]
         pool.close()
         pool.join()
@@ -210,5 +212,5 @@ if __name__ == '__main__':
     G.import_edgelist(input_graph)
     G.node_ranking(0, np.inf, ranking_output_file)
     G.heuristik(0, np.inf, heuristik_output_file, depth)
-    # Rangliste 13.939621333281199 min
-    # Heuristik  5.106800317764282 min
+    # Rangliste 13.939621333281199 min 13.853401001294454 min
+    # Heuristik  5.106800317764282 min 5.123348788420359 min
