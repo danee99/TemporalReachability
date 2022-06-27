@@ -196,3 +196,5 @@ if __name__ == '__main__':
     G.import_edgelist(input_graph)
     G.node_ranking(0, np.inf, ranking_output_file)
     G.heuristik(0, np.inf, heuristik_output_file, depth)
+    # Rangliste 13.939621333281199 min
+    # Heuristik 5.106800317764282 min
