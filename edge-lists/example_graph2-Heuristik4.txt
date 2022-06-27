@@ -1,6 +1,6 @@
-[(2, (11, 17)), (6, (12, 20)), (0, (13, 19)), (5, (14, 20)), (1, (15, 21))]
+[(0, (12, 18)), (1, (12, 18)), (2, (11, 17)), (5, (12, 18)), (6, (10, 18))]
 mit Tiefe = 2
---- finished in 0.3749125003814697 seconds ---
---- filter_nodes() finished in 1.717408498128255e-05 minutes ---
---- finished in 0.006248541673024495 minutes ---
---- finished in 0.00010414236121707492 hours ---
+--- finished in 0.3705940246582031 seconds ---
+--- filter_nodes() finished in 0.0 minutes ---
+--- finished in 0.006176567077636719 minutes ---
+--- finished in 0.00010294278462727864 hours ---

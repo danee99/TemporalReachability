@@ -2,14 +2,12 @@ import multiprocessing
 import os
 import time
 from queue import PriorityQueue
-import intervals as I
 import numpy as np
 
 
 class TemporalGraph:
     def __init__(self):
         self.n = 0
-        self.before = 0
         self.m = 0
         self.nodes = {}
         self.graph = {}
@@ -24,17 +22,28 @@ class TemporalGraph:
             self.graph[u].append((u, v, t, l))
         else:
             self.graph[u] = [(u, v, t, l)]
+        if u in self.nodes:
+            self.nodes[u][0] += 1
+        else:
+            self.nodes[u] = [1, 0]
+        if v not in self.graph:
+            self.graph[v] = []
+        if v in self.nodes:
+            self.nodes[v][1] += 1
+        else:
+            self.nodes[v] = [0, 1]
+        self.m += 1
 
     def print_graph(self):
-        print(self.n)
+        print("|V| = " + str(self.n))
+        print("|E| = " + str(self.m))
         for v in self.graph:
             print(str(v) + " " + str(self.graph[v]))
-            print(str(v) + " " + str(self.nodes[v]))
+            # print(str(v) + " " + str(self.nodes[v]))
 
     def import_edgelist(self, file_name):
         with open(os.getcwd() + file_name, "r") as f:
             self.n = int(f.readline())
-            self.before = self.n
             for line in f:
                 arr = line.split()
                 u = int(arr[0])
@@ -42,19 +51,53 @@ class TemporalGraph:
                 t = int(arr[2])
                 l = int(arr[3])
                 self.add_edge(u, v, t, l)
-                if u in self.nodes:
-                    self.nodes[u][0] += 1
-                else:
-                    self.nodes[u] = [1, 0]
-                if v in self.nodes:
-                    self.nodes[v][1] += 1
-                else:
-                    self.nodes[v] = [0, 1]
-                    self.graph[v] = []
-                self.m += 1
-        # self.change_in_reachability = {v: 0 for v in self.nodes}
 
-    def calc_total_reachability_after(self, a, b, x, helper):
+    def calc_total_reachability(self, a, b):
+        for node in self.nodes:
+            reach_set = {node}
+            earliest_arrival_time = [np.inf for _ in range(len(self.nodes))]
+            earliest_arrival_time[node] = 0
+            PQ = PriorityQueue()
+            PQ.put((earliest_arrival_time[node], node))
+            while not PQ.empty():
+                (current_arrival_time, current_node) = PQ.get()
+                for (u, v, t, l) in self.graph[current_node]:
+                    if t < a or t + l > b: continue
+                    if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+                        reach_set.add(v)
+                        earliest_arrival_time[v] = t + l
+                        PQ.put((earliest_arrival_time[v], v))
+            self.total_reachability += len(reach_set)
+
+    def rank_node(self, x, a, b, before, helper):
+        total = 0
+        for node in self.nodes:
+            if node == x:
+                continue
+            reach_set = {node}
+            visited = set()
+            earliest_arrival_time = helper.copy()
+            earliest_arrival_time[node] = 0
+            PQ = PriorityQueue()
+            PQ.put((earliest_arrival_time[node], node))
+            while not PQ.empty():
+                (current_arrival_time, current_node) = PQ.get()
+                if current_node not in visited:
+                    for (u, v, t, l) in self.incidence_list[current_node]:
+                        if u != x and v != x:
+                            if t < a or t + l > b: continue
+                            if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+                                reach_set.add(v)
+                                earliest_arrival_time[v] = t + l
+                                PQ.put((earliest_arrival_time[v], v))
+                    visited.add(current_node)
+            total += len(reach_set)
+        # return 1 - (total / before)
+        return x, total
+
+    def calculate_bounds(self, a, b, x, earliest_arrival_time=None):
+        if earliest_arrival_time is None:
+            earliest_arrival_time = {v: np.inf for v in self.nodes}
         upper_bound = 0
         lower_bound = 0
         for node in self.nodes:
@@ -62,7 +105,6 @@ class TemporalGraph:
                 continue
             reach_set = {node}
             visited = set()
-            earliest_arrival_time = helper.copy()
             earliest_arrival_time[node] = 0
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
@@ -78,53 +120,14 @@ class TemporalGraph:
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
             lower_bound += len(reach_set)
-            # upper_bound += len(reach_set) + len(self.deleted_nodes)
+            upper_bound += len(reach_set) + len(self.deleted_nodes)
         lower_bound += sum(len(value) for key, value in self.change_in_reachability.items()
                            if key != x)
-        # upper_bound += sum(len(value) for key, value in self.change_in_reachability.items()
-        #                    if key in self.deleted_nodes)
-        return 1-(lower_bound/500000)
-
-    def quick_node_ranking_test(self, a, b, depth):
-        self.filter_nodes(depth)
-        file = "/edge-lists/noderankingtest.txt"
-        pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        result_objects = [pool.apply_async(self.calc_total_reachability_after, args=(0, np.inf, node))
-                          for node in self.nodes]
-        rankings = [r.get() for r in result_objects]
-        rankings.sort(key=lambda tup: tup[:][1].lower)
-        print(rankings)
-        # example_graph2.txt
+        upper_bound += sum(len(value) for key, value in self.change_in_reachability.items()
+                           if key in self.deleted_nodes)
+        return x, (lower_bound, upper_bound)
 
     def filter_nodes(self, depth):
-        i = 0
-        while i != depth:
-            deletion = set()
-            for node in self.nodes:
-                if self.nodes[node][0] == 0:
-                    deletion.add(node)
-            for node in self.nodes:
-                for (u, v, t, l) in self.graph[node][:]:
-                    if v in deletion:
-                        if u not in self.change_in_reachability:
-                            self.change_in_reachability[u] = 0
-                        self.change_in_reachability[u] += 1
-                        # self.change_in_reachability[u] += 1 + self.change_in_reachability[v]
-                        self.nodes[u][0] -= 1
-                        self.nodes[v][1] -= 1
-                        self.graph[u].remove((u, v, t, l))
-                        self.m -= 1
-            self.deleted_nodes = self.deleted_nodes | deletion
-            for node in self.deleted_nodes:
-                try:
-                    del self.nodes[node]
-                    del self.graph[node]
-                    self.n -= 1
-                except KeyError:
-                    continue
-            i += 1
-
-    def filter_nodes2(self, depth):
         for i in range(0, depth):
             for node in self.nodes:
                 if self.nodes[node][0] == 0:
@@ -149,14 +152,12 @@ class TemporalGraph:
                 except KeyError:
                     continue
 
-    def node_ranking(self, a, b, output_name, depth):
+    def heuristik(self, a, b, output_name, depth):
         start_time = time.time()
-        G.filter_nodes2(depth)
+        G.filter_nodes(depth)
         finish1 = time.time() - start_time
-        helper = {v: np.inf for v in self.nodes}
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        result_objects = [pool.apply_async(self.calc_total_reachability_after, args=(a, b, node, helper)) for node in
-                          range(0, self.n) if node in self.nodes]
+        result_objects = [pool.apply_async(self.calculate_bounds, args=(a, b, node)) for node in self.nodes]
         ranking = [r.get() for r in result_objects]
         pool.close()
         pool.join()
@@ -177,4 +178,4 @@ if __name__ == '__main__':
     # test = input_graph.split(".")[0] + '-_TEST' + '.txt'
     G = TemporalGraph()
     G.import_edgelist(input_graph)
-    G.node_ranking(0, np.inf, output_file, depth)
+    G.heuristik(0, np.inf, output_file, depth)
