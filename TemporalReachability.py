@@ -123,8 +123,8 @@ class TemporalGraph:
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
             total += len(reach_set)
-        # return 1 - (total / before)
-        return x, total
+        return 1 - (total / before)
+        # return x, total
 
     # node ranking, with asynchronous multiprocessing
     def node_ranking(self, a, b, output_name):

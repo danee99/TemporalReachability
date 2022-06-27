@@ -69,21 +69,21 @@ class TemporalGraph:
                         PQ.put((earliest_arrival_time[v], v))
             self.total_reachability += len(reach_set)
 
-    def rank_node(self, x, a, b, before, helper):
+    def rank_node(self, x, a, b, before):
         total = 0
         for node in self.nodes:
             if node == x:
                 continue
             reach_set = {node}
             visited = set()
-            earliest_arrival_time = helper.copy()
+            earliest_arrival_time = [np.inf for _ in range(self.n)]
             earliest_arrival_time[node] = 0
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
             while not PQ.empty():
                 (current_arrival_time, current_node) = PQ.get()
                 if current_node not in visited:
-                    for (u, v, t, l) in self.incidence_list[current_node]:
+                    for (u, v, t, l) in self.graph[current_node]:
                         if u != x and v != x:
                             if t < a or t + l > b: continue
                             if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
@@ -92,8 +92,23 @@ class TemporalGraph:
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
             total += len(reach_set)
-        # return 1 - (total / before)
-        return x, total
+        return 1 - (total / before)
+
+    def node_ranking(self, a, b, output_name):
+        start_time = time.time()
+        self.calc_total_reachability(a, b)
+        pool = multiprocessing.Pool(multiprocessing.cpu_count())
+        result_objects = [pool.apply_async(self.rank_node, args=(node, a, b, self.total_reachability)) for node in
+                          range(0, self.n)]
+        ranking = [r.get() for r in result_objects]
+        pool.close()
+        pool.join()
+        finish = time.time() - start_time
+        with open(os.getcwd() + output_name, 'w') as f:
+            f.write(str(ranking) + "\n")
+            f.write("--- finished in %s seconds ---" % finish + "\n")
+            f.write("--- finished in %s minutes ---" % (finish / 60) + "\n")
+            f.write("--- finished in %s hours ---" % (finish / 3600))
 
     def calculate_bounds(self, a, b, x, earliest_arrival_time=None):
         if earliest_arrival_time is None:
@@ -174,8 +189,10 @@ class TemporalGraph:
 if __name__ == '__main__':
     input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
     depth = int(input('Tiefe eingeben:'))
-    output_file = input_graph.split(".")[0] + '-Heuristik4' + '.txt'
+    heuristik_output_file = input_graph.split(".")[0] + '-Heuristik' + '.txt'
+    ranking_output_file = input_graph.split(".")[0] + '-Rangliste' + '.txt'
     # test = input_graph.split(".")[0] + '-_TEST' + '.txt'
     G = TemporalGraph()
     G.import_edgelist(input_graph)
-    G.heuristik(0, np.inf, output_file, depth)
+    G.node_ranking(0, np.inf, ranking_output_file)
+    G.heuristik(0, np.inf, heuristik_output_file, depth)
