@@ -2,7 +2,7 @@
 mit Tiefe = 2
 geloeschte Knotenanzahl = 2
 uebrige Kanten = 6
---- filter_nodes() finished in 0.0 seconds ---
---- creating the helper finished in 0.0 seconds ---
---- ranking finished in 0.28621864318847656 seconds ---
---- total finished in 0.3600168228149414 seconds ---
+--- filter_nodes() finished in 0.0 minutes ---
+--- finished in 0.5555148124694824 seconds ---
+--- finished in 0.009258580207824708 minutes ---
+--- finished in 0.0001543096701304118 hours ---
