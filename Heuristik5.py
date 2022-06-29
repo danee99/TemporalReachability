@@ -141,9 +141,9 @@ class TemporalGraph:
                     visited.add(current_node)
             lower_bound += len(reach_set) + self.nodes[node][2]
             upper_bound += len(reach_set) + len(self.deleted_nodes)
-        for i in self.deleted_nodes:
-            lower_bound += self.deleted_nodes[i]
-            upper_bound += self.deleted_nodes[i]
+        part = sum(self.deleted_nodes.values())
+        lower_bound += part
+        upper_bound += part
         return x, (lower_bound, upper_bound)
 
     def filter_nodes(self, depth):
@@ -204,7 +204,7 @@ if __name__ == '__main__':
     ranking_output_file = input_graph.split(".")[0] + '-Rangliste' + '.txt'
     G = TemporalGraph()
     G.import_edgelist(input_graph)
-    # G.node_ranking(0, np.inf, ranking_output_file)
+    G.node_ranking(0, np.inf, ranking_output_file)
     G.heuristik(0, np.inf, heuristik_output_file, depth)
     # G.filter_nodes(depth)
     # print(str(len(G.deleted_nodes))+' Knoten gelöscht')
