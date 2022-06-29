@@ -204,7 +204,7 @@ if __name__ == '__main__':
     ranking_output_file = input_graph.split(".")[0] + '-Rangliste' + '.txt'
     G = TemporalGraph()
     G.import_edgelist(input_graph)
-    G.node_ranking(0, np.inf, ranking_output_file)
+    # G.node_ranking(0, np.inf, ranking_output_file)
     G.heuristik(0, np.inf, heuristik_output_file, depth)
     # G.filter_nodes(depth)
     # print(str(len(G.deleted_nodes))+' Knoten gelöscht')
