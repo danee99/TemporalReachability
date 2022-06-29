@@ -1,6 +1,6 @@
 [0.29166666666666663, 0.125, 0.45833333333333337, 0.25, 0.25, 0.25, 0.5]
 R(G) = 24
---- ranking finished in 0.5185844898223877 seconds ---
---- finished in 0.5185844898223877 seconds ---
---- finished in 0.008643074830373128 minutes ---
---- finished in 0.00014405124717288548 hours ---
+--- ranking finished in 0.377016544342041 seconds ---
+--- finished in 0.377016544342041 seconds ---
+--- finished in 0.00628360907236735 minutes ---
+--- finished in 0.00010472681787278917 hours ---

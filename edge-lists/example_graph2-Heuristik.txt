@@ -1,8 +1,7 @@
-[(2, (11, 17)), (6, (12, 20)), (0, (13, 19)), (5, (14, 20)), (1, (15, 21))]
+[(2, (11, 19)), (6, (12, 20)), (0, (13, 21)), (5, (14, 22)), (1, (15, 23))]
 mit Tiefe = 2
-geloeschte Knotenanzahl = 2
-uebrige Kanten = 6
+geloeschte Kanten = 3
 --- filter_nodes() finished in 0.0 minutes ---
---- finished in 0.38565635681152344 seconds ---
---- finished in 0.006427605946858724 minutes ---
---- finished in 0.00010712676578097873 hours ---
+--- finished in 0.3779909610748291 seconds ---
+--- finished in 0.006299849351247152 minutes ---
+--- finished in 0.00010499748918745253 hours ---
