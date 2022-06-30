@@ -14,26 +14,19 @@ class TemporalGraph:
         self.total_reachability = 0
         self.deleted_nodes = {}
         # outdegree(v) = self.nodes[v][0]
-        # indegree(v) = self.nodes[v][1]
-        # part that is missing = self.nodes[v][2]
+        # part that is missing = self.nodes[v][1]
 
     def add_edge(self, u, v, t, l):
-        if u in self.graph:
-            self.graph[u].append((u, v, t, l))
-        else:
+        if u not in self.graph:
             self.graph[u] = [(u, v, t, l)]
-        if u in self.nodes:
+            self.nodes[u] = [1, 0]
+        else:
             if v not in [self.graph[u][i][1] for i in range(0, len(self.graph[u]))]:
                 self.nodes[u][0] += 1
-        else:
-            self.nodes[u] = [1, 0, 0]
+            self.graph[u].append((u, v, t, l))
         if v not in self.graph:
             self.graph[v] = []
-        if v in self.nodes:
-            if v not in [self.graph[u][i][1] for i in range(0, len(self.graph[u]))]:
-                self.nodes[v][1] += 1
-        else:
-            self.nodes[v] = [0, 1, 0]
+            self.nodes[v] = [0, 0]
         self.m += 1
 
     def print_graph(self):
@@ -41,7 +34,7 @@ class TemporalGraph:
         print("|E| = " + str(self.m))
         for v in self.graph:
             print(str(v) + " " + str(self.graph[v]))
-            # print(str(v) + " " + str(self.nodes[v]))
+            print(str(v) + " " + str(self.nodes[v]))
 
     def import_edgelist(self, file_name):
         with open(os.getcwd() + file_name, "r") as f:
@@ -141,7 +134,7 @@ class TemporalGraph:
                                 earliest_arrival_time[v] = t + l
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
-            lower_bound += len(reach_set) + self.nodes[node][2]
+            lower_bound += len(reach_set) + self.nodes[node][1]
             upper_bound += len(reach_set) + len(self.deleted_nodes)
         part = sum(self.deleted_nodes.values())
         lower_bound += part
@@ -150,19 +143,19 @@ class TemporalGraph:
 
     def filter_nodes(self, depth):
         for i in range(0, depth):
+            # bestimme alle knoten mit ausgangsgrad 0
             for node in self.nodes:
                 if self.nodes[node][0] == 0:
                     if node not in self.deleted_nodes:
                         self.deleted_nodes[node] = 1
-                    self.deleted_nodes[node] += self.nodes[node][2]
+                    self.deleted_nodes[node] += self.nodes[node][1]
             for node in self.nodes:
                 visited = set()
                 for (u, v, t, l) in self.graph[node][:]:
                     if v in self.deleted_nodes:
                         if v not in visited:
-                            self.nodes[u][2] += 1
+                            self.nodes[u][1] += 1
                         self.nodes[u][0] -= 1
-                        self.nodes[v][1] -= 1
                         self.graph[u].remove((u, v, t, l))
                         self.m -= 1
                         visited.add(v)
@@ -181,8 +174,7 @@ class TemporalGraph:
         finish1 = time.time() - start_time
         helper = {v: np.inf for v in self.nodes}
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        result_objects = [pool.apply_async(self.calculate_bounds, args=(a, b, node, helper))
-                          for node in self.nodes]
+        result_objects = [pool.apply_async(self.calculate_bounds, args=(a, b, node, helper)) for node in self.nodes]
         ranking = [r.get() for r in result_objects]
         pool.close()
         pool.join()
@@ -206,13 +198,12 @@ if __name__ == '__main__':
     ranking_output_file = input_graph.split(".")[0] + '-Rangliste' + '.txt'
     G = TemporalGraph()
     G.import_edgelist(input_graph)
-    G.node_ranking(0, np.inf, ranking_output_file)
-    G.heuristik(0, np.inf, heuristik_output_file, depth)
+    # G.node_ranking(0, np.inf, ranking_output_file)
+    # G.heuristik(0, np.inf, heuristik_output_file, depth)
 
-    # num_edges = G.m
-    # G.filter_nodes(depth)
-    # print(str(len(G.deleted_nodes))+' Knoten gelöscht')
-    # print(str(num_edges-G.m)+' Kanten gelöscht')
-
+    num_edges = G.m
+    G.filter_nodes(depth)
+    print(str(len(G.deleted_nodes))+' Knoten gelöscht')
+    print(str(num_edges-G.m)+' Kanten gelöscht')
     # print(G.nodes)
     # print(G.graph)

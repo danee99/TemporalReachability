@@ -3,6 +3,6 @@ mit Tiefe = 2
 geloeschte Knotenanzahl = 2
 geloeschte Kanten = 3
 --- filter_nodes() finished in 0.0 minutes ---
---- finished in 0.367018461227417 seconds ---
---- finished in 0.006116974353790283 minutes ---
---- finished in 0.00010194957256317139 hours ---
+--- finished in 0.35405397415161133 seconds ---
+--- finished in 0.005900899569193522 minutes ---
+--- finished in 9.834832615322537e-05 hours ---
