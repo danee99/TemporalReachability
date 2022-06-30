@@ -194,16 +194,16 @@ class TemporalGraph:
 if __name__ == '__main__':
     input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
     depth = int(input('Tiefe eingeben:'))
-    heuristik_output_file = input_graph.split(".")[0] + '-Heuristik' + '.txt'
+    heuristik_output_file = input_graph.split(".")[0] + '-Heuristik2' + '.txt'
     ranking_output_file = input_graph.split(".")[0] + '-Rangliste' + '.txt'
     G = TemporalGraph()
     G.import_edgelist(input_graph)
     # G.node_ranking(0, np.inf, ranking_output_file)
-    # G.heuristik(0, np.inf, heuristik_output_file, depth)
+    G.heuristik(0, np.inf, heuristik_output_file, depth)
 
-    num_edges = G.m
-    G.filter_nodes(depth)
-    print(str(len(G.deleted_nodes))+' Knoten gelöscht')
-    print(str(num_edges-G.m)+' Kanten gelöscht')
+    # num_edges = G.m
+    # G.filter_nodes(depth)
+    # print(str(len(G.deleted_nodes))+' Knoten gelöscht')
+    # print(str(num_edges-G.m)+' Kanten gelöscht')
     # print(G.nodes)
     # print(G.graph)
