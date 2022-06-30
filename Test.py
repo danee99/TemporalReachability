@@ -29,9 +29,11 @@ class TemporalGraph:
                     self.graph[u] = [[], 0, 0]
                 if v not in self.graph:
                     self.graph[v] = [[], 0, 0]
+                if v not in [self.graph[u][0][i][1] for i in range(0, len(self.graph[u][0]))]:
+                    self.graph[u][1] += 1
+                if v not in [self.graph[u][0][i][1] for i in range(0, len(self.graph[u][0]))]:
+                    self.graph[v][2] += 1
                 self.graph[u][0].append((u, v, t, l))
-                self.graph[u][1] += 1 # outdegree
-                self.graph[v][2] += 1 # indegree
                 self.m += 1
 
     def filter_nodes(self, depth):
@@ -183,7 +185,8 @@ if __name__ == '__main__':
     ranking = input_graph.split(".")[0] + '-Rangliste' + '.txt'
     G = TemporalGraph()
     G.import_edgelist(input_graph)
+    G.print_graph()
     # G.node_ranking(0, np.inf, ranking)
-    G.heuristik(0, np.inf, heuristik, depth)
-    # example_graph2.txt
+    # G.heuristik(0, np.inf, heuristik, depth)
+
 

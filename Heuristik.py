@@ -23,13 +23,15 @@ class TemporalGraph:
         else:
             self.graph[u] = [(u, v, t, l)]
         if u in self.nodes:
-            self.nodes[u][0] += 1
+            if v not in [self.graph[u][i][1] for i in range(0, len(self.graph[u]))]:
+                self.nodes[u][0] += 1
         else:
             self.nodes[u] = [1, 0, 0]
         if v not in self.graph:
             self.graph[v] = []
         if v in self.nodes:
-            self.nodes[v][1] += 1
+            if v not in [self.graph[u][i][1] for i in range(0, len(self.graph[u]))]:
+                self.nodes[v][1] += 1
         else:
             self.nodes[v] = [0, 1, 0]
         self.m += 1
@@ -211,3 +213,6 @@ if __name__ == '__main__':
     # G.filter_nodes(depth)
     # print(str(len(G.deleted_nodes))+' Knoten gelöscht')
     # print(str(num_edges-G.m)+' Kanten gelöscht')
+
+    # print(G.nodes)
+    # print(G.graph)
