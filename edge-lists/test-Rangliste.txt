@@ -1,0 +1,6 @@
+[0.6666666666666667, 0.6666666666666667]
+R(G) = 3
+--- ranking finished in 0.0 seconds ---
+--- finished in 0.0 seconds ---
+--- finished in 0.0 minutes ---
+--- finished in 0.0 hours ---
