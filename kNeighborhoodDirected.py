@@ -1,6 +1,8 @@
+import multiprocessing
 import os
 from queue import PriorityQueue
 import numpy as np
+import time
 
 
 class TemporalGraph:
@@ -12,17 +14,17 @@ class TemporalGraph:
 
     def add_edge(self, u, v, t, l):
         if u not in self.graph:
-            #
+            # change
             self.graph[u] = [[(u, v, t, l)], set()]
         else:
-            #
+            # change
             self.graph[u][0].append((u, v, t, l))
         if v not in self.graph:
-            #
+            # change
             self.graph[v] = [[], set()]
-        #
+        # change
         self.graph[u][1].add(v)
-        #
+        # change
         self.graph[v][1].add(u)
         self.m += 1
 
@@ -46,6 +48,9 @@ class TemporalGraph:
         visited = set()
         queue = [node, -1]
         i = 0
+        # There are two possibilities for the algorithm to terminate
+        # either the queue is empty, then every node of the graph (for example k=|V|) has been processed
+        # or the k-neighborhood of node has been completely processed
         while queue:
             current_node = queue.pop(0)
             if current_node == -1:
@@ -56,7 +61,7 @@ class TemporalGraph:
                 else:
                     continue
             else:
-                #
+                # change
                 for neighbour in self.graph[current_node][1]:
                     if neighbour not in visited:
                         visited.add(neighbour)
@@ -71,14 +76,14 @@ class TemporalGraph:
                 continue
             reach_set = {node}
             visited = set()
-            earliest_arrival_time = {c: np.inf for c in k_neighbours}
+            earliest_arrival_time = {j: np.inf for j in k_neighbours}
             earliest_arrival_time[node] = 0
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
             while not PQ.empty():
                 (current_arrival_time, current_node) = PQ.get()
                 if current_node not in visited:
-                    #
+                    # change
                     for (u, v, t, l) in self.graph[current_node][0]:
                         if u in k_neighbours and v in k_neighbours:
                             if v != deleted_node and u != deleted_node:
@@ -94,15 +99,22 @@ class TemporalGraph:
 
 if __name__ == '__main__':
     input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
-    output_file = input_graph.split(".")[0] + 'k-Nachbarschaft-Ranking' + '.txt'
+    k = int(input('k-Nachbarschaft, Gebe den Wert k ein:'))
+    output_file = input_graph.split(".")[0] + '-k-Nachbarschaft-Ranking' + '.txt'
     G = TemporalGraph()
     G.import_edgelist(input_graph)
-    G.print_graph()
-    for v in G.graph:
-        print(str(v) + ': R(G-v) = ' + str(G.total_reachability_after(v, 0, 99, 2)))
-    # num_edges = G.m
-    # G.filter_nodes(depth)
-    # print(str(len(G.deleted_nodes))+' Knoten gelöscht')
-    # print(str(num_edges-G.m)+' Kanten gelöscht')
-    # example_graph1.txt
-    # example_graph2.txt
+
+    start_time = time.time()
+    pool = multiprocessing.Pool(multiprocessing.cpu_count())
+    result_objects = [pool.apply_async(G.total_reachability_after, args=(node, 0, np.inf, k)) for node in range(0, G.n)]
+    result = [r.get() for r in result_objects]
+    pool.close()
+    pool.join()
+    finish = time.time() - start_time
+    with open(os.getcwd() + output_file, 'w') as f:
+        f.write(str(result) + "\n")
+        f.write("wurde auf die " + str(k) + "-Nachbarschaft jedes Knotens angewendet." + "\n")
+        f.write("|V| = " + str(G.n) + ", |E| = " + str(G.m) + "\n")
+        f.write("--- finished in %s seconds ---" % finish + "\n")
+        f.write("--- finished in %s minutes ---" % (finish / 60) + "\n")
+        f.write("--- finished in %s hours ---" % (finish / 3600))
