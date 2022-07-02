@@ -37,21 +37,16 @@ class TemporalGraph:
                 l = int(arr[3])
                 self.add_edge(u, v, t, l)
 
-    # def k_neighborhood(self, node, visited, k):
+    # def staic_bfs(self, node):
+    #     visited = [node]
     #     queue = []
     #     queue.append(node)
-    #     i = 0
     #     while queue:
-    #         # if i == k:
-    #         #     break
     #         current_node = queue.pop(0)
-    #         print(current_node)
     #         for (current_node, neighbour, t, l) in self.graph[current_node]:
-    #             print((current_node, neighbour, t, l))
     #             if neighbour not in visited:
-    #                 visited.add(neighbour)
+    #                 visited.append(neighbour)
     #                 queue.append(neighbour)
-    #         # i += 1
     #     return visited
 
     def k_neighborhood(self, node, k):
