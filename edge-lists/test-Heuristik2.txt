@@ -1,8 +1,0 @@
-[(0, (1, 1))]
-mit Tiefe = 2
-geloeschte Knotenanzahl = 1
-geloeschte Kanten = 2
---- filter_nodes() finished in 0.0 minutes ---
---- finished in 0.0 seconds ---
---- finished in 0.0 minutes ---
---- finished in 0.0 hours ---

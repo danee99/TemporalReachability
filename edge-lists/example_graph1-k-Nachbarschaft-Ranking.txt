@@ -1,6 +1,0 @@
-[18, 18, 25, 21, 18, 26, 18]
-wurde auf die 2-Nachbarschaft jedes Knotens angewendet.
-|V| = 7, |E| = 18
---- finished in 0.38028526306152344 seconds ---
---- finished in 0.006338087717692057 minutes ---
---- finished in 0.00010563479529486763 hours ---

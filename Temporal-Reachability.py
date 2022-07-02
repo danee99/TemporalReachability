@@ -31,17 +31,17 @@ class TemporalGraph:
         with open(os.getcwd() + output_name, 'w') as f:
             f.write(str(res) + "\n")
 
-    # normalized version of the outdegrees for every node
-    def degree_centrality_normalized(self, output_name):
-        res = []
-        for node in range(0, self.n):
-            res.append(len(self.incidence_list[node]))
-        maximum = max(res)
-        minimum = min(res)
-        for j in range(0, self.n):
-            res[j] = (res[j] - minimum) / (maximum - minimum)
-        with open(os.getcwd() + output_name, 'w') as f:
-            f.write(str(res) + "\n")
+    # # normalized version of the outdegrees for every node
+    # def degree_centrality_normalized(self, output_name):
+    #     res = []
+    #     for node in range(0, self.n):
+    #         res.append(len(self.incidence_list[node]))
+    #     maximum = max(res)
+    #     minimum = min(res)
+    #     for j in range(0, self.n):
+    #         res[j] = (res[j] - minimum) / (maximum - minimum)
+    #     with open(os.getcwd() + output_name, 'w') as f:
+    #         f.write(str(res) + "\n")
 
     # scans an edgelist and creates a TemporalGraph object in O(n+m)
     def import_edgelist(self, file_name):
@@ -124,7 +124,6 @@ class TemporalGraph:
                     visited.add(current_node)
             total += len(reach_set)
         return 1 - (total / before)
-        # return x, total
 
     # node ranking, with asynchronous multiprocessing
     def node_ranking(self, a, b, output_name):
@@ -139,7 +138,6 @@ class TemporalGraph:
         pool.join()
         finish = time.time() - start_time
         with open(os.getcwd() + output_name, 'w') as f:
-            ranking.sort(key=lambda tup: tup[:][1])
             f.write(str(ranking) + "\n")
             f.write("--- finished in %s seconds ---" % finish + "\n")
             f.write("--- finished in %s minutes ---" % (finish / 60) + "\n")
@@ -150,12 +148,11 @@ if __name__ == '__main__':
     input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
     a = int(input('Intervall a eingeben: '))
     b = np.inf
-    output_file = input_graph.split(".")[0] + '-RanglisteTest' + '.txt'
+    output_file = input_graph.split(".")[0] + '-Rangliste' + '.txt'
     degree_output_file = input_graph.split(".")[0] + '-Outdegrees' + '.txt'
     G = TemporalGraph()
     G.import_edgelist(input_graph)
-    # G.node_ranking(a, b, output_file)
-    G.degrees(degree_output_file)
+    G.node_ranking(a, b, output_file)
     # DATASETS:                                                                 Node Ranking | Top k  | Heuristik (k-core)
     # wiki_talk_nl.txt                      |  |V| = 225.749 | |E| = 1.554.698
     # wikipediasg.txt                       |  |V| = 208.142 | |E| = 810.702
