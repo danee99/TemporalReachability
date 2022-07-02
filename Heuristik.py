@@ -65,14 +65,14 @@ class TemporalGraph:
                         PQ.put((earliest_arrival_time[v], v))
             self.total_reachability += len(reach_set)
 
-    def rank_node(self, x, a, b, before, helper):
+    def rank_node(self, x, a, b, before):
         total = 0
         for node in self.nodes:
             if node == x:
                 continue
             reach_set = {node}
             visited = set()
-            earliest_arrival_time = helper[:]
+            earliest_arrival_time = [np.inf for _ in range(self.n)]
             earliest_arrival_time[node] = 0
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
@@ -92,11 +92,10 @@ class TemporalGraph:
 
     # def node_ranking(self, a, b, output_name):
     #     start_time = time.time()
-    #     helper = [np.inf for _ in range(self.n)]
     #     self.calc_total_reachability(a, b)
     #     start_time2 = time.time()
     #     pool = multiprocessing.Pool(multiprocessing.cpu_count())
-    #     result_objects = [pool.apply_async(self.rank_node, args=(node, a, b, self.total_reachability, helper)) for node
+    #     result_objects = [pool.apply_async(self.rank_node, args=(node, a, b, self.total_reachability)) for node
     #                       in range(0, self.n)]
     #     ranking = [r.get() for r in result_objects]
     #     finish2 = time.time() - start_time2
@@ -112,11 +111,10 @@ class TemporalGraph:
     #         f.write("--- finished in %s hours ---" % (finish / 3600))
     def node_ranking(self, a, b, output_name):
         start_time = time.time()
-        helper = [np.inf for _ in range(self.n)]
         self.calc_total_reachability(a, b)
         ranking = []
         for node in range(0, self.n):
-            ranking.append(self.rank_node(node, a, b, self.total_reachability, helper))
+            ranking.append(self.rank_node(node, a, b, self.total_reachability))
         finish = time.time() - start_time
         with open(os.getcwd() + output_name, 'w') as f:
             f.write(str(ranking) + "\n")
@@ -126,7 +124,7 @@ class TemporalGraph:
             f.write("--- finished in %s minutes ---" % (finish / 60) + "\n")
             f.write("--- finished in %s hours ---" % (finish / 3600))
 
-    def calculate_bounds(self, a, b, x, helper):
+    def calculate_bounds(self, a, b, x):
         upper_bound = 0
         lower_bound = 0
         for node in self.nodes:
@@ -134,7 +132,7 @@ class TemporalGraph:
                 continue
             reach_set = {node}
             visited = set()
-            earliest_arrival_time = helper.copy()
+            earliest_arrival_time = {v: np.inf for v in self.nodes}
             earliest_arrival_time[node] = 0
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
@@ -187,9 +185,8 @@ class TemporalGraph:
     #     start_time = time.time()
     #     self.filter_nodes(depth)
     #     finish1 = time.time() - start_time
-    #     helper = {v: np.inf for v in self.nodes}
     #     pool = multiprocessing.Pool(multiprocessing.cpu_count())
-    #     result_objects = [pool.apply_async(self.calculate_bounds, args=(a, b, node, helper)) for node in self.nodes]
+    #     result_objects = [pool.apply_async(self.calculate_bounds, args=(a, b, node)) for node in self.nodes]
     #     ranking = [r.get() for r in result_objects]
     #     pool.close()
     #     pool.join()
@@ -208,10 +205,9 @@ class TemporalGraph:
         start_time = time.time()
         num_edges = self.m
         self.filter_nodes(depth)
-        helper = {v: np.inf for v in self.nodes}
         result = []
         for node in self.nodes:
-            result.append(self.calculate_bounds(a, b, node, helper))
+            result.append(self.calculate_bounds(a, b, node))
         finish = time.time() - start_time
         with open(os.getcwd() + output_name, 'w') as f:
             result.sort(key=lambda tup: tup[1][0])
