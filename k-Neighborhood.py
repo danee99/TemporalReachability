@@ -83,9 +83,9 @@ class TemporalGraph:
 
     def total_reachability_after(self, deleted_node, a, b, k):
         total = 0
-        bfs_start_time = time.time()
+        # bfs_start_time = time.time()
         k_neighbours = self.k_neighborhood(deleted_node, k)
-        bfs_finish_time = time.time() - bfs_start_time
+        # bfs_finish_time = time.time() - bfs_start_time
         for node in k_neighbours:
             if node == deleted_node:
                 continue
@@ -110,7 +110,7 @@ class TemporalGraph:
                     visited.add(current_node)
             # print(node, len(reach_set))
             total += len(reach_set)
-        print(str(bfs_finish_time) + " Sekunden")
+        # print(str(bfs_finish_time) + " Sekunden")
         return total
 
 
