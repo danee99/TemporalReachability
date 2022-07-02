@@ -36,7 +36,6 @@ class TemporalGraph:
                 t = int(arr[2])
                 l = int(arr[3])
                 self.add_edge(u, v, t, l)
-                self.add_edge(v, u, t, l)
 
     def import_undirected_edgelist(self, file_name):
         with open(os.getcwd() + file_name, "r") as f:
@@ -48,6 +47,7 @@ class TemporalGraph:
                 t = int(arr[2])
                 l = int(arr[3])
                 self.add_edge(u, v, t, l)
+                self.add_edge(v, u, t, l)
 
     # def staic_bfs(self, node):
     #     visited = [node]
@@ -60,6 +60,32 @@ class TemporalGraph:
     #                 visited.append(neighbour)
     #                 queue.append(neighbour)
     #     return visited
+
+    def k_neighborhood2(self, node, k):
+        sub_graph = {}
+        visited = set()
+        queue = [node, -1]
+        i = 0
+        while queue:
+            current_node = queue.pop(0)
+            if current_node == -1:
+                i += 1
+                queue.append(-1)
+                if i == k:
+                    break
+                else:
+                    continue
+            else:
+                for (current_node, neighbour, t, l) in self.graph[current_node]:
+                    if neighbour not in visited:
+                        visited.add(neighbour)
+                        sub_graph[neighbour] = []
+                        queue.append(neighbour)
+        for node in visited:
+            for (u, v, t, l) in self.graph[node]:
+                if u in visited and v in visited:
+                    sub_graph[node].append((u, v, t, l))
+        return sub_graph
 
     def k_neighborhood(self, node, k):
         visited = set()
@@ -84,23 +110,25 @@ class TemporalGraph:
     def total_reachability_after(self, deleted_node, a, b, k):
         total = 0
         # bfs_start_time = time.time()
-        k_neighbours = self.k_neighborhood(deleted_node, k)
+        # k_neighbours = self.k_neighborhood(deleted_node, k)
+        sub_graph = self.k_neighborhood2(deleted_node, k)
+        # print(deleted_node, sub_graph)
         # bfs_finish_time = time.time() - bfs_start_time
-        for node in k_neighbours:
+        for node in sub_graph:
             if node == deleted_node:
                 continue
             reach_set = {node}
             visited = set()
-            earliest_arrival_time = {c: np.inf for c in k_neighbours}
+            earliest_arrival_time = {c: np.inf for c in sub_graph}
             earliest_arrival_time[node] = 0
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
             while not PQ.empty():
                 (current_arrival_time, current_node) = PQ.get()
                 if current_node not in visited:
-                    for (u, v, t, l) in self.graph[current_node]:
-                        if u not in k_neighbours or v not in k_neighbours:
-                            continue
+                    for (u, v, t, l) in sub_graph[current_node]:
+                        # if u not in k_neighbours or v not in k_neighbours:
+                        #     continue
                         if v != deleted_node and u != deleted_node:
                             if t < a or t + l > b: continue
                             if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
