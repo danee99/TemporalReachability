@@ -5,7 +5,7 @@ def convert(file_name, output):
     nodemanager = {}
     with open(os.getcwd() + output, "w") as o:
         with open(os.getcwd() + file_name, "r") as f:
-            # n = int(f.readline())
+            n = int(f.readline())
             id = 0
             for line in f:
                 arr = line.split()
@@ -23,6 +23,7 @@ def convert(file_name, output):
                     nodemanager[v] = id
                     id = id + 1
                 o.write((str(nodemanager[u]) + " " + str(nodemanager[v]) + " " + str(t) + " " + str(l) + "\n"))
+                o.write((str(nodemanager[v]) + " " + str(nodemanager[u]) + " " + str(t) + " " + str(l) + "\n"))
         o.write(str(len(nodemanager.keys())))
 
 
@@ -55,11 +56,12 @@ def swap(file_name, output):
         with open(os.getcwd() + file_name, "r") as f:
             for line in f:
                 arr = line.split()
-                u = int(arr[0])
-                v = int(arr[1])
-                l = int(arr[2])
-                t = int(arr[3])
-                o.write((str(u) + " " + str(v) + " " + str(t) + " " + str(l) + "\n"))
+                t = int(arr[0])
+                u = int(arr[1])
+                v = int(arr[2])
+                l1 = arr[3]
+                l2 = arr[4]
+                o.write((str(u) + " " + str(v) + " " + str(t) + " " + str(1) + "\n"))
 
 
 if __name__ == '__main__':
@@ -67,4 +69,4 @@ if __name__ == '__main__':
     inp = input('Edgeliste eingeben:')
     file_in = '/edge-lists/' + str(inp)
     file_out ='/edge-lists/' + '0_'+str(inp)
-    betw(file_in, file_out)
+    convert(file_in, file_out)

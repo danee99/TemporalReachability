@@ -154,23 +154,24 @@ if __name__ == '__main__':
     G.import_edgelist(input_graph)
     G.node_ranking(a, b, output_file)
     # DATASETS:                                                                 Node Ranking
-    # wiki_talk_nl.txt                      |  |V| = 225.749 | |E| = 1.554.698
-    # wikipediasg.txt                       |  |V| = 208.142 | |E| = 810.702
-    # facebook.txt                          |  |V| = 63.731  | |E| = 817.035
-    # twitter.txt                           |  |V| = 4.605   | |E| = 23.736     167 min
-    # ia-reality-call.txt                   |  |V| = 6.809   | |E| = 52.050     137 min
-    # infectious.txt                        |  |V| = 10.972  | |E| = 415.912    130 min
-    # ia-contacts_dublin.txt                |  |V| = 10.972  | |E| = 415.912    xxx min
-    # fb-messages.txt                       |  |V| = 1.899   | |E| = 61.734     47 min
-    # UC-Irvine-messages.txt                |  |V| = 1.899   | |E| = 59.385     47 min
-    # email-dnc.txt                         |  |V| = 1.891   | |E| = 39.264     13 min
-    # copresence-InVS15.txt                 |  |V| = 219     | |E| = 1.283.194  7 min
-    # ht09_contact_list.txt                 |  |V| = 5.351   | |E| = 20.817     4 min
-    # fb-forum.txt                          |  |V| = 899     | |E| = 33.720     3 min
-    # tij_SFHH.txt                          |  |V| = 403     | |E| = 70.261     2 min
-    # copresence-InVS13.txt                 |  |V| = 95      | |E| = 394.247    1 min
-    # reptilia-tortoise-network-fi.txt      |  |V| = 787     | |E| = 1.713      0 min
-    # aves-weaver-social.txt                |  |V| = 445     | |E| = 1.426      0 min
+    # wiki_talk_nl.txt                              |  |V| = 225.749 | |E| = 1.554.698
+    # wikipediasg.txt                               |  |V| = 208.142 | |E| = 810.702
+    # facebook.txt                                  |  |V| = 63.731  | |E| = 817.035
+    # twitter.txt                                   |  |V| = 4.605   | |E| = 23.736     167 min
+    # ia-reality-call.txt (Undirected)              |  |V| = 6.809   | |E| = 52.050     137 min
+    # infectious.txt (Undirected ?)                 |  |V| = 10.972  | |E| = 415.912    130 min
+    # ia-contacts_dublin.txt (Undirected)           |  |V| = 10.972  | |E| = 415.912    xxx min
+    # fb-messages.txt (Directed)                    |  |V| = 1.899   | |E| = 61.734     47 min
+    # UC-Irvine-messages.txt (Directed)             |  |V| = 1.899   | |E| = 59.385     47 min
+    # High-School_data_2013.txt (Undirected)        |  |V| = 327     | |E| = 59.385     47 min
+    # email-dnc.txt (Directed)                      |  |V| = 1.891   | |E| = 39.264     13 min
+    # copresence-InVS15.txt (Undirected)            |  |V| = 219     | |E| = 1.283.194  7 min
+    # ht09_contact_list.txt (Undirected)            |  |V| = 5.351   | |E| = 20.817     4 min
+    # fb-forum.txt (directed)                       |  |V| = 899     | |E| = 33.720     3 min
+    # tij_SFHH.txt (Undirected)                     |  |V| = 403     | |E| = 70.261     2 min
+    # copresence-InVS13.txt (Undirected ?)          |  |V| = 95      | |E| = 394.247    1 min
+    # reptilia-tortoise-network-fi.txt (Undirected) |  |V| = 787     | |E| = 1.713      0 min
+    # aves-weaver-social.txt (Undirected)           |  |V| = 445     | |E| = 1.426      0 min
     # -------------------------------------------------------------------------------------------------------------------------
     # example_graph1.txt                    |  |V| = 7       | |E| = 18
     # example_graph2.txt                    |  |V| = 7       | |E| = 9
