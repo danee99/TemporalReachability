@@ -9,7 +9,8 @@ class TemporalGraph:
     def __init__(self):
         self.n = 0
         self.m = 0
-        self.graph = {}
+        self.nodes = []
+        self.graph = []
         self.total_reachability = 0
 
     def add_edge(self, u, v, t, l):
@@ -29,18 +30,21 @@ class TemporalGraph:
     def import_edgelist(self, file_name):
         with open(os.getcwd() + file_name, "r") as f:
             self.n = int(f.readline())
+            self.graph = [[] for _ in range(self.n)]
             for line in f:
                 arr = line.split()
                 u = int(arr[0])
                 v = int(arr[1])
                 t = int(arr[2])
                 l = int(arr[3])
-                self.add_edge(u, v, t, l)
+                # self.add_edge(u, v, t, l)
                 # self.add_edge(v, u, t, l)
+                self.graph[u].append((u, v, t, l))
+                self.graph[v].append((v, u, t, l))
+                self.m += 2
 
     def k_neighborhood2(self, node, k):
-        sub_graph = {}
-        visited = set()
+        sub_graph = {node: []}
         queue = [node, -1]
         i = 0
         while queue:
@@ -53,38 +57,12 @@ class TemporalGraph:
                 else:
                     continue
             else:
-                for (current_node, neighbour, t, l) in self.graph[current_node]:
-                    if neighbour not in visited:
-                        visited.add(neighbour)
-                        sub_graph[neighbour] = []
-                        queue.append(neighbour)
-        for node in visited:
-            for (u, v, t, l) in self.graph[node]:
-                if u in visited and v in visited:
-                    sub_graph[node].append((u, v, t, l))
-        # sub_graph = {}
-        # sub_graph[node] = []
-        # queue = [node, -1]
-        # i = 0
-        # while queue:
-        #     current_node = queue.pop(0)
-        #     if current_node == -1:
-        #         i += 1
-        #         queue.append(-1)
-        #         if i == k:
-        #             break
-        #         else:
-        #             continue
-        #     else:
-        #         for (current_node, neighbour, t, l) in self.graph[current_node]:
-        #             if neighbour not in sub_graph:
-        #                 sub_graph[neighbour] = []
-        #                 sub_graph[current_node].append((current_node, neighbour, t, l))
-        #                 sub_graph[neighbour].append((neighbour, current_node, t, l))
-        #                 queue.append(neighbour)
-        #             else:
-        #                 sub_graph[current_node].append((current_node, neighbour, t, l))
-        # # print(sub_graph)
+                for (x, y, t, l) in self.graph[current_node]:
+                    if y not in sub_graph:
+                        sub_graph[y] = []
+                        queue.append(y)
+        for u in sub_graph:
+            sub_graph[u] = [(x, y, t, l) for (x, y, t, l) in self.graph[u] if y in sub_graph]
         return sub_graph
 
     def k_neighborhood(self, node, k):
@@ -101,10 +79,10 @@ class TemporalGraph:
                 else:
                     continue
             else:
-                for (current_node, neighbour, t, l) in self.graph[current_node]:
-                    if neighbour not in visited:
-                        visited.add(neighbour)
-                        queue.append(neighbour)
+                for (x, y, t, l) in self.graph[current_node]:
+                    if y not in visited:
+                        visited.add(y)
+                        queue.append(y)
         return visited
 
     def total_reachability_after(self, deleted_node, a, b, k):
