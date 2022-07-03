@@ -1,0 +1,6 @@
+[4, 4, 1, 1, 2, 2, 2, 1, 4, 1, 1, 1]
+wurde auf die 1-Nachbarschaft jedes Knotens angewendet.
+|V| = 12, |E| = 24
+--- finished in 0.38730406761169434 seconds ---
+--- finished in 0.006455067793528239 minutes ---
+--- finished in 0.00010758446322547066 hours ---

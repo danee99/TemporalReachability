@@ -61,6 +61,7 @@ class TemporalGraph:
                 self.nodes.add(u)
                 self.nodes.add(v)
                 self.incidence_list[u].append((u, v, t, l))
+                self.incidence_list[v].append((v, u, t, l))
 
     # calculates for a given node "source" the number of nodes that "source" can reach
     def number_of_reachable_nodes(self, source, a, b):
