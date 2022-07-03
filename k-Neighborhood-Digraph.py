@@ -23,6 +23,9 @@ class TemporalGraph:
         self.graph[v][1].add(u)
         self.m += 1
 
+    def neighbors_of(self, node):
+        return self.graph[node][1]
+
     def print_graph(self):
         print("|V| = " + str(self.n) + " |E| = " + str(self.m))
         for v in self.graph:
@@ -40,13 +43,14 @@ class TemporalGraph:
                 self.add_edge(u, v, t, l)
 
     def k_neighborhood(self, node, k):
+        # Ausgabe: Menge der Knoten, die sich in der k-Nachbarschaft von "node" befinden
         visited = set()
         visited.add(node)
         queue = [node, -1]
         i = 0
-        # There are two possibilities for the algorithm to terminate
-        # either the queue is empty, then every node of the graph (for example k=|V|) has been processed
-        # or the k-neighborhood of node has been completely processed
+        # Idee: i immer um 1 erhöhen, wenn die Breitensuche die nächste Tiefe erreicht.
+        # Wann weiß man, dass die nächste Tiefe erreicht wurde? Wenn -1 aus der Warteschlange genommen wurde!
+        # Wenn das aus der Warteschlange genommene Element -1 ist, weiß man, dass die i-Nachbarschaft erkundet wurde!
         while queue:
             current_node = queue.pop(0)
             if current_node == -1:
@@ -57,16 +61,14 @@ class TemporalGraph:
                 else:
                     continue
             else:
-                for neighbour in self.graph[current_node][1]:
+                for neighbour in self.neighbors_of(current_node):
                     if neighbour not in visited:
                         visited.add(neighbour)
                         queue.append(neighbour)
         return visited
 
-    # def k_neighborhood2(self, node, k):
-    #     sub_graph = TemporalGraph()
-    #     sub_graph.graph = {}
-    #     visited = set()
+    # def k_neighborhood_subgraph(self, node, k):
+    #     sub_graph = {node: []}
     #     queue = [node, -1]
     #     i = 0
     #     while queue:
@@ -79,20 +81,16 @@ class TemporalGraph:
     #             else:
     #                 continue
     #         else:
-    #             for neighbour in self.graph[current_node][1]:
-    #                 if neighbour not in visited:
-    #                     visited.add(neighbour)
+    #             for neighbour in self.neighbors_of(current_node):
+    #                 if neighbour not in sub_graph:
+    #                     sub_graph[neighbour] = []
     #                     queue.append(neighbour)
-    #     for node in visited:
-    #         if node not in sub_graph.graph:
-    #             sub_graph.graph[node] = []
-    #         for (u, v, t, l) in self.graph[node][0]:
-    #             if u in visited and v in visited:
-    #                 sub_graph.graph[node].append((u, v, t, l))
-    #     print(sub_graph.graph)
+    #     for u in sub_graph:
+    #         sub_graph[u] = [(u, v, t, l) for (u, v, t, l) in self.graph[u][0] if v in sub_graph]
     #     return sub_graph
 
     def total_reachability_after(self, deleted_node, a, b, k):
+        # der Knoten, der bewertet wird: deleted_node
         total = 0
         bfs_start_time = time.time()
         k_neighbours = self.k_neighborhood(deleted_node, k)
@@ -110,7 +108,7 @@ class TemporalGraph:
                 (current_arrival_time, current_node) = PQ.get()
                 if current_node not in visited:
                     # change
-                    for (u, v, t, l) in k_neighbours[current_node][0]:
+                    for (u, v, t, l) in self.graph[current_node][0]:
                         if u in k_neighbours and v in k_neighbours:
                             if v != deleted_node and u != deleted_node:
                                 if t < a or t + l > b: continue
