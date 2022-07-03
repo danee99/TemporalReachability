@@ -67,55 +67,59 @@ class TemporalGraph:
                         queue.append(neighbour)
         return visited
 
-    # def k_neighborhood_subgraph(self, node, k):
-    #     sub_graph = {node: []}
-    #     queue = [node, -1]
-    #     i = 0
-    #     while queue:
-    #         current_node = queue.pop(0)
-    #         if current_node == -1:
-    #             i += 1
-    #             queue.append(-1)
-    #             if i == k:
-    #                 break
-    #             else:
-    #                 continue
-    #         else:
-    #             for neighbour in self.neighbors_of(current_node):
-    #                 if neighbour not in sub_graph:
-    #                     sub_graph[neighbour] = []
-    #                     queue.append(neighbour)
-    #     for u in sub_graph:
-    #         sub_graph[u] = [(u, v, t, l) for (u, v, t, l) in self.graph[u][0] if v in sub_graph]
-    #     return sub_graph
+    def k_neighborhood_subgraph(self, node, k):
+        sub_graph = {node: []}
+        queue = [node, -1]
+        i = 0
+        while queue:
+            current_node = queue.pop(0)
+            if current_node == -1:
+                i += 1
+                queue.append(-1)
+                if i == k:
+                    break
+                else:
+                    continue
+            else:
+                for neighbour in self.neighbors_of(current_node):
+                    if neighbour not in sub_graph:
+                        sub_graph[neighbour] = []
+                        queue.append(neighbour)
+        for u in sub_graph:
+            sub_graph[u] = [(u, v, t, l) for (u, v, t, l) in self.graph[u][0] if v in sub_graph]
+        return sub_graph
 
     def total_reachability_after(self, deleted_node, a, b, k):
         # der Knoten, der bewertet wird: deleted_node
         total = 0
         bfs_start_time = time.time()
-        k_neighbours = self.k_neighborhood(deleted_node, k)
+        # ~0.0008 Sekunden pro Knoten
+        # k_neighbours = self.k_neighborhood(deleted_node, k)
+        subgraph = self.k_neighborhood_subgraph(deleted_node, k)
         bfs_finish_time = time.time() - bfs_start_time
-        for node in k_neighbours:
+        for node in subgraph:
             if node == deleted_node:
                 continue
             reach_set = {node}
             visited = set()
-            earliest_arrival_time = {j: np.inf for j in k_neighbours}
+            earliest_arrival_time = {j: np.inf for j in subgraph}
             earliest_arrival_time[node] = 0
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
             while not PQ.empty():
                 (current_arrival_time, current_node) = PQ.get()
                 if current_node not in visited:
-                    # change
-                    for (u, v, t, l) in self.graph[current_node][0]:
-                        if u in k_neighbours and v in k_neighbours:
-                            if v != deleted_node and u != deleted_node:
-                                if t < a or t + l > b: continue
-                                if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                                    reach_set.add(v)
-                                    earliest_arrival_time[v] = t + l
-                                    PQ.put((earliest_arrival_time[v], v))
+                    # for (u, v, t, l) in self.graph[current_node][0]:
+                    # for (u, v, t, l) in [(u, v, t, l) for (u, v, t, l) in self.graph[current_node][0] if
+                    #                      u in k_neighbours and v in k_neighbours]:
+                    for (u, v, t, l) in subgraph[current_node]:
+                        # if u in k_neighbours and v in k_neighbours:
+                        if v != deleted_node and u != deleted_node:
+                            if t < a or t + l > b: continue
+                            if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+                                reach_set.add(v)
+                                earliest_arrival_time[v] = t + l
+                                PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
             print(str(bfs_finish_time) + " Sekunden")
             total += len(reach_set)
