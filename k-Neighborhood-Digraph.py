@@ -107,11 +107,9 @@ class TemporalGraph:
             while not PQ.empty():
                 (current_arrival_time, current_node) = PQ.get()
                 if current_node not in visited:
-                    # for (u, v, t, l) in self.graph[current_node][0]:
-                    for (u, v, t, l) in [(u, v, t, l) for (u, v, t, l) in self.graph[current_node][0] if
-                                         u in k_neighbours and v in k_neighbours]:
+                    for (u, v, t, l) in self.graph[current_node][0]:
                         # for (u, v, t, l) in subgraph[current_node]:
-                        # if u in k_neighbours and v in k_neighbours:
+                        if u not in k_neighbours or v not in k_neighbours: continue
                         if v != deleted_node and u != deleted_node:
                             if t < a or t + l > b: continue
                             if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
