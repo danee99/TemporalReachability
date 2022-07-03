@@ -90,19 +90,17 @@ class TemporalGraph:
         return sub_graph
 
     def total_reachability_after(self, deleted_node, a, b, k):
-        # der Knoten, der bewertet wird: deleted_node
         total = 0
-        bfs_start_time = time.time()
         # ~0.0008 Sekunden pro Knoten
-        # k_neighbours = self.k_neighborhood(deleted_node, k)
-        subgraph = self.k_neighborhood_subgraph(deleted_node, k)
-        bfs_finish_time = time.time() - bfs_start_time
-        for node in subgraph:
+        # Bereich 0.007 bis 0.02 Sekunden pro Knoten für Teilgraphen erstellen
+        k_neighbours = self.k_neighborhood(deleted_node, k)
+        # subgraph = self.k_neighborhood_subgraph(deleted_node, k)
+        for node in k_neighbours:
             if node == deleted_node:
                 continue
             reach_set = {node}
             visited = set()
-            earliest_arrival_time = {j: np.inf for j in subgraph}
+            earliest_arrival_time = {j: np.inf for j in k_neighbours}
             earliest_arrival_time[node] = 0
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
@@ -110,9 +108,9 @@ class TemporalGraph:
                 (current_arrival_time, current_node) = PQ.get()
                 if current_node not in visited:
                     # for (u, v, t, l) in self.graph[current_node][0]:
-                    # for (u, v, t, l) in [(u, v, t, l) for (u, v, t, l) in self.graph[current_node][0] if
-                    #                      u in k_neighbours and v in k_neighbours]:
-                    for (u, v, t, l) in subgraph[current_node]:
+                    for (u, v, t, l) in [(u, v, t, l) for (u, v, t, l) in self.graph[current_node][0] if
+                                         u in k_neighbours and v in k_neighbours]:
+                        # for (u, v, t, l) in subgraph[current_node]:
                         # if u in k_neighbours and v in k_neighbours:
                         if v != deleted_node and u != deleted_node:
                             if t < a or t + l > b: continue
@@ -121,7 +119,6 @@ class TemporalGraph:
                                 earliest_arrival_time[v] = t + l
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
-            print(str(bfs_finish_time) + " Sekunden")
             total += len(reach_set)
         return total
 
