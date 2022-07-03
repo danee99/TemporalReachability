@@ -109,26 +109,21 @@ class TemporalGraph:
 
     def total_reachability_after(self, deleted_node, a, b, k):
         total = 0
-        # bfs_start_time = time.time()
-        # k_neighbours = self.k_neighborhood(deleted_node, k)
-        sub_graph = self.k_neighborhood2(deleted_node, k)
-        # print(deleted_node, sub_graph)
-        # bfs_finish_time = time.time() - bfs_start_time
-        for node in sub_graph:
+        k_neighbours = self.k_neighborhood(deleted_node, k)
+        for node in k_neighbours:
             if node == deleted_node:
                 continue
             reach_set = {node}
             visited = set()
-            earliest_arrival_time = {c: np.inf for c in sub_graph}
+            earliest_arrival_time = {c: np.inf for c in k_neighbours}
             earliest_arrival_time[node] = 0
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
             while not PQ.empty():
                 (current_arrival_time, current_node) = PQ.get()
                 if current_node not in visited:
-                    for (u, v, t, l) in sub_graph[current_node]:
-                        # if u not in k_neighbours or v not in k_neighbours:
-                        #     continue
+                    for (u, v, t, l) in self.graph[current_node]:
+                        if u not in k_neighbours or v not in k_neighbours: continue
                         if v != deleted_node and u != deleted_node:
                             if t < a or t + l > b: continue
                             if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
