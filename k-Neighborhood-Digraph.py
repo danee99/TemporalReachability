@@ -42,18 +42,6 @@ class TemporalGraph:
                 l = int(arr[3])
                 self.add_edge(u, v, t, l)
 
-    def import_undirected_edgelist(self, file_name):
-        with open(os.getcwd() + file_name, "r") as f:
-            self.n = int(f.readline())
-            for line in f:
-                arr = line.split()
-                u = int(arr[0])
-                v = int(arr[1])
-                t = int(arr[2])
-                l = int(arr[3])
-                self.add_edge(u, v, t, l)
-                self.add_edge(v, u, t, l)
-
     def k_neighborhood(self, node, k):
         # Ausgabe: Menge der Knoten, die sich in der k-Nachbarschaft von "node" befinden
         visited = set()
@@ -136,10 +124,7 @@ if __name__ == '__main__':
     directed = (input('Ist der Graph gerichtet? [y/n]:'))
     output_file = input_graph.split(".")[0] + '-k-Nachbarschaft-Ranking' + '.txt'
     G = TemporalGraph()
-    if directed == 'y' or directed == 'idk':
-        G.import_edgelist(input_graph)
-    elif directed == 'n':
-        G.import_undirected_edgelist(input_graph)
+    G.import_edgelist(input_graph)
     start_time = time.time()
     pool = multiprocessing.Pool(multiprocessing.cpu_count())
     result_objects = [pool.apply_async(G.total_reachability_after, args=(node, 0, np.inf, k)) for node in range(0, G.n)]
@@ -154,6 +139,3 @@ if __name__ == '__main__':
         f.write("--- finished in %s seconds ---" % finish + "\n")
         f.write("--- finished in %s minutes ---" % (finish / 60) + "\n")
         f.write("--- finished in %s hours ---" % (finish / 3600))
-
-
-

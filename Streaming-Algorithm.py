@@ -28,6 +28,23 @@ class TemporalGraph:
                     l = 1
                 self.edge_stream.append((u, v, t, l))
 
+    def import_undirected_edgelist(self, file_name):
+        with open(os.getcwd() + file_name, "r") as f:
+            n = int(f.readline())
+            self.n = n
+            self.nodes = [i for i in range(0, n)]
+            for line in f:
+                arr = line.split()
+                u = int(arr[0])
+                v = int(arr[1])
+                t = int(arr[2])
+                try:
+                    l = int(arr[3])
+                except IndexError:
+                    l = 1
+                self.edge_stream.append((u, v, t, l))
+                self.edge_stream.append((v, u, t, l))
+
     def total_reachability(self, a, b):
         total_reach = 0
         for node in self.nodes:
@@ -78,11 +95,16 @@ class TemporalGraph:
             f.write("--- finished in %s hours ---" % (finish / 3600))
 
 
+
 if __name__ == '__main__':
     input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
     a = 0
     b = np.inf
+    test = (input('Ist die Kantenliste im ungerichteten Format? [y/n]:'))
     output_file = input_graph.split(".")[0] + '-Streaming-Rangliste' + '.txt'
     G = TemporalGraph()
-    G.import_edgelist(input_graph)
+    if test == 'y' or test == 'idk':
+        G.import_edgelist(input_graph)
+    elif test == 'n':
+        G.import_undirected_edgelist(input_graph)
     G.node_ranking(a, b, output_file)

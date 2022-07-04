@@ -176,7 +176,7 @@ if __name__ == '__main__':
     elif directed == 'n':
         G.import_undirected_edgelist(input_graph)
     G.node_ranking(a, b, output_file)
-    # DATASETS:                                                                 Node Ranking
+    # DATASETS:                                     Node Ranking                  gerichteter Graph, ungerichteter Graph
     # wiki_talk_nl.txt                              |  |V| = 225.749 | |E| = 1.554.698
     # wikipediasg.txt                               |  |V| = 208.142 | |E| = 810.702
     # facebook.txt                                  |  |V| = 63.731  | |E| = 817.035
