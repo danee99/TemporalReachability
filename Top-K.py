@@ -19,9 +19,9 @@ def log_result(result):
 
 
 class TemporalGraph:
-    def __init__(self, nodes, incidence_list):
+    def __init__(self):
         self.n = 0
-        self.nodes = {}
+        self.nodes = set()
         self.incidence_list = []
 
     # scans the edgelist and creates TemporalGraph object
@@ -38,23 +38,18 @@ class TemporalGraph:
                     l = int(arr[3])
                 except IndexError:
                     l = 1
-                if u not in self.nodes:
-                    self.nodes[u] = 0
-                if v not in self.nodes:
-                    self.nodes[v] = 0
-                self.nodes[u] += 1
+                self.nodes.add(u)
+                self.nodes.add(v)
                 self.incidence_list[u].append((u, v, t, l))
-            self.nodes = {node: degree for node, degree in
-                          sorted(self.nodes.items(), key=lambda item: item[1], reverse=True)}
 
-    def top_k_util(self, alpha, beta, k, x, helper):
+    def top_k_util(self, x, alpha, beta):
         total = 0
         for node in self.nodes:
             if node == x:
                 continue
             reach_set = {node}
             visited = set()
-            earliest_arrival_time = helper.copy()
+            earliest_arrival_time = [np.inf for _ in range(self.n)]
             earliest_arrival_time[node] = 0
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
@@ -76,24 +71,22 @@ class TemporalGraph:
 
     def top_k_reachability(self, alpha, beta, k, output_name):
         start_time = time.time()
-        helper = [np.inf for _ in range(self.n)]
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
         for node in self.nodes:
-            pool.apply_async(self.top_k_util, args=(alpha, beta, k, node, helper), callback=log_result)
+            pool.apply_async(self.top_k_util, args=(node, alpha, beta, k), callback=log_result)
         pool.close()
         pool.join()
         finish = time.time() - start_time
         with open(os.getcwd() + output_name, 'w') as f:
-            f.write("--- finished in %s seconds ---" % finish + "\n")
-            f.write("--- finished in %s minutes ---" % (finish / 60) + "\n")
-            f.write("--- finished in %s hours ---" % (finish / 3600) + "\n")
             f.write(str(max_heap) + "\n")
-            f.write(str([element[1] for element in max_heap]))
+            f.write("abgeschlossen in %s Sekunden" % finish + "\n")
+            f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
+            f.write("abgeschlossen in %s Stunden" % (finish / 3600))
 
 
 if __name__ == '__main__':
     input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
     output_file = input_graph.split(".")[0] + '-Top' + str(k) + '.txt'
-    G = TemporalGraph([], [])
+    G = TemporalGraph()
     G.import_edgelist(input_graph)
     G.top_k_reachability(0, np.inf, k, output_file)

@@ -10,38 +10,13 @@ class TemporalGraph:
         self.nodes = set()
         self.incidence_list = []
         self.n = 0
+        self.m = 0
+        self.total_reachability = 0
 
     # prints each node and the corresponding set of outgoing edges of the node
     def print_graph(self):
         for node in self.nodes:
             print(str(node) + ": " + str(self.incidence_list[node]))
-
-    def degrees(self, output_name):
-        res = []
-        for node in range(0, self.n):
-            res.append(len(self.incidence_list[node]))
-        with open(os.getcwd() + output_name, 'w') as f:
-            f.write(str(res))
-
-    # returns a list with every out-degree for each node
-    def degree_centrality(self, output_name):
-        res = []
-        for node in range(0, self.n):
-            res.append(len(self.incidence_list[node]))
-        with open(os.getcwd() + output_name, 'w') as f:
-            f.write(str(res) + "\n")
-
-    # # normalized version of the outdegrees for every node
-    # def degree_centrality_normalized(self, output_name):
-    #     res = []
-    #     for node in range(0, self.n):
-    #         res.append(len(self.incidence_list[node]))
-    #     maximum = max(res)
-    #     minimum = min(res)
-    #     for j in range(0, self.n):
-    #         res[j] = (res[j] - minimum) / (maximum - minimum)
-    #     with open(os.getcwd() + output_name, 'w') as f:
-    #         f.write(str(res) + "\n")
 
     # scans an edgelist and creates a TemporalGraph object in O(n+m)
     def import_edgelist(self, file_name):
@@ -61,7 +36,10 @@ class TemporalGraph:
                 self.nodes.add(u)
                 self.nodes.add(v)
                 self.incidence_list[u].append((u, v, t, l))
+                self.m += 1
 
+    # scans an edgelist and creates a undirected temporal Graph in O(n+m)
+    # Here, the edge list is assumed to have no back edges, even though the graph is undirected
     def import_undirected_edgelist(self, file_name):
         with open(os.getcwd() + file_name, "r") as f:
             n = int(f.readline())
@@ -99,8 +77,7 @@ class TemporalGraph:
         return len(reach_set)
 
     # calculates the total reachability of the given temporal graph in a time interval [a,b]
-    def total_reachability(self, a, b):
-        total = 0
+    def calc_total_reachability(self, a, b):
         for node in self.nodes:
             reach_set = {node}
             earliest_arrival_time = [np.inf for _ in range(self.n)]
@@ -115,18 +92,17 @@ class TemporalGraph:
                         reach_set.add(v)
                         earliest_arrival_time[v] = t + l
                         PQ.put((earliest_arrival_time[v], v))
-            total = total + len(reach_set)
-        return total
+            self.total_reachability += len(reach_set)
 
-    # ranks a node, where the ranking is a floating point number between 0 and 1
-    def rank_node(self, x, a, b, before, helper):
+    # ranks the node "x", where the ranking is a floating point number between 0 and 1
+    def rank_node(self, x, a, b, before):
         total = 0
         for node in self.nodes:
             if node == x:
                 continue
             reach_set = {node}
             visited = set()
-            earliest_arrival_time = helper.copy()
+            earliest_arrival_time = [np.inf for _ in range(self.n)]
             earliest_arrival_time[node] = 0
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
@@ -142,15 +118,17 @@ class TemporalGraph:
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
             total += len(reach_set)
-        return 1 - (total / before)
+        # return 1 - (total / before)
+        return total
 
-    # node ranking, with asynchronous multiprocessing
+    # parallelized node ranking
     def node_ranking(self, a, b, output_name):
         start_time = time.time()
-        before = self.total_reachability(a, b)
-        helper = [np.inf for _ in range(self.n)]
+        self.calc_total_reachability(a,b)
+        before = self.total_reachability
+        # helper = [np.inf for _ in range(self.n)]
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        result_objects = [pool.apply_async(self.rank_node, args=(node, a, b, before, helper)) for node in
+        result_objects = [pool.apply_async(self.rank_node, args=(node, a, b, before)) for node in
                           range(0, self.n)]
         ranking = [r.get() for r in result_objects]
         pool.close()
@@ -158,25 +136,24 @@ class TemporalGraph:
         finish = time.time() - start_time
         with open(os.getcwd() + output_name, 'w') as f:
             f.write(str(ranking) + "\n")
-            f.write("--- finished in %s seconds ---" % finish + "\n")
-            f.write("--- finished in %s minutes ---" % (finish / 60) + "\n")
-            f.write("--- finished in %s hours ---" % (finish / 3600))
+            f.write("abgeschlossen in %s Sekunden" % finish + "\n")
+            f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
+            f.write("abgeschlossen in %s Stunden" % (finish / 3600))
 
 
 if __name__ == '__main__':
     input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
-    a = int(input('Intervall a eingeben: '))
     directed = (input('Ist der Graph gerichtet? [y/n]:'))
+    a = int(input('Intervall a eingeben: '))
     b = np.inf
     output_file = input_graph.split(".")[0] + '-Rangliste' + '.txt'
-    degree_output_file = input_graph.split(".")[0] + '-Outdegrees' + '.txt'
     G = TemporalGraph()
-    if directed == 'y' or directed == 'idk':
+    if directed == 'y':
         G.import_edgelist(input_graph)
     elif directed == 'n':
         G.import_undirected_edgelist(input_graph)
     G.node_ranking(a, b, output_file)
-    # DATASETS:                                     Node Ranking                  gerichteter Graph, ungerichteter Graph
+    # DATASETS:                                     Node Ranking                        für gerichteten Graph
     # wiki_talk_nl.txt                              |  |V| = 225.749 | |E| = 1.554.698
     # wikipediasg.txt                               |  |V| = 208.142 | |E| = 810.702
     # facebook.txt                                  |  |V| = 63.731  | |E| = 817.035

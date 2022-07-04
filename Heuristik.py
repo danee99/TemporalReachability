@@ -10,18 +10,18 @@ class TemporalGraph:
         self.n = 0
         self.m = 0
         self.graph = {}
-        self.change = {}
-        self.change_of_deleted_nodes = 0
+        self.reachability_change_of_deleted_nodes = 0
         self.num_deleted_nodes = 0
-        self.total_reachability = 0
 
     def add_edge(self, u, v, t, l):
         if u not in self.graph:
-            self.graph[u] = [(u, v, t, l)]
+            self.graph[u] = [[(u, v, t, l)], 1, 0]
         else:
-            self.graph[u].append((u, v, t, l))
+            if v not in [self.graph[u][0][i][1] for i in range(0, len(self.graph[u][0]))]:
+                self.graph[u][1] += 1
+            self.graph[u][0].append((u, v, t, l))
         if v not in self.graph:
-            self.graph[v] = []
+            self.graph[v] = [[], 0, 0]
         self.m += 1
 
     def print_graph(self):
@@ -41,6 +41,25 @@ class TemporalGraph:
                 l = int(arr[3])
                 self.add_edge(u, v, t, l)
 
+    def import_undirected_edgelist(self, file_name):
+        with open(os.getcwd() + file_name, "r") as f:
+            self.n = int(f.readline())
+            for line in f:
+                arr = line.split()
+                u = int(arr[0])
+                v = int(arr[1])
+                t = int(arr[2])
+                l = int(arr[3])
+                self.add_edge(u, v, t, l)
+                self.add_edge(v, u, t, l)
+
+    def degree_centrality(self, output_name):
+        res = []
+        for node in range(0, self.n):
+            res.append(self.graph[node][1])
+        with open(os.getcwd() + output_name, 'w') as f:
+            f.write(str(res))
+
     def filter_nodes(self, depth):
         # Problem 1: Erreichbarkeiten der In-Nachbarn der gelöschten Knoten speichern
         # Problem 2: Erreichbarkeiten der gelöschten Knoten speichern
@@ -48,27 +67,23 @@ class TemporalGraph:
         deleted_nodes = []
         for i in range(0, depth):
             for node in self.graph:
-                if len(self.graph[node]) == 0:
+                if self.graph[node][1] == 0:
                     deleted_nodes.append(node)
                     self.num_deleted_nodes += 1
-                    if node not in self.change:
-                        self.change[node] = 1
-                    else:
-                        self.change[node] += 1
+                    self.graph[node][2] += 1
             for node in self.graph:
                 visited = set()
-                for (u, v, t, l) in self.graph[node][:]:
+                for (u, v, t, l) in self.graph[node][0][:]:
                     if v in deleted_nodes:
-                        if v not in visited:
-                            if node not in self.change:
-                                self.change[u] = 0
-                            self.change[u] += 1
-                        self.graph[u].remove((u, v, t, l))
+                        if v not in visited: # because of multi edges
+                            self.graph[node][2] += 1
+                            self.graph[node][1] -= 1
+                        self.graph[u][0].remove((u, v, t, l))
                         self.m -= 1
                         visited.add(v)
             while deleted_nodes:
                 delete_me = deleted_nodes.pop(0)
-                self.change_of_deleted_nodes += self.change[delete_me]
+                self.reachability_change_of_deleted_nodes += self.graph[delete_me][2]
                 try:
                     del self.graph[delete_me]
                     self.n -= 1
@@ -76,8 +91,8 @@ class TemporalGraph:
                     continue
 
     def calculate_bounds(self, a, b, x):
-        lower_bound = self.change_of_deleted_nodes
-        upper_bound = self.change_of_deleted_nodes
+        lower_bound = self.reachability_change_of_deleted_nodes
+        upper_bound = self.reachability_change_of_deleted_nodes
         for node in self.graph:
             if node == x:
                 continue
@@ -90,7 +105,7 @@ class TemporalGraph:
             while not PQ.empty():
                 (current_arrival_time, current_node) = PQ.get()
                 if current_node not in visited:
-                    for (u, v, t, l) in self.graph[current_node]:
+                    for (u, v, t, l) in self.graph[current_node][0]:
                         if u != x and v != x:
                             if t < a or t + l > b: continue
                             if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
@@ -98,11 +113,8 @@ class TemporalGraph:
                                 earliest_arrival_time[v] = t + l
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
-            try:
-                lower_bound += len(reach_set) + self.change[node]
-            except KeyError:
-                lower_bound += len(reach_set)
-            upper_bound += len(reach_set)+self.num_deleted_nodes
+            lower_bound += len(reach_set) + self.graph[node][2]
+            upper_bound += len(reach_set) + self.num_deleted_nodes
         return x, (lower_bound, upper_bound)
 
     def heuristik(self, a, b, output_name, depth):
@@ -124,22 +136,23 @@ class TemporalGraph:
             f.write("mit Tiefe = " + str(depth) + "\n")
             f.write("geloeschte Knotenanzahl = " + str(num_nodes - self.n) + "\n")
             f.write("geloeschte Kanten = " + str(num_edges - self.m) + "\n")
-            f.write("--- filter_nodes() finished in %s minutes ---" % (finish1 / 60) + "\n")
-            f.write("--- finished in %s seconds ---" % finish2 + "\n")
-            f.write("--- finished in %s minutes ---" % (finish2 / 60) + "\n")
-            f.write("--- finished in %s hours ---" % (finish2 / 3600))
+            f.write("filter_nodes() abgeschlossen in %s Sekunden" % finish1 + "\n")
+            f.write("abgeschlossen in %s Sekunden" % finish2 + "\n")
+            f.write("abgeschlossen in %s Minuten" % (finish2 / 60) + "\n")
+            f.write("abgeschlossen in %s Stunden" % (finish2 / 3600))
+
 
 
 if __name__ == '__main__':
     input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
+    directed = (input('Ist der Graph gerichtet? [y/n]:'))
     depth = int(input('Tiefe eingeben:'))
+    degree_output_file = input_graph.split(".")[0] + '-Outdegrees' + '.txt'
     heuristik_output_file = input_graph.split(".")[0] + '-Heuristik' + '.txt'
     ranking_output_file = input_graph.split(".")[0] + '-Rangliste' + '.txt'
     G = TemporalGraph()
-    G.import_edgelist(input_graph)
+    if directed == 'y':
+        G.import_edgelist(input_graph)
+    elif directed == 'n':
+        G.import_undirected_edgelist(input_graph)
     G.heuristik(0, np.inf, heuristik_output_file, depth)
-    # num_edges = G.m
-    # G.filter_nodes(depth)
-    # print(str(len(G.deleted_nodes))+' Knoten gelöscht')
-    # print(str(num_edges-G.m)+' Kanten gelöscht')
-    # example_graph2.txt

@@ -1,7 +1,6 @@
 import multiprocessing
 import os
 import time
-from queue import PriorityQueue
 import numpy as np
 
 
@@ -11,7 +10,6 @@ class TemporalGraph:
         self.edge_stream = []
         self.n = 0
 
-    # scans an edgelist and creates a TemporalGraph object in O(n+m)
     def import_edgelist(self, file_name):
         with open(os.getcwd() + file_name, "r") as f:
             n = int(f.readline())
@@ -74,9 +72,9 @@ class TemporalGraph:
                         arrival_time[v] = t + l
                         reach_num = reach_num + 1
             total_reach = total_reach + reach_num
-        return 1 - total_reach/before
+        # return 1 - (total_reach / before)
+        return total_reach
 
-    # node ranking, but with asynchronous multiprocessing
     def node_ranking(self, a, b, output_name):
         start_time = time.time()
         before = self.total_reachability(a, b)
@@ -90,21 +88,20 @@ class TemporalGraph:
         finish = time.time() - start_time
         with open(os.getcwd() + output_name, 'w') as f:
             f.write(str(ranking) + "\n")
-            f.write("--- finished in %s seconds ---" % finish + "\n")
-            f.write("--- finished in %s minutes ---" % (finish / 60) + "\n")
-            f.write("--- finished in %s hours ---" % (finish / 3600))
-
+            f.write("abgeschlossen in %s Sekunden" % finish + "\n")
+            f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
+            f.write("abgeschlossen in %s Stunden" % (finish / 3600))
 
 
 if __name__ == '__main__':
     input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
     a = 0
     b = np.inf
-    test = (input('Ist die Kantenliste im ungerichteten Format? [y/n]:'))
+    directed = (input('Ist der Graph gerichtet? [y/n]:'))
     output_file = input_graph.split(".")[0] + '-Streaming-Rangliste' + '.txt'
     G = TemporalGraph()
-    if test == 'y' or test == 'idk':
+    if directed == 'y':
         G.import_edgelist(input_graph)
-    elif test == 'n':
+    elif directed == 'n':
         G.import_undirected_edgelist(input_graph)
     G.node_ranking(a, b, output_file)
