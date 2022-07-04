@@ -2,7 +2,6 @@
 mit Tiefe = 7
 geloeschte Knotenanzahl = 1048
 geloeschte Kanten = 34578
---- filter_nodes() finished in 784.8435658057531 minutes ---
 --- finished in 47090.613948345184 seconds ---
 --- finished in 784.8435658057531 minutes ---
 --- finished in 13.080726096762552 hours ---

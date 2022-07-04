@@ -61,6 +61,24 @@ class TemporalGraph:
                 self.nodes.add(u)
                 self.nodes.add(v)
                 self.incidence_list[u].append((u, v, t, l))
+
+    def import_undirected_edgelist(self, file_name):
+        with open(os.getcwd() + file_name, "r") as f:
+            n = int(f.readline())
+            self.n = n
+            self.incidence_list = [[] for _ in range(n)]
+            for line in f:
+                arr = line.split()
+                u = int(arr[0])
+                v = int(arr[1])
+                t = int(arr[2])
+                try:
+                    l = int(arr[3])
+                except IndexError:
+                    l = 1
+                self.nodes.add(u)
+                self.nodes.add(v)
+                self.incidence_list[u].append((u, v, t, l))
                 self.incidence_list[v].append((v, u, t, l))
 
     # calculates for a given node "source" the number of nodes that "source" can reach
@@ -148,11 +166,15 @@ class TemporalGraph:
 if __name__ == '__main__':
     input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
     a = int(input('Intervall a eingeben: '))
+    directed = (input('Ist der Graph gerichtet? [y/n]:'))
     b = np.inf
     output_file = input_graph.split(".")[0] + '-Rangliste' + '.txt'
     degree_output_file = input_graph.split(".")[0] + '-Outdegrees' + '.txt'
     G = TemporalGraph()
-    G.import_edgelist(input_graph)
+    if directed == 'y' or directed == 'idk':
+        G.import_edgelist(input_graph)
+    elif directed == 'n':
+        G.import_undirected_edgelist(input_graph)
     G.node_ranking(a, b, output_file)
     # DATASETS:                                                                 Node Ranking
     # wiki_talk_nl.txt                              |  |V| = 225.749 | |E| = 1.554.698
@@ -164,7 +186,7 @@ if __name__ == '__main__':
     # ia-contacts_dublin.txt (Undirected)           |  |V| = 10.972  | |E| = 415.912    xxx min
     # fb-messages.txt (Directed)                    |  |V| = 1.899   | |E| = 61.734     47 min
     # UC-Irvine-messages.txt (Directed)             |  |V| = 1.899   | |E| = 59.385     47 min
-    # High-School_data_2013.txt (Undirected)        |  |V| = 327     | |E| = 59.385     47 min
+    # High-School_data_2013.txt (Undirected)        |  |V| = 327     | |E| = 59.385
     # email-dnc.txt (Directed)                      |  |V| = 1.891   | |E| = 39.264     13 min
     # copresence-InVS15.txt (Undirected)            |  |V| = 219     | |E| = 1.283.194  7 min
     # ht09_contact_list.txt (Undirected)            |  |V| = 5.351   | |E| = 20.817     4 min

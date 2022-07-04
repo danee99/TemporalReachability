@@ -109,6 +109,7 @@ class TemporalGraph:
             f.write("--- finished in %s seconds ---" % finish + "\n")
             f.write("--- finished in %s minutes ---" % (finish / 60) + "\n")
             f.write("--- finished in %s hours ---" % (finish / 3600))
+
     # def node_ranking(self, a, b, output_name):
     #     start_time = time.time()
     #     self.calc_total_reachability(a, b)
@@ -205,6 +206,7 @@ class TemporalGraph:
     #     start_time = time.time()
     #     num_edges = self.m
     #     self.filter_nodes(depth)
+    #     finish1 = time.time() - start_time
     #     result = []
     #     for node in self.nodes:
     #         result.append(self.calculate_bounds(a, b, node))
@@ -215,7 +217,7 @@ class TemporalGraph:
     #         f.write("mit Tiefe = " + str(depth) + "\n")
     #         f.write("geloeschte Knotenanzahl = " + str(len(self.deleted_nodes)) + "\n")
     #         f.write("geloeschte Kanten = " + str(num_edges - self.m) + "\n")
-    #         f.write("--- filter_nodes() finished in %s minutes ---" % (finish / 60) + "\n")
+    #         f.write("--- filter_nodes() finished in %s minutes ---" % (finish1 / 60) + "\n")
     #         f.write("--- finished in %s seconds ---" % finish + "\n")
     #         f.write("--- finished in %s minutes ---" % (finish / 60) + "\n")
     #         f.write("--- finished in %s hours ---" % (finish / 3600))
