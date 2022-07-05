@@ -95,14 +95,14 @@ class TemporalGraph:
             self.total_reachability += len(reach_set)
 
     # ranks the node "x", where the ranking is a floating point number between 0 and 1
-    def rank_node(self, x, a, b, before):
+    def rank_node(self, x, a, b, before, helper):
         total = 0
         for node in self.nodes:
             if node == x:
                 continue
             reach_set = {node}
             visited = set()
-            earliest_arrival_time = [np.inf for _ in range(self.n)]
+            earliest_arrival_time = helper.copy()
             earliest_arrival_time[node] = 0
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
@@ -126,9 +126,9 @@ class TemporalGraph:
         start_time = time.time()
         self.calc_total_reachability(a,b)
         before = self.total_reachability
-        # helper = [np.inf for _ in range(self.n)]
+        helper = [np.inf for _ in range(self.n)]
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        result_objects = [pool.apply_async(self.rank_node, args=(node, a, b, before)) for node in
+        result_objects = [pool.apply_async(self.rank_node, args=(node, a, b, before, helper)) for node in
                           range(0, self.n)]
         ranking = [r.get() for r in result_objects]
         pool.close()
@@ -146,7 +146,7 @@ if __name__ == '__main__':
     directed = (input('Ist der Graph gerichtet? [y/n]:'))
     a = int(input('Intervall a eingeben: '))
     b = np.inf
-    output_file = input_graph.split(".")[0] + '-Rangliste2' + '.txt'
+    output_file = input_graph.split(".")[0] + '-Rangliste3' + '.txt'
     G = TemporalGraph()
     if directed == 'y':
         G.import_edgelist(input_graph)
