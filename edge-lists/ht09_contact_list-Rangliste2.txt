@@ -2,3 +2,5 @@
 abgeschlossen in 258.15254068374634 Sekunden
 abgeschlossen in 4.302542344729106 Minuten
 abgeschlossen in 0.07170903907881843 Stunden
+
+gerichtet

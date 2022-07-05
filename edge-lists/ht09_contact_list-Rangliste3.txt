@@ -2,3 +2,5 @@
 abgeschlossen in 247.48032522201538 Sekunden
 abgeschlossen in 4.12467208703359 Minuten
 abgeschlossen in 0.06874453478389315 Stunden
+
+gerichtet mit helper
