@@ -146,7 +146,7 @@ if __name__ == '__main__':
     directed = (input('Ist der Graph gerichtet? [y/n]:'))
     a = int(input('Intervall a eingeben: '))
     b = np.inf
-    output_file = input_graph.split(".")[0] + '-Rangliste3' + '.txt'
+    output_file = input_graph.split(".")[0] + '-Rangliste' + '.txt'
     G = TemporalGraph()
     if directed == 'y':
         G.import_edgelist(input_graph)

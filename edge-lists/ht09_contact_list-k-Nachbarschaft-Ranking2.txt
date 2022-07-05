@@ -4,3 +4,5 @@ wurde auf die 3-Nachbarschaft jedes Knotens angewendet.
 --- finished in 351.28057861328125 seconds ---
 --- finished in 5.854676310221354 minutes ---
 --- finished in 0.09757793850368923 hours ---
+
+gerichtet
