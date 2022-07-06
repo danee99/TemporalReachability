@@ -122,7 +122,7 @@ if __name__ == '__main__':
     input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
     k = int(input('k-Nachbarschaft, Gebe den Wert k ein:'))
     directed = (input('Ist der Graph gerichtet? [y/n]:'))
-    output_file = input_graph.split(".")[0] + '-k-Nachbarschaft-Ranking' + '.txt'
+    output_file = input_graph.split(".")[0] + '-k-Nachbarschaft-Ranking (Digraph)' + '.txt'
     G = TemporalGraph()
     G.import_edgelist(input_graph)
     start_time = time.time()

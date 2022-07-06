@@ -75,7 +75,7 @@ class TemporalGraph:
                 visited = set()
                 for (u, v, t, l) in self.graph[node][0][:]:
                     if v in deleted_nodes:
-                        if v not in visited: # because of multi edges
+                        if v not in visited:  # because of multi edges
                             self.graph[node][2] += 1
                             self.graph[node][1] -= 1
                         self.graph[u][0].remove((u, v, t, l))
@@ -140,7 +140,26 @@ class TemporalGraph:
             f.write("abgeschlossen in %s Sekunden" % finish2 + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish2 / 60) + "\n")
             f.write("abgeschlossen in %s Stunden" % (finish2 / 3600))
-
+    # def heuristik(self, a, b, output_name, depth):
+    #     num_edges = self.m
+    #     num_nodes = self.n
+    #     start_time = time.time()
+    #     self.filter_nodes(depth)
+    #     finish1 = time.time() - start_time
+    #     ranking = []
+    #     for node in self.graph:
+    #         ranking.append(self.calculate_bounds(a, b, node))
+    #     finish2 = time.time() - start_time
+    #     with open(os.getcwd() + output_name, 'w') as f:
+    #         ranking.sort(key=lambda tup: tup[1][0])
+    #         f.write(str(ranking) + "\n")
+    #         f.write("mit Tiefe = " + str(depth) + "\n")
+    #         f.write("geloeschte Knotenanzahl = " + str(num_nodes - self.n) + "\n")
+    #         f.write("geloeschte Kanten = " + str(num_edges - self.m) + "\n")
+    #         f.write("filter_nodes() abgeschlossen in %s Sekunden" % finish1 + "\n")
+    #         f.write("abgeschlossen in %s Sekunden" % finish2 + "\n")
+    #         f.write("abgeschlossen in %s Minuten" % (finish2 / 60) + "\n")
+    #         f.write("abgeschlossen in %s Stunden" % (finish2 / 3600))
 
 
 if __name__ == '__main__':

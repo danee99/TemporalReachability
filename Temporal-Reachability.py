@@ -139,6 +139,20 @@ class TemporalGraph:
             f.write("abgeschlossen in %s Sekunden" % finish + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
             f.write("abgeschlossen in %s Stunden" % (finish / 3600))
+    # def node_ranking(self, a, b, output_name):
+    #     start_time = time.time()
+    #     self.calc_total_reachability(a,b)
+    #     before = self.total_reachability
+    #     ranking = []
+    #     helper = [np.inf for _ in range(self.n)]
+    #     for node in range(0, self.n):
+    #         ranking.append(self.rank_node(node, a, b, before, helper))
+    #     finish = time.time() - start_time
+    #     with open(os.getcwd() + output_name, 'w') as f:
+    #         f.write(str(ranking) + "\n")
+    #         f.write("abgeschlossen in %s Sekunden" % finish + "\n")
+    #         f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
+    #         f.write("abgeschlossen in %s Stunden" % (finish / 3600))
 
 
 if __name__ == '__main__':
