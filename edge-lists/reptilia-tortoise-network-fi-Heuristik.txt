@@ -3,6 +3,6 @@ mit Tiefe = 3
 geloeschte Knotenanzahl = 0
 geloeschte Kanten = 0
 filter_nodes() abgeschlossen in 0.001003265380859375 Sekunden
-abgeschlossen in 10.796326637268066 Sekunden
+abgeschlossen in 10.79632663726806 Sekunden
 abgeschlossen in 0.1799387772878011 Minuten
 abgeschlossen in 0.002998979621463352 Stunden
