@@ -4,6 +4,8 @@ import time
 from queue import PriorityQueue
 import numpy as np
 
+path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+
 
 class TemporalGraph:
     def __init__(self):
@@ -20,7 +22,7 @@ class TemporalGraph:
 
     # scans an edgelist and creates a TemporalGraph object in O(n+m)
     def import_edgelist(self, file_name):
-        with open(os.getcwd() + file_name, "r") as f:
+        with open(path + file_name, "r") as f:
             n = int(f.readline())
             self.n = n
             self.incidence_list = [[] for _ in range(n)]
@@ -41,7 +43,7 @@ class TemporalGraph:
     # scans an edgelist and creates a undirected temporal Graph in O(n+m)
     # Here, the edge list is assumed to have no back edges, even though the graph is undirected
     def import_undirected_edgelist(self, file_name):
-        with open(os.getcwd() + file_name, "r") as f:
+        with open(path + file_name, "r") as f:
             n = int(f.readline())
             self.n = n
             self.incidence_list = [[] for _ in range(n)]
@@ -118,23 +120,23 @@ class TemporalGraph:
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
             total += len(reach_set)
-        # return 1 - (total / before)
-        return total
+        return x, 1 - (total / before)
+        # return total, x
 
     # parallelized node ranking
     def node_ranking(self, a, b, output_name):
         start_time = time.time()
-        self.calc_total_reachability(a,b)
-        before = self.total_reachability
+        self.calc_total_reachability(a, b)
         helper = [np.inf for _ in range(self.n)]
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        result_objects = [pool.apply_async(self.rank_node, args=(node, a, b, before, helper)) for node in
+        result_objects = [pool.apply_async(self.rank_node, args=(node, a, b, self.total_reachability, helper)) for node in
                           range(0, self.n)]
         ranking = [r.get() for r in result_objects]
         pool.close()
         pool.join()
         finish = time.time() - start_time
-        with open(os.getcwd() + output_name, 'w') as f:
+        with open(path + output_name, 'w') as f:
+            ranking.sort(key=lambda tup: tup[1], reverse=True)
             f.write(str(ranking) + "\n")
             f.write("abgeschlossen in %s Sekunden" % finish + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
@@ -156,11 +158,11 @@ class TemporalGraph:
 
 
 if __name__ == '__main__':
-    input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
+    input_graph = input('Edgeliste eingeben:')
     directed = (input('Ist der Graph gerichtet? [y/n]:'))
     a = int(input('Intervall a eingeben: '))
     b = np.inf
-    output_file = input_graph.split(".")[0] + '-Rangliste' + '.txt'
+    output_file = input_graph.split(".")[0] + '-Ranking' + '.txt'
     G = TemporalGraph()
     if directed == 'y':
         G.import_edgelist(input_graph)
@@ -186,6 +188,5 @@ if __name__ == '__main__':
     # copresence-InVS13.txt (Undirected ?)          |  |V| = 95      | |E| = 394.247    1 min
     # reptilia-tortoise-network-fi.txt (Undirected) |  |V| = 787     | |E| = 1.713      0 min
     # aves-weaver-social.txt (Undirected)           |  |V| = 445     | |E| = 1.426      0 min
-    # -------------------------------------------------------------------------------------------------------------------------
-    # example_graph1.txt                    |  |V| = 7       | |E| = 18
-    # example_graph2.txt                    |  |V| = 7       | |E| = 9
+    # example_graph1.txt                            |  |V| = 7       | |E| = 18
+    # example_graph2.txt                            |  |V| = 7       | |E| = 9

@@ -4,6 +4,8 @@ from queue import PriorityQueue
 import numpy as np
 import time
 
+path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+
 
 class TemporalGraph:
     def __init__(self):
@@ -32,7 +34,7 @@ class TemporalGraph:
             print(str(v) + " " + str(self.graph[v]))
 
     def import_edgelist(self, file_name):
-        with open(os.getcwd() + file_name, "r") as f:
+        with open(path + file_name, "r") as f:
             self.n = int(f.readline())
             for line in f:
                 arr = line.split()
@@ -92,6 +94,7 @@ class TemporalGraph:
     def total_reachability_after(self, deleted_node, a, b, k):
         total = 0
         k_neighbours = self.k_neighborhood_subgraph(deleted_node, k)
+        len_subgraph = len(k_neighbours)
         for node in k_neighbours:
             if node == deleted_node:
                 continue
@@ -105,8 +108,8 @@ class TemporalGraph:
                 (current_arrival_time, current_node) = PQ.get()
                 if current_node not in visited:
                     for (u, v, t, l) in k_neighbours[current_node]:
-                    # for (u, v, t, l) in self.graph[current_node][0]:
-                    #     if u not in k_neighbours or v not in k_neighbours: continue
+                        # for (u, v, t, l) in self.graph[current_node][0]:
+                        #     if u not in k_neighbours or v not in k_neighbours: continue
                         if v != deleted_node and u != deleted_node:
                             if t < a or t + l > b: continue
                             if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
@@ -115,11 +118,11 @@ class TemporalGraph:
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
             total += len(reach_set)
-        return total
+        return total, deleted_node, len_subgraph
 
 
 if __name__ == '__main__':
-    input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
+    input_graph = input('Edgeliste eingeben:')
     k = int(input('k-Nachbarschaft, Gebe den Wert k ein:'))
     directed = (input('Ist der Graph gerichtet? [y/n]:'))
     output_file = input_graph.split(".")[0] + '-k-Nachbarschaft-Ranking (Digraph)' + '.txt'
@@ -132,10 +135,10 @@ if __name__ == '__main__':
     pool.close()
     pool.join()
     finish = time.time() - start_time
-    with open(os.getcwd() + output_file, 'w') as f:
+    with open(path + output_file, 'w') as f:
         f.write(str(result) + "\n")
         f.write("wurde auf die " + str(k) + "-Nachbarschaft jedes Knotens angewendet." + "\n")
         f.write("|V| = " + str(G.n) + ", |E| = " + str(G.m) + "\n")
-        f.write("--- finished in %s seconds ---" % finish + "\n")
-        f.write("--- finished in %s minutes ---" % (finish / 60) + "\n")
-        f.write("--- finished in %s hours ---" % (finish / 3600))
+        f.write("abgeschlossen in %s Sekunden ---" % finish + "\n")
+        f.write("abgeschlossen in %s Minuten ---" % (finish / 60) + "\n")
+        f.write("abgeschlossen in %s Stunden ---" % (finish / 3600))

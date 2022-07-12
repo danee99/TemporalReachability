@@ -3,6 +3,8 @@ import os
 import time
 import numpy as np
 
+path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+
 
 class TemporalGraph:
     def __init__(self):
@@ -11,7 +13,7 @@ class TemporalGraph:
         self.n = 0
 
     def import_edgelist(self, file_name):
-        with open(os.getcwd() + file_name, "r") as f:
+        with open(path + file_name, "r") as f:
             n = int(f.readline())
             self.n = n
             self.nodes = [i for i in range(0, n)]
@@ -27,7 +29,7 @@ class TemporalGraph:
                 self.edge_stream.append((u, v, t, l))
 
     def import_undirected_edgelist(self, file_name):
-        with open(os.getcwd() + file_name, "r") as f:
+        with open(path + file_name, "r") as f:
             n = int(f.readline())
             self.n = n
             self.nodes = [i for i in range(0, n)]
@@ -72,8 +74,8 @@ class TemporalGraph:
                         arrival_time[v] = t + l
                         reach_num = reach_num + 1
             total_reach = total_reach + reach_num
-        # return 1 - (total_reach / before)
-        return total_reach
+        return x, 1 - (total_reach / before)
+        # return total_reach
 
     def node_ranking(self, a, b, output_name):
         start_time = time.time()
@@ -86,7 +88,8 @@ class TemporalGraph:
         pool.close()
         pool.join()
         finish = time.time() - start_time
-        with open(os.getcwd() + output_name, 'w') as f:
+        with open(path + output_name, 'w') as f:
+            ranking.sort(key=lambda tup: tup[1], reverse=True)
             f.write(str(ranking) + "\n")
             f.write("abgeschlossen in %s Sekunden" % finish + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
@@ -94,11 +97,11 @@ class TemporalGraph:
 
 
 if __name__ == '__main__':
-    input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
+    input_graph = input('Edgeliste eingeben:')
     a = 0
     b = np.inf
     directed = (input('Ist der Graph gerichtet? [y/n]:'))
-    output_file = input_graph.split(".")[0] + '-Streaming-Rangliste' + '.txt'
+    output_file = input_graph.split(".")[0] + '-Streaming-Ranking' + '.txt'
     G = TemporalGraph()
     if directed == 'y':
         G.import_edgelist(input_graph)

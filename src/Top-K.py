@@ -7,6 +7,7 @@ import numpy as np
 
 max_heap = []
 k = 10
+path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
 
 
 def log_result(result):
@@ -26,7 +27,7 @@ class TemporalGraph:
 
     # scans the edgelist and creates TemporalGraph object
     def import_edgelist(self, file_name):
-        with open(os.getcwd() + file_name, "r") as f:
+        with open(path + file_name, "r") as f:
             self.n = int(f.readline())
             self.incidence_list = [[] for _ in range(self.n)]
             for line in f:
@@ -73,11 +74,11 @@ class TemporalGraph:
         start_time = time.time()
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
         for node in self.nodes:
-            pool.apply_async(self.top_k_util, args=(node, alpha, beta, k), callback=log_result)
+            pool.apply_async(self.top_k_util, args=(node, alpha, beta), callback=log_result)
         pool.close()
         pool.join()
         finish = time.time() - start_time
-        with open(os.getcwd() + output_name, 'w') as f:
+        with open(path + output_name, 'w') as f:
             f.write(str(max_heap) + "\n")
             f.write("abgeschlossen in %s Sekunden" % finish + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
@@ -85,7 +86,7 @@ class TemporalGraph:
 
 
 if __name__ == '__main__':
-    input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
+    input_graph = input('Edgeliste eingeben:')
     output_file = input_graph.split(".")[0] + '-Top' + str(k) + '.txt'
     G = TemporalGraph()
     G.import_edgelist(input_graph)

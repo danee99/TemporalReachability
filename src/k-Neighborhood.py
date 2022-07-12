@@ -4,6 +4,8 @@ from queue import PriorityQueue
 import numpy as np
 import time
 
+path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+
 
 class TemporalGraph:
     def __init__(self):
@@ -27,7 +29,7 @@ class TemporalGraph:
             print(str(v) + " " + str(self.graph[v]))
 
     def import_edgelist(self, file_name):
-        with open(os.getcwd() + file_name, "r") as f:
+        with open(path + file_name, "r") as f:
             self.n = int(f.readline())
             for line in f:
                 arr = line.split()
@@ -38,7 +40,7 @@ class TemporalGraph:
                 self.add_edge(u, v, t, l)
 
     def import_undirected_edgelist(self, file_name):
-        with open(os.getcwd() + file_name, "r") as f:
+        with open(path + file_name, "r") as f:
             self.n = int(f.readline())
             for line in f:
                 arr = line.split()
@@ -99,6 +101,7 @@ class TemporalGraph:
     def total_reachability_after(self, deleted_node, a, b, k):
         total = 0
         subgraph = self.k_neighborhood_subgraph(deleted_node, k)
+        len_subgraph = len(subgraph)
         for node in subgraph:
             if node == deleted_node:
                 continue
@@ -126,7 +129,7 @@ class TemporalGraph:
 
 
 if __name__ == '__main__':
-    input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
+    input_graph = input('Edgeliste eingeben:')
     k = int(input('k-Nachbarschaft, Gebe den Wert k ein:'))
     directed = (input('Ist die Kantenliste schon ungerichtet? [y/n]:'))
     output_file = input_graph.split(".")[0] + '-k-Nachbarschaft-Ranking' + '.txt'
@@ -142,7 +145,7 @@ if __name__ == '__main__':
     pool.close()
     pool.join()
     finish = time.time() - start_time
-    with open(os.getcwd() + output_file, 'w') as f:
+    with open(path + output_file, 'w') as f:
         f.write(str(result) + "\n")
         f.write("wurde auf die " + str(k) + "-Nachbarschaft jedes Knotens angewendet." + "\n")
         f.write("|V| = " + str(G.n) + ", |E| = " + str(G.m) + "\n")

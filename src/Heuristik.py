@@ -4,6 +4,8 @@ import time
 from queue import PriorityQueue
 import numpy as np
 
+path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+
 
 class TemporalGraph:
     def __init__(self):
@@ -31,7 +33,7 @@ class TemporalGraph:
             print(str(v) + " " + str(self.graph[v]))
 
     def import_edgelist(self, file_name):
-        with open(os.getcwd() + file_name, "r") as f:
+        with open(path + file_name, "r") as f:
             self.n = int(f.readline())
             for line in f:
                 arr = line.split()
@@ -57,7 +59,7 @@ class TemporalGraph:
         res = []
         for node in range(0, self.n):
             res.append(self.graph[node][1])
-        with open(os.getcwd() + output_name, 'w') as f:
+        with open(path + output_name, 'w') as f:
             f.write(str(res))
 
     def filter_nodes(self, depth):
@@ -130,7 +132,7 @@ class TemporalGraph:
         pool.close()
         pool.join()
         finish2 = time.time() - start_time
-        with open(os.getcwd() + output_name, 'w') as f:
+        with open(path + output_name, 'w') as f:
             ranking.sort(key=lambda tup: tup[1][0])
             f.write(str(ranking) + "\n")
             f.write("mit Tiefe = " + str(depth) + "\n")
@@ -150,7 +152,7 @@ class TemporalGraph:
     #     for node in self.graph:
     #         ranking.append(self.calculate_bounds(a, b, node))
     #     finish2 = time.time() - start_time
-    #     with open(os.getcwd() + output_name, 'w') as f:
+    #     with open(path + output_name, 'w') as f:
     #         ranking.sort(key=lambda tup: tup[1][0])
     #         f.write(str(ranking) + "\n")
     #         f.write("mit Tiefe = " + str(depth) + "\n")
@@ -163,7 +165,7 @@ class TemporalGraph:
 
 
 if __name__ == '__main__':
-    input_graph = '/edge-lists/' + input('Edgeliste eingeben:')
+    input_graph = input('Edgeliste eingeben:')
     directed = (input('Ist der Graph gerichtet? [y/n]:'))
     depth = int(input('Tiefe eingeben:'))
     degree_output_file = input_graph.split(".")[0] + '-Outdegrees' + '.txt'
