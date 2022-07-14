@@ -55,14 +55,11 @@ class TemporalGraph:
                 self.add_edge(u, v, t, l)
                 self.add_edge(v, u, t, l)
 
-    def avg_degree(self):
-        var = [self.graph[u][1] for u in self.graph]
-        return int(sum(var) / len(var))
-
     def max_degree(self):
         var = [self.graph[u][1] for u in self.graph]
-        print(int(max(var)))
+        print(int(sum(var) / len(var)))
         print(int(min(var)))
+        print(int(max(var)))
 
     def degree_centrality(self, output_name):
         res = []

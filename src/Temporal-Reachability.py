@@ -141,21 +141,6 @@ class TemporalGraph:
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
             f.write("abgeschlossen in %s Stunden" % (finish / 3600))
 
-    def DFS(self, v, visited):
-        visited[v] = True
-        for (v, u, t, l) in self.incidence_list[v]:
-            if not visited[u]:
-                self.DFS(u, visited)
-
-    def is_Connected(self):
-        for i in range(self.n):
-            visited = [False] * self.n
-            self.DFS(i, visited)
-            for b in visited:
-                if not b:
-                    return False
-        return True
-
 
 if __name__ == '__main__':
     input_graph = input('Edgeliste eingeben:')
@@ -168,11 +153,7 @@ if __name__ == '__main__':
         G.import_edgelist(input_graph)
     elif directed == 'n':
         G.import_undirected_edgelist(input_graph)
-    # G.node_ranking(a, b, output_file)
-    if G.is_Connected():
-        print('Der Graph ist stark verbunden')
-    else:
-        print('Der Graph ist nicht stark verbunden')
+    G.node_ranking(a, b, output_file)
     # DATASETS:                                     Node Ranking                        für gerichteten Graph
     # wiki_talk_nl.txt                              |  |V| = 225.749 | |E| = 1.554.698
     # wikipediasg.txt                               |  |V| = 208.142 | |E| = 810.702
