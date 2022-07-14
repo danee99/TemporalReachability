@@ -10,7 +10,7 @@ def convert(file_name, output):
             # n = int(f.readline())
             id = 0
             for line in f:
-                arr = line.split()
+                arr = line.split(",")
                 u = int(arr[0])
                 v = int(arr[1])
                 t = int(arr[2])
@@ -24,7 +24,7 @@ def convert(file_name, output):
                 if v not in nodemanager.keys():
                     nodemanager[v] = id
                     id = id + 1
-                o.write((str(nodemanager[u]) + " " + str(nodemanager[v]) + " " + str(t) + " " + str(l) + "\n"))
+                o.write((str(nodemanager[u]) + " " + str(nodemanager[v]) + " " + str(t) + " " + str(1) + "\n"))
                 # o.write((str(nodemanager[v]) + " " + str(nodemanager[u]) + " " + str(t) + " " + str(l) + "\n"))
         o.write(str(len(nodemanager.keys())))
 
@@ -67,7 +67,7 @@ def swap(file_name, output):
 
 
 if __name__ == '__main__':
-    convert('arxiv.txt', 'a.txt')
+    convert('ia-contacts_hypertext2009.edges', 'ia-contacts_hypertext2009.txt')
     # inp = input('Edgeliste eingeben:')
     # file_in = '/edge-lists/' + str(inp)
     # file_out ='/edge-lists/' + '0_'+str(inp)

@@ -169,24 +169,24 @@ if __name__ == '__main__':
         print('Der Graph ist stark verbunden')
     else:
         print('Der Graph ist nicht stark verbunden')
-    # start_time = time.time()
-    # pool = multiprocessing.Pool(multiprocessing.cpu_count())
-    # result_objects = [pool.apply_async(G.total_reachability_after, args=(node, 0, np.inf, k)) for node in range(0, G.n)]
-    # result = [r.get() for r in result_objects]
-    # pool.close()
-    # pool.join()
-    # finish = time.time() - start_time
-    # with open(path + output_file, 'w') as f:
-    #     # f.write("Avg " + str(int(sum(result) / len(result))) + "\n")
-    #     # f.write("Min " + str(min(result)) + "\n")
-    #     # f.write("Max " + str(max(result)) + "\n")
-    #     result.sort(reverse=True)
-    #     f.write(str(result) + "\n")
-    #     f.write("wurde auf die " + str(k) + "-Nachbarschaft jedes Knotens angewendet." + "\n")
-    #     f.write("|V| = " + str(G.n) + ", |E| = " + str(G.m) + "\n")
-    #     f.write("abgeschlossen in %s Sekunden ---" % finish + "\n")
-    #     f.write("abgeschlossen in %s Minuten ---" % (finish / 60) + "\n")
-    #     f.write("abgeschlossen in %s Stunden ---" % (finish / 3600))
+    start_time = time.time()
+    pool = multiprocessing.Pool(multiprocessing.cpu_count())
+    result_objects = [pool.apply_async(G.total_reachability_after, args=(node, 0, np.inf, k)) for node in range(0, G.n)]
+    result = [r.get() for r in result_objects]
+    pool.close()
+    pool.join()
+    finish = time.time() - start_time
+    with open(path + output_file, 'w') as f:
+        # f.write("Avg " + str(int(sum(result) / len(result))) + "\n")
+        # f.write("Min " + str(min(result)) + "\n")
+        # f.write("Max " + str(max(result)) + "\n")
+        result.sort(reverse=True)
+        f.write(str(result) + "\n")
+        f.write("wurde auf die " + str(k) + "-Nachbarschaft jedes Knotens angewendet." + "\n")
+        f.write("|V| = " + str(G.n) + ", |E| = " + str(G.m) + "\n")
+        f.write("abgeschlossen in %s Sekunden ---" % finish + "\n")
+        f.write("abgeschlossen in %s Minuten ---" % (finish / 60) + "\n")
+        f.write("abgeschlossen in %s Stunden ---" % (finish / 3600))
         # DATASETS:                                     Node Ranking                        für gerichteten Graph
         # wiki_talk_nl.txt                              |  |V| = 225.749 | |E| = 1.554.698
         # wikipediasg.txt                               |  |V| = 208.142 | |E| = 810.702

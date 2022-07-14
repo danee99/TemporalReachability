@@ -44,7 +44,7 @@ class TemporalGraph:
                 self.add_edge(u, v, t, l)
 
     def import_undirected_edgelist(self, file_name):
-        with open(os.getcwd() + file_name, "r") as f:
+        with open(path + file_name, "r") as f:
             self.n = int(f.readline())
             for line in f:
                 arr = line.split()
