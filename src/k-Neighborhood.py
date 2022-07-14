@@ -125,7 +125,7 @@ class TemporalGraph:
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
             total += len(reach_set)
-        return total
+        return total, deleted_node
 
 
 if __name__ == '__main__':

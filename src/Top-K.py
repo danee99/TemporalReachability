@@ -11,12 +11,11 @@ path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
 
 
 def log_result(result):
-    if result[0] != -1:
-        if len(max_heap) < k:
-            heapq_max.heappush_max(max_heap, (result[0], result[1]))
-        if len(max_heap) >= k:
-            if result[0] < max_heap[0][0]:
-                heapq_max.heappushpop_max(max_heap, (result[0], result[1]))
+    if len(max_heap) < k:
+        heapq_max.heappush_max(max_heap, (result[0], result[1]))
+    if len(max_heap) >= k:
+        if result[0] < max_heap[0][0]:
+            heapq_max.heappushpop_max(max_heap, (result[0], result[1]))
 
 
 class TemporalGraph:
@@ -25,7 +24,6 @@ class TemporalGraph:
         self.nodes = set()
         self.incidence_list = []
 
-    # scans the edgelist and creates TemporalGraph object
     def import_edgelist(self, file_name):
         with open(path + file_name, "r") as f:
             self.n = int(f.readline())
@@ -67,7 +65,7 @@ class TemporalGraph:
                     visited.add(current_node)
             total = total + len(reach_set)
             if max_heap != [] and len(max_heap) >= k and total > max_heap[0][0]:
-                return -1, x
+                continue
         return total, x
 
     def top_k_reachability(self, alpha, beta, k, output_name):
