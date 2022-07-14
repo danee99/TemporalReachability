@@ -60,6 +60,7 @@ class TemporalGraph:
                 self.nodes.add(v)
                 self.incidence_list[u].append((u, v, t, l))
                 self.incidence_list[v].append((v, u, t, l))
+                self.m += 2
 
     # calculates for a given node "source" the number of nodes that "source" can reach
     def number_of_reachable_nodes(self, source, a, b):
@@ -120,8 +121,7 @@ class TemporalGraph:
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
             total += len(reach_set)
-        return x, 1 - (total / before)
-        # return total, x
+        return 1 - (total / before)
 
     # parallelized node ranking
     def node_ranking(self, a, b, output_name):
@@ -129,32 +129,32 @@ class TemporalGraph:
         self.calc_total_reachability(a, b)
         helper = [np.inf for _ in range(self.n)]
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        result_objects = [pool.apply_async(self.rank_node, args=(node, a, b, self.total_reachability, helper)) for node in
-                          range(0, self.n)]
+        result_objects = [pool.apply_async(self.rank_node, args=(node, a, b, self.total_reachability, helper)) for node
+                          in range(0, self.n)]
         ranking = [r.get() for r in result_objects]
         pool.close()
         pool.join()
         finish = time.time() - start_time
         with open(path + output_name, 'w') as f:
-            ranking.sort(key=lambda tup: tup[1], reverse=True)
             f.write(str(ranking) + "\n")
             f.write("abgeschlossen in %s Sekunden" % finish + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
             f.write("abgeschlossen in %s Stunden" % (finish / 3600))
-    # def node_ranking(self, a, b, output_name):
-    #     start_time = time.time()
-    #     self.calc_total_reachability(a,b)
-    #     before = self.total_reachability
-    #     ranking = []
-    #     helper = [np.inf for _ in range(self.n)]
-    #     for node in range(0, self.n):
-    #         ranking.append(self.rank_node(node, a, b, before, helper))
-    #     finish = time.time() - start_time
-    #     with open(os.getcwd() + output_name, 'w') as f:
-    #         f.write(str(ranking) + "\n")
-    #         f.write("abgeschlossen in %s Sekunden" % finish + "\n")
-    #         f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
-    #         f.write("abgeschlossen in %s Stunden" % (finish / 3600))
+
+    def DFS(self, v, visited):
+        visited[v] = True
+        for (v, u, t, l) in self.incidence_list[v]:
+            if not visited[u]:
+                self.DFS(u, visited)
+
+    def is_Connected(self):
+        for i in range(self.n):
+            visited = [False] * self.n
+            self.DFS(i, visited)
+            for b in visited:
+                if not b:
+                    return False
+        return True
 
 
 if __name__ == '__main__':
@@ -168,7 +168,11 @@ if __name__ == '__main__':
         G.import_edgelist(input_graph)
     elif directed == 'n':
         G.import_undirected_edgelist(input_graph)
-    G.node_ranking(a, b, output_file)
+    # G.node_ranking(a, b, output_file)
+    if G.is_Connected():
+        print('Der Graph ist stark verbunden')
+    else:
+        print('Der Graph ist nicht stark verbunden')
     # DATASETS:                                     Node Ranking                        für gerichteten Graph
     # wiki_talk_nl.txt                              |  |V| = 225.749 | |E| = 1.554.698
     # wikipediasg.txt                               |  |V| = 208.142 | |E| = 810.702

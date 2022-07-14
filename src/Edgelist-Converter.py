@@ -1,11 +1,13 @@
 import os
 
+path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+
 
 def convert(file_name, output):
     nodemanager = {}
-    with open(os.getcwd() + output, "w") as o:
-        with open(os.getcwd() + file_name, "r") as f:
-            n = int(f.readline())
+    with open(path + output, "w") as o:
+        with open(path + file_name, "r") as f:
+            # n = int(f.readline())
             id = 0
             for line in f:
                 arr = line.split()
@@ -23,14 +25,14 @@ def convert(file_name, output):
                     nodemanager[v] = id
                     id = id + 1
                 o.write((str(nodemanager[u]) + " " + str(nodemanager[v]) + " " + str(t) + " " + str(l) + "\n"))
-                o.write((str(nodemanager[v]) + " " + str(nodemanager[u]) + " " + str(t) + " " + str(l) + "\n"))
+                # o.write((str(nodemanager[v]) + " " + str(nodemanager[u]) + " " + str(t) + " " + str(l) + "\n"))
         o.write(str(len(nodemanager.keys())))
 
 
 def betw(file_name, output):
     nodemanager = {}
-    with open(os.getcwd() + output, "w") as o:
-        with open(os.getcwd() + file_name, "r") as f:
+    with open(output, "w") as o:
+        with open(file_name, "r") as f:
             n = int(f.readline())
             id = 0
             for line in f:
@@ -65,8 +67,8 @@ def swap(file_name, output):
 
 
 if __name__ == '__main__':
-    # convert('/edge-lists/example_graph2.txt', '/edge-lists/example_graph.txt')
-    inp = input('Edgeliste eingeben:')
-    file_in = '/edge-lists/' + str(inp)
-    file_out ='/edge-lists/' + '0_'+str(inp)
-    convert(file_in, file_out)
+    convert('arxiv.txt', 'a.txt')
+    # inp = input('Edgeliste eingeben:')
+    # file_in = '/edge-lists/' + str(inp)
+    # file_out ='/edge-lists/' + '0_'+str(inp)
+    # convert(file_in, file_out)
