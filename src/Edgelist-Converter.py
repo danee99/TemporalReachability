@@ -97,7 +97,7 @@ def swap(file_name, output):
 
 
 if __name__ == '__main__':
-    convert2('ia-workplace-contacts.txt', 'testing.txt')
+    convert2('twitter.txt', 'testing.txt')
     # inp = input('Edgeliste eingeben:')
     # file_in = '/edge-lists/' + str(inp)
     # file_out ='/edge-lists/' + '0_'+str(inp)

@@ -19,8 +19,9 @@ class TemporalGraph:
         if u not in self.graph:
             self.graph[u] = [[(u, v, t, l)], 1, 0]
         else:
-            if v not in [self.graph[u][0][i][1] for i in range(0, len(self.graph[u][0]))]:
-                self.graph[u][1] += 1
+            # if v not in [self.graph[u][0][i][1] for i in range(0, len(self.graph[u][0]))]:
+            #     self.graph[u][1] += 1
+            self.graph[u][1] += 1
             self.graph[u][0].append((u, v, t, l))
         if v not in self.graph:
             self.graph[v] = [[], 0, 0]
@@ -55,11 +56,11 @@ class TemporalGraph:
                 self.add_edge(u, v, t, l)
                 self.add_edge(v, u, t, l)
 
-    def max_degree(self):
+    def degrees_info(self):
         var = [self.graph[u][1] for u in self.graph]
-        print(int(sum(var) / len(var)))
-        print(int(min(var)))
-        print(int(max(var)))
+        print("Durchschnitt = "+str(round(sum(var) / len(var))))
+        print("Minimum = "+str(int(min(var))))
+        print("Maximum = "+str(int(max(var))))
 
     def degree_centrality(self, output_name):
         res = []
@@ -183,24 +184,3 @@ if __name__ == '__main__':
     elif directed == 'n':
         G.import_undirected_edgelist(input_graph)
     G.heuristik(0, np.inf, heuristik_output_file, depth)
-    # DATASETS:                                     Node Ranking                        für gerichteten Graph
-    # wiki_talk_nl.txt                              |  |V| = 225.749 | |E| = 1.554.698
-    # wikipediasg.txt                               |  |V| = 208.142 | |E| = 810.702
-    # facebook.txt                                  |  |V| = 63.731  | |E| = 817.035
-    # twitter.txt                                   |  |V| = 4.605   | |E| = 23.736     167 min
-    # ia-reality-call.txt (Undirected)              |  |V| = 6.809   | |E| = 52.050     137 min
-    # infectious.txt (Undirected ?)                 |  |V| = 10.972  | |E| = 415.912    130 min
-    # ia-contacts_dublin.txt (Undirected)           |  |V| = 10.972  | |E| = 415.912    xxx min
-    # fb-messages.txt (Directed)                    |  |V| = 1.899   | |E| = 61.734     47 min
-    # UC-Irvine-messages.txt (Directed)             |  |V| = 1.899   | |E| = 59.385     47 min
-    # High-School_data_2013.txt (Undirected)        |  |V| = 327     | |E| = 59.385
-    # email-dnc.txt (Directed)                      |  |V| = 1.891   | |E| = 39.264     13 min
-    # copresence-InVS15.txt (Undirected)            |  |V| = 219     | |E| = 1.283.194  7 min
-    # ht09_contact_list.txt (Undirected)            |  |V| = 5.351   | |E| = 20.817     4 min
-    # fb-forum.txt (directed)                       |  |V| = 899     | |E| = 33.720     3 min
-    # tij_SFHH.txt (Undirected)                     |  |V| = 403     | |E| = 70.261     2 min
-    # copresence-InVS13.txt (Undirected ?)          |  |V| = 95      | |E| = 394.247    1 min
-    # reptilia-tortoise-network-fi.txt (Undirected) |  |V| = 787     | |E| = 1.713      0 min
-    # aves-weaver-social.txt (Undirected)           |  |V| = 445     | |E| = 1.426      0 min
-    # example_graph1.txt                            |  |V| = 7       | |E| = 18
-    # example_graph2.txt                            |  |V| = 7       | |E| = 9

@@ -74,7 +74,7 @@ class TemporalGraph:
                         arrival_time[v] = t + l
                         reach_num = reach_num + 1
             total_reach = total_reach + reach_num
-        return x, 1 - (total_reach / before)
+        return 1 - (total_reach / before), x
         # return total_reach
 
     def node_ranking(self, a, b, output_name):
@@ -89,7 +89,7 @@ class TemporalGraph:
         pool.join()
         finish = time.time() - start_time
         with open(path + output_name, 'w') as f:
-            ranking.sort(key=lambda tup: tup[1], reverse=True)
+            ranking.sort(key=lambda tup: tup[0], reverse=True)
             f.write(str(ranking) + "\n")
             f.write("abgeschlossen in %s Sekunden" % finish + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
