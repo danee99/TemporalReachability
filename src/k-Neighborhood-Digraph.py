@@ -111,27 +111,27 @@ class TemporalGraph:
     def total_reachability_after(self, deleted_node, a, b, k):
         total = 0
         k_neighbours = self.k_neighborhood_subgraph(deleted_node, k)
-        before = 0
-        for node in k_neighbours:
-            reach_set = {node}
-            visited = set()
-            earliest_arrival_time = {j: np.inf for j in k_neighbours}
-            earliest_arrival_time[node] = 0
-            PQ = PriorityQueue()
-            PQ.put((earliest_arrival_time[node], node))
-            while not PQ.empty():
-                (current_arrival_time, current_node) = PQ.get()
-                if current_node not in visited:
-                    for (u, v, t, l) in k_neighbours[current_node]:
-                        # for (u, v, t, l) in self.graph[current_node][0]:
-                        #     if u not in k_neighbours or v not in k_neighbours: continue
-                        if t < a or t + l > b: continue
-                        if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                            reach_set.add(v)
-                            earliest_arrival_time[v] = t + l
-                            PQ.put((earliest_arrival_time[v], v))
-                    visited.add(current_node)
-            before += len(reach_set)
+        # before = 0
+        # for node in k_neighbours:
+        #     reach_set = {node}
+        #     visited = set()
+        #     earliest_arrival_time = {j: np.inf for j in k_neighbours}
+        #     earliest_arrival_time[node] = 0
+        #     PQ = PriorityQueue()
+        #     PQ.put((earliest_arrival_time[node], node))
+        #     while not PQ.empty():
+        #         (current_arrival_time, current_node) = PQ.get()
+        #         if current_node not in visited:
+        #             for (u, v, t, l) in k_neighbours[current_node]:
+        #                 # for (u, v, t, l) in self.graph[current_node][0]:
+        #                 #     if u not in k_neighbours or v not in k_neighbours: continue
+        #                 if t < a or t + l > b: continue
+        #                 if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+        #                     reach_set.add(v)
+        #                     earliest_arrival_time[v] = t + l
+        #                     PQ.put((earliest_arrival_time[v], v))
+        #             visited.add(current_node)
+        #     before += len(reach_set)
         for node in k_neighbours:
             if node == deleted_node:
                 continue
@@ -155,7 +155,8 @@ class TemporalGraph:
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
             total += len(reach_set)
-        return 1 - (total/before), deleted_node
+        # return 1 - (total/before), deleted_node
+        return total, deleted_node
 
 
 if __name__ == '__main__':
@@ -165,10 +166,10 @@ if __name__ == '__main__':
     output_file = input_graph.split(".")[0] + '-k-Nachbarschaft-Ranking (Digraph)' + '.txt'
     G = TemporalGraph()
     G.import_edgelist(input_graph)
-    if G.is_connected():
-        print('Der Graph ist stark verbunden')
-    else:
-        print('Der Graph ist nicht stark verbunden')
+    # if G.is_connected():
+    #     print('Der Graph ist stark verbunden')
+    # else:
+    #     print('Der Graph ist nicht stark verbunden')
     start_time = time.time()
     pool = multiprocessing.Pool(multiprocessing.cpu_count())
     result_objects = [pool.apply_async(G.total_reachability_after, args=(node, 0, np.inf, k)) for node in range(0, G.n)]
@@ -180,7 +181,8 @@ if __name__ == '__main__':
         # f.write("Avg " + str(int(sum(result) / len(result))) + "\n")
         # f.write("Min " + str(min(result)) + "\n")
         # f.write("Max " + str(max(result)) + "\n")
-        result.sort(reverse=True)
+        # result.sort(reverse=True)
+        result.sort()
         f.write(str(result) + "\n")
         f.write("wurde auf die " + str(k) + "-Nachbarschaft jedes Knotens angewendet." + "\n")
         f.write("|V| = " + str(G.n) + ", |E| = " + str(G.m) + "\n")

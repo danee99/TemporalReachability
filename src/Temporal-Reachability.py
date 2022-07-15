@@ -121,7 +121,7 @@ class TemporalGraph:
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
             total += len(reach_set)
-        return 1 - (total / before)
+        return 1 - (total / before), x
 
     # parallelized node ranking
     def node_ranking(self, a, b, output_name):
@@ -136,6 +136,7 @@ class TemporalGraph:
         pool.join()
         finish = time.time() - start_time
         with open(path + output_name, 'w') as f:
+            ranking.sort(reverse=True)
             f.write(str(ranking) + "\n")
             f.write("abgeschlossen in %s Sekunden" % finish + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
@@ -165,13 +166,13 @@ if __name__ == '__main__':
     # fb-messages.txt (Directed)                    |  |V| = 1.899   | |E| = 61.734     47 min
     # UC-Irvine-messages.txt (Directed)             |  |V| = 1.899   | |E| = 59.385     47 min
     # High-School_data_2013.txt (Undirected)        |  |V| = 327     | |E| = 59.385
-    # email-dnc.txt (Directed)                      |  |V| = 1.891   | |E| = 39.264     13 min
+    # email-dnc.txt                                 |  |V| = 1.891   | |E| = 39.264     13 min
     # copresence-InVS15.txt (Undirected)            |  |V| = 219     | |E| = 1.283.194  7 min
-    # ht09_contact_list.txt (Undirected)            |  |V| = 5.351   | |E| = 20.817     4 min
-    # fb-forum.txt (directed)                       |  |V| = 899     | |E| = 33.720     3 min
-    # tij_SFHH.txt (Undirected)                     |  |V| = 403     | |E| = 70.261     2 min
-    # copresence-InVS13.txt (Undirected ?)          |  |V| = 95      | |E| = 394.247    1 min
-    # reptilia-tortoise-network-fi.txt (Undirected) |  |V| = 787     | |E| = 1.713      0 min
-    # aves-weaver-social.txt (Undirected)           |  |V| = 445     | |E| = 1.426      0 min
+    # ht09_contact_list.txt                         |  |V| = 5.351   | |E| = 20.817     4 min
+    # fb-forum.txt                                  |  |V| = 899     | |E| = 33.720     3 min
+    # tij_SFHH.txt                                  |  |V| = 403     | |E| = 70.261     2 min
+    # copresence-InVS13.txt                         |  |V| = 95      | |E| = 394.247    1 min
+    # reptilia-tortoise-network-fi.txt              |  |V| = 787     | |E| = 1.713      0 min
+    # aves-weaver-social.txt                        |  |V| = 445     | |E| = 1.426      0 min
     # example_graph1.txt                            |  |V| = 7       | |E| = 18
     # example_graph2.txt                            |  |V| = 7       | |E| = 9
