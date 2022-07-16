@@ -19,17 +19,16 @@ class TemporalGraph:
         if u not in self.graph:
             self.graph[u] = [[(u, v, t, l)], 1, 0]
         else:
-            # if v not in [self.graph[u][0][i][1] for i in range(0, len(self.graph[u][0]))]:
-            #     self.graph[u][1] += 1
-            self.graph[u][1] += 1
+            if v not in [self.graph[u][0][i][1] for i in range(0, len(self.graph[u][0]))]:
+                self.graph[u][1] += 1
+            # self.graph[u][1] += 1
             self.graph[u][0].append((u, v, t, l))
         if v not in self.graph:
             self.graph[v] = [[], 0, 0]
         self.m += 1
 
     def print_graph(self):
-        print("|V| = " + str(self.n))
-        print("|E| = " + str(self.m))
+        print("|V| = " + str(self.n) + ", |E| = " + str(self.m))
         for v in self.graph:
             print(str(v) + " " + str(self.graph[v]))
 
@@ -58,26 +57,24 @@ class TemporalGraph:
 
     def degrees_info(self):
         var = [self.graph[u][1] for u in self.graph]
-        print("Durchschnitt = "+str(round(sum(var) / len(var))))
-        print("Minimum = "+str(int(min(var))))
-        print("Maximum = "+str(int(max(var))))
+        print("Durchschnitt = " + str(round(sum(var) / len(var))))
+        print("Minimum = " + str(int(min(var))))
+        print("Maximum = " + str(int(max(var))))
 
     def degree_centrality(self, output_name):
-        res = []
-        for node in range(0, self.n):
-            res.append(self.graph[node][1])
         with open(path + output_name, 'w') as f:
-            f.write(str(res))
+            for node in range(0, self.n):
+                f.write(str(self.graph[node][1]) + "\n")
 
     def filter_nodes(self, depth):
         # Problem 1: Erreichbarkeiten der In-Nachbarn der gelöschten Knoten speichern
         # Problem 2: Erreichbarkeiten der gelöschten Knoten speichern
         # Problem 3: Erreichbarkeiten von x fallen bei der Berechnung von R(G-x) weg
-        deleted_nodes = []
+        deleted_nodes = set()
         for i in range(0, depth):
             for node in self.graph:
                 if self.graph[node][1] == 0:
-                    deleted_nodes.append(node)
+                    deleted_nodes.add(node)
                     self.num_deleted_nodes += 1
                     self.graph[node][2] += 1
             for node in self.graph:
@@ -91,7 +88,7 @@ class TemporalGraph:
                         self.m -= 1
                         visited.add(v)
             while deleted_nodes:
-                delete_me = deleted_nodes.pop(0)
+                delete_me = deleted_nodes.pop()
                 self.reachability_change_of_deleted_nodes += self.graph[delete_me][2]
                 try:
                     del self.graph[delete_me]
@@ -177,7 +174,6 @@ if __name__ == '__main__':
     depth = int(input('Tiefe eingeben:'))
     degree_output_file = input_graph.split(".")[0] + '-Outdegrees' + '.txt'
     heuristik_output_file = input_graph.split(".")[0] + '-Heuristik' + '.txt'
-    ranking_output_file = input_graph.split(".")[0] + '-Rangliste' + '.txt'
     G = TemporalGraph()
     if directed == 'y':
         G.import_edgelist(input_graph)

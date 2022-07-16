@@ -5,7 +5,6 @@ import numpy as np
 import time
 import sys
 
-
 path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
 
 

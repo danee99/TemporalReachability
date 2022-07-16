@@ -101,7 +101,6 @@ class TemporalGraph:
     def total_reachability_after(self, deleted_node, a, b, k):
         total = 0
         subgraph = self.k_neighborhood_subgraph(deleted_node, k)
-        len_subgraph = len(subgraph)
         for node in subgraph:
             if node == deleted_node:
                 continue
@@ -131,10 +130,10 @@ class TemporalGraph:
 if __name__ == '__main__':
     input_graph = input('Edgeliste eingeben:')
     k = int(input('k-Nachbarschaft, Gebe den Wert k ein:'))
-    directed = (input('Ist die Kantenliste schon ungerichtet? [y/n]:'))
+    directed = (input('Ist das Format der Kantenliste bereits ungerichtet? [y/n]:'))
     output_file = input_graph.split(".")[0] + '-k-Nachbarschaft-Ranking' + '.txt'
     G = TemporalGraph()
-    if directed == 'y' or directed == 'idk':
+    if directed == 'y':
         G.import_edgelist(input_graph)
     elif directed == 'n':
         G.import_undirected_edgelist(input_graph)
