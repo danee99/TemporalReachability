@@ -90,10 +90,10 @@ class TemporalGraph:
                 else:
                     continue
             else:
-                for (u, neighbour, t, l) in self.graph[current_node]:
-                    if neighbour not in sub_graph:
-                        sub_graph[neighbour] = []
-                        queue.append(neighbour)
+                for (u, neighbour_of_u, t, l) in self.graph[current_node]:
+                    if neighbour_of_u not in sub_graph:
+                        sub_graph[neighbour_of_u] = []
+                        queue.append(neighbour_of_u)
         for x in sub_graph:
             sub_graph[x] = [(u, v, t, l) for (u, v, t, l) in self.graph[x] if v in sub_graph]
         return sub_graph
@@ -107,7 +107,7 @@ class TemporalGraph:
             reach_set = {node}
             visited = set()
             earliest_arrival_time = {j: np.inf for j in subgraph}
-            earliest_arrival_time[node] = 0
+            earliest_arrival_time[node] = a
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
             while not PQ.empty():

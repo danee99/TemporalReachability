@@ -50,7 +50,7 @@ class TemporalGraph:
         for node in self.nodes:
             reach_num = 1
             arrival_time = [np.inf for _ in range(self.n)]
-            arrival_time[node] = 0
+            arrival_time[node] = a
             for (u, v, t, l) in self.edge_stream:
                 if t >= a and b >= l:
                     if arrival_time[u] <= t and arrival_time[v] > t + l:
@@ -66,7 +66,7 @@ class TemporalGraph:
                 continue
             reach_num = 1
             arrival_time = helper.copy()
-            arrival_time[node] = 0
+            arrival_time[node] = a
             for (u, v, t, l) in self.edge_stream:
                 if u != x and v != x:
                     if t < a or t + l > b: continue

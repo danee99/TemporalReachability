@@ -115,7 +115,7 @@ class TemporalGraph:
         #     reach_set = {node}
         #     visited = set()
         #     earliest_arrival_time = {j: np.inf for j in k_neighbours}
-        #     earliest_arrival_time[node] = 0
+        #     earliest_arrival_time[node] = a
         #     PQ = PriorityQueue()
         #     PQ.put((earliest_arrival_time[node], node))
         #     while not PQ.empty():
@@ -137,7 +137,7 @@ class TemporalGraph:
             reach_set = {node}
             visited = set()
             earliest_arrival_time = {j: np.inf for j in k_neighbours}
-            earliest_arrival_time[node] = 0
+            earliest_arrival_time[node] = a
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
             while not PQ.empty():

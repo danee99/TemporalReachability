@@ -66,7 +66,7 @@ class TemporalGraph:
     def number_of_reachable_nodes(self, source, a, b):
         reach_set = {source}
         earliest_arrival_time = [np.inf for _ in range(self.n)]
-        earliest_arrival_time[source] = 0
+        earliest_arrival_time[source] = a
         PQ = PriorityQueue()
         PQ.put((earliest_arrival_time[source], source))
         while not PQ.empty():
@@ -84,7 +84,7 @@ class TemporalGraph:
         for node in self.nodes:
             reach_set = {node}
             earliest_arrival_time = [np.inf for _ in range(self.n)]
-            earliest_arrival_time[node] = 0
+            earliest_arrival_time[node] = a
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
             while not PQ.empty():
@@ -106,7 +106,7 @@ class TemporalGraph:
             reach_set = {node}
             visited = set()
             earliest_arrival_time = helper.copy()
-            earliest_arrival_time[node] = 0
+            earliest_arrival_time[node] = a
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
             while not PQ.empty():

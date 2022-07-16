@@ -49,7 +49,7 @@ class TemporalGraph:
             reach_set = {node}
             visited = set()
             earliest_arrival_time = [np.inf for _ in range(self.n)]
-            earliest_arrival_time[node] = 0
+            earliest_arrival_time[node] = alpha
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
             while not PQ.empty():
