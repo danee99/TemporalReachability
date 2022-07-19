@@ -4,7 +4,8 @@ import time
 from queue import PriorityQueue
 import numpy as np
 
-path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+# path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
 
 
 class TemporalGraph:
@@ -155,3 +156,6 @@ if __name__ == '__main__':
     elif directed == 'n':
         G.import_undirected_edgelist(input_graph)
     G.node_ranking(a, b, output_file)
+
+# C:\Users\Daniel\Documents\GitHub\TemporalReachability\edge-lists\dataset
+# /home/stud/degenste/BA/TemporalReachability/edge-lists/dataset

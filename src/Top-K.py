@@ -7,7 +7,8 @@ import numpy as np
 
 max_heap = []
 k = 10
-path = os.path.join(os.getcwd(), os.pardir)
+# path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
 
 
 def log_result(result):

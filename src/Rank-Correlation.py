@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 
-path = os.path.join(os.getcwd(), os.pardir)
+# path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
 
 
 def import_ranking(degree_input, reachability_input, output_name, number_of_nodes):
