@@ -156,6 +156,6 @@ if __name__ == '__main__':
     elif directed == 'n':
         G.import_undirected_edgelist(input_graph)
     G.node_ranking(a, b, output_file)
-
-# C:\Users\Daniel\Documents\GitHub\TemporalReachability\edge-lists\dataset
-# /home/stud/degenste/BA/TemporalReachability/edge-lists/dataset
+    
+    # C:\Users\Daniel\Documents\GitHub\TemporalReachability\edge-lists\dataset
+    # /home/stud/degenste/BA/TemporalReachability/edge-lists/dataset
