@@ -98,8 +98,6 @@ class TemporalGraph:
 
 if __name__ == '__main__':
     input_graph = input('Edgeliste eingeben:')
-    a = 0
-    b = np.inf
     directed = (input('Ist der Graph gerichtet? [y/n]:'))
     output_file = input_graph.split(".")[0] + '-Streaming-Ranking' + '.txt'
     G = TemporalGraph()
@@ -107,4 +105,4 @@ if __name__ == '__main__':
         G.import_edgelist(input_graph)
     elif directed == 'n':
         G.import_undirected_edgelist(input_graph)
-    G.node_ranking(a, b, output_file)
+    G.node_ranking(0, np.inf, output_file)
