@@ -96,8 +96,46 @@ def swap(file_name, output):
                 o.write((str(u) + " " + str(v) + " " + str(t) + " " + str(1) + "\n"))
 
 
+def fail(file_name, output):
+    E = []
+    edge_before = (-1, -1, -1, -1)
+    t_before = -1
+    with open(path + file_name, "r") as f:
+        f.readline()
+        for line in f:
+            arr = line.split()
+            u = int(arr[0])
+            v = int(arr[1])
+            t = int(arr[2])
+            l = int(arr[3])
+            if edge_before[0] == u and edge_before[1] == v:
+                if edge_before[2] + edge_before[3] == t:
+                    # E.append((u, v, edge_before[2], t+(2*l)-t_before))
+                    E.append((u, v, edge_before[2], t + l - t_before))
+                    E.remove(edge_before)
+            else:
+                edge_before = (u, v, t, l)
+                t_before = t
+                E.append(edge_before)
+
+        with open(path + output, "w") as o:
+            for (u, v, t, l) in E:
+                o.write((str(u) + " " + str(v) + " " + str(t) + " " + str(l) + "\n"))
+    # with open(path + file_name, "r") as f:
+    #     f.readline()
+    #     with open(path + output, "w") as o:
+    #         for line in f:
+    #             arr = line.split()
+    #             u = int(arr[0])
+    #             v = int(arr[1])
+    #             t = int(arr[2])
+    #             l = int(arr[3])
+    #             o.write((str(u) + " " + str(v) + " " + str(t - 20) + " " + str(20) + "\n"))
+
+
 if __name__ == '__main__':
-    convert2('twitter.txt', 'testing.txt')
+    # convert2('twitter.txt', 'testing.txt')
+    fail('tij (fail).txt', 'tij (good).txt')
     # inp = input('Edgeliste eingeben:')
     # file_in = '/edge-lists/' + str(inp)
     # file_out ='/edge-lists/' + '0_'+str(inp)
