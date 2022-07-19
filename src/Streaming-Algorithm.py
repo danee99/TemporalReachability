@@ -3,7 +3,7 @@ import os
 import time
 import numpy as np
 
-path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+path = os.path.join(os.getcwd(), os.pardir)
 
 
 class TemporalGraph:

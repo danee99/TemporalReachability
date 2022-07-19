@@ -7,7 +7,7 @@ import numpy as np
 
 max_heap = []
 k = 10
-path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+path = os.path.join(os.getcwd(), os.pardir)
 
 
 def log_result(result):
