@@ -90,7 +90,7 @@ class TemporalGraph:
         pool.join()
         finish = time.time() - start_time
         with open(path + output_name, 'w') as f:
-            ranking.sort(key=lambda tup: tup[0], reverse=True)
+            # ranking.sort(key=lambda tup: tup[0], reverse=True)
             f.write(str(ranking) + "\n")
             f.write("abgeschlossen in %s Sekunden" % finish + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
@@ -99,7 +99,7 @@ class TemporalGraph:
 
 if __name__ == '__main__':
     input_graph = input('Edgeliste eingeben:')
-    directed = (input('Ist der Graph gerichtet? [y/n]:'))
+    directed = (input('Soll die Kantenliste als gerichtet betrachtet werden? [y/n]:'))
     output_file = input_graph.split(".")[0] + '-Streaming-Ranking' + '.txt'
     G = TemporalGraph()
     if directed == 'y':

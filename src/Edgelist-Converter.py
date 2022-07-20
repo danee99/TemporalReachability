@@ -1,5 +1,4 @@
 import os
-import re
 
 path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
 
@@ -61,17 +60,17 @@ def convert2(file_name, output):
 
 def betw(file_name, output):
     nodemanager = {}
-    with open(output, "w") as o:
-        with open(file_name, "r") as f:
+    with open(path + output, "w") as o:
+        with open(path + file_name, "r") as f:
             n = int(f.readline())
             id = 0
             for line in f:
                 arr = line.split()
                 u = int(arr[0])
                 v = int(arr[1])
-                l = int(arr[2])
+                t = int(arr[2])
                 try:
-                    t = int(arr[3])
+                    l = int(arr[3])
                 except IndexError:
                     l = 1
                 if u not in nodemanager.keys():
@@ -135,7 +134,8 @@ def fail(file_name, output):
 
 if __name__ == '__main__':
     # convert2('twitter.txt', 'testing.txt')
-    fail('tij (fail).txt', 'tij (good).txt')
+    # fail('tij (fail).txt', 'tij (good).txt')
+    betw('email-dnc.txt', '0_email-dnc.txt')
     # inp = input('Edgeliste eingeben:')
     # file_in = '/edge-lists/' + str(inp)
     # file_out ='/edge-lists/' + '0_'+str(inp)

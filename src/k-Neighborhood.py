@@ -1,11 +1,11 @@
 import multiprocessing
-import os
+import time
 from queue import PriorityQueue
 import numpy as np
-import time
+import os
 
-# path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
-path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
+path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+# path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
 
 
 class TemporalGraph:
@@ -53,14 +53,10 @@ class TemporalGraph:
                 self.add_edge(v, u, t, l)
 
     def k_neighborhood(self, node, k):
-        # Ausgabe: Menge der Knoten, die sich in der k-Nachbarschaft von "node" befinden
         visited = set()
         visited.add(node)
         queue = [node, -1]
         i = 0
-        # Idee: i immer um 1 erhöhen, wenn die Breitensuche die nächste Tiefe erreicht.
-        # Wann weiß man, dass die nächste Tiefe erreicht wurde? Wenn -1 aus der Warteschlange genommen wurde!
-        # Wenn das aus der Warteschlange genommene Element -1 ist, weiß man, dass die i-Nachbarschaft erkundet wurde!
         while queue:
             current_node = queue.pop(0)
             if current_node == -1:
@@ -94,10 +90,12 @@ class TemporalGraph:
                 for (u, neighbour_of_u, t, l) in self.graph[current_node]:
                     if neighbour_of_u not in sub_graph:
                         sub_graph[neighbour_of_u] = []
+                        sub_graph[u].append((u, neighbour_of_u, t, l))
                         queue.append(neighbour_of_u)
-        for x in sub_graph:
-            sub_graph[x] = [(u, v, t, l) for (u, v, t, l) in self.graph[x] if v in sub_graph]
-        return sub_graph
+        # for x in sub_graph:
+        #     sub_graph[x] = [(u, v, t, l) for (u, v, t, l) in self.graph[x] if v in sub_graph]
+        # return sub_graph
+        print(sub_graph)
 
     def total_reachability_after(self, deleted_node, a, b, k):
         total = 0
@@ -138,17 +136,18 @@ if __name__ == '__main__':
         G.import_edgelist(input_graph)
     elif directed == 'n':
         G.import_undirected_edgelist(input_graph)
-    start_time = time.time()
-    pool = multiprocessing.Pool(multiprocessing.cpu_count())
-    result_objects = [pool.apply_async(G.total_reachability_after, args=(node, 0, np.inf, k)) for node in range(0, G.n)]
-    result = [r.get() for r in result_objects]
-    pool.close()
-    pool.join()
-    finish = time.time() - start_time
-    with open(path + output_file, 'w') as f:
-        f.write(str(result) + "\n")
-        f.write("wurde auf die " + str(k) + "-Nachbarschaft jedes Knotens angewendet." + "\n")
-        f.write("|V| = " + str(G.n) + ", |E| = " + str(G.m) + "\n")
-        f.write("abgeschlossen in %s Sekunden" % finish + "\n")
-        f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
-        f.write("abgeschlossen in %s Stunden" % (finish / 3600))
+    G.k_neighborhood_subgraph(6,2)
+    # start_time = time.time()
+    # pool = multiprocessing.Pool(multiprocessing.cpu_count())
+    # result_objects = [pool.apply_async(G.total_reachability_after, args=(node, 0, np.inf, k)) for node in range(0, G.n)]
+    # result = [r.get() for r in result_objects]
+    # pool.close()
+    # pool.join()
+    # finish = time.time() - start_time
+    # with open(path + output_file, 'w') as f:
+    #     f.write(str(result) + "\n")
+    #     f.write("wurde auf die " + str(k) + "-Nachbarschaft jedes Knotens angewendet." + "\n")
+    #     f.write("|V| = " + str(G.n) + ", |E| = " + str(G.m) + "\n")
+    #     f.write("abgeschlossen in %s Sekunden" % finish + "\n")
+    #     f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
+    #     f.write("abgeschlossen in %s Stunden" % (finish / 3600))

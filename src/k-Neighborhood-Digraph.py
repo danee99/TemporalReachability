@@ -1,9 +1,8 @@
 import multiprocessing
-import os
+import time
 from queue import PriorityQueue
 import numpy as np
-import time
-import sys
+import os
 
 # path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
 path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
@@ -165,10 +164,6 @@ if __name__ == '__main__':
     output_file = input_graph.split(".")[0] + '-k-Nachbarschaft-Ranking (Digraph)' + '.txt'
     G = TemporalGraph()
     G.import_edgelist(input_graph)
-    # if G.is_connected():
-    #     print('Der Graph ist stark verbunden')
-    # else:
-    #     print('Der Graph ist nicht stark verbunden')
     start_time = time.time()
     pool = multiprocessing.Pool(multiprocessing.cpu_count())
     result_objects = [pool.apply_async(G.total_reachability_after, args=(node, 0, np.inf, k)) for node in range(0, G.n)]
@@ -180,7 +175,6 @@ if __name__ == '__main__':
         # f.write("Avg " + str(int(sum(result) / len(result))) + "\n")
         # f.write("Min " + str(min(result)) + "\n")
         # f.write("Max " + str(max(result)) + "\n")
-        # result.sort(reverse=True)
         result.sort()
         f.write(str(result) + "\n")
         f.write("wurde auf die " + str(k) + "-Nachbarschaft jedes Knotens angewendet." + "\n")
@@ -188,3 +182,7 @@ if __name__ == '__main__':
         f.write("abgeschlossen in %s Sekunden" % finish + "\n")
         f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
         f.write("abgeschlossen in %s Stunden" % (finish / 3600))
+    # if G.is_connected():
+    #     print('Der Graph ist stark verbunden')
+    # else:
+    #     print('Der Graph ist nicht stark verbunden')

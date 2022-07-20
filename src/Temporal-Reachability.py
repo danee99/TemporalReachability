@@ -84,18 +84,22 @@ class TemporalGraph:
     def calc_total_reachability(self, a, b):
         for node in self.nodes:
             reach_set = {node}
+            visited = set()
             earliest_arrival_time = [np.inf for _ in range(self.n)]
             earliest_arrival_time[node] = a
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
             while not PQ.empty():
                 (current_arrival_time, current_node) = PQ.get()
+                if current_node in visited:
+                    continue
                 for (u, v, t, l) in self.incidence_list[current_node]:
                     if t < a or t + l > b: continue
                     if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                         reach_set.add(v)
                         earliest_arrival_time[v] = t + l
                         PQ.put((earliest_arrival_time[v], v))
+                visited.add(current_node)
             self.total_reachability += len(reach_set)
 
     # ranks the node "x", where the ranking is a floating point number between 0 and 1
@@ -137,7 +141,7 @@ class TemporalGraph:
         pool.join()
         finish = time.time() - start_time
         with open(path + output_name, 'w') as f:
-            ranking.sort(reverse=True)
+            # ranking.sort(reverse=True)
             f.write(str(ranking) + "\n")
             f.write("abgeschlossen in %s Sekunden" % finish + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
@@ -146,7 +150,7 @@ class TemporalGraph:
 
 if __name__ == '__main__':
     input_graph = input('Edgeliste eingeben:')
-    directed = (input('Ist der Graph gerichtet? [y/n]:'))
+    directed = (input('Soll die Kantenliste als gerichtet betrachtet werden? [y/n]:'))
     a = int(input('Intervall a eingeben: '))
     b = np.inf
     output_file = input_graph.split(".")[0] + '-Ranking' + '.txt'
@@ -156,6 +160,3 @@ if __name__ == '__main__':
     elif directed == 'n':
         G.import_undirected_edgelist(input_graph)
     G.node_ranking(a, b, output_file)
-    
-    # C:\Users\Daniel\Documents\GitHub\TemporalReachability\edge-lists\dataset
-    # /home/stud/degenste/BA/TemporalReachability/edge-lists/dataset

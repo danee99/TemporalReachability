@@ -2,7 +2,9 @@ import os
 import numpy as np
 from matplotlib import pyplot as plt
 import networkx as nx
+
 path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+
 
 # print(plt.style.available)
 # plt.style.use('bmh')
@@ -36,4 +38,5 @@ def draw_graph(file_name):
     nx.draw_networkx_edge_labels(G, pos, edge_labels=weights)
     plt.show()
 
-draw_graph("aves-weaver-social.txt")
+
+draw_graph("example_graph3.txt")

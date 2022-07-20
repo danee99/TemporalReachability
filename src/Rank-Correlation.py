@@ -30,16 +30,16 @@ def import_ranking(degree_input, reachability_input, output_name, number_of_node
                     f.write(str(j) + "," + str(arr1[j]) + "," + str(arr2[j]) + "," + str(arr3[j]) + '\n')
 
 
-# mydataframe = pd.read_csv(path + "/Dataframes/fb-forum")
-# obj = sns.heatmap(data=mydataframe.corr(method='kendall'), annot=True)
-# obj.set_xticklabels(obj.get_xticklabels(), rotation=90)
-# plt.tight_layout()
-# plt.savefig(path+'/Plots/fb-forum.svg')
+mydataframe = pd.read_csv(path + "/Dataframes/email-dnc")
+obj = sns.heatmap(data=mydataframe.corr(method='kendall'), annot=True)
+obj.set_xticklabels(obj.get_xticklabels(), rotation=90)
+plt.tight_layout()
+plt.savefig(path+'/Plots/email-dnc.svg')
 
-name = "fb-messages"
-import_ranking(name + "-Outdegrees.txt",
-               name + "-Rangliste.txt",
-               name,
-               1899,
-               "fb-forum-temporal-betweenness.txt"
-               )
+# name = "email-dnc"
+# import_ranking(name + "-Outdegrees.txt",
+#                name + "-Rangliste.txt",
+#                name,
+#                1891,
+#                name+"-temporal-betweenness.txt"
+#                )

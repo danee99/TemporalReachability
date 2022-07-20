@@ -43,14 +43,32 @@ class TemporalGraph:
                 self.nodes.add(v)
                 self.incidence_list[u].append((u, v, t, l))
 
-    def top_k_util(self, x, alpha, beta):
+    def import_undirected_edgelist(self, file_name):
+        with open(path + file_name, "r") as f:
+            self.n = int(f.readline())
+            self.incidence_list = [[] for _ in range(self.n)]
+            for line in f:
+                arr = line.split()
+                u = int(arr[0])
+                v = int(arr[1])
+                t = int(arr[2])
+                try:
+                    l = int(arr[3])
+                except IndexError:
+                    l = 1
+                self.nodes.add(u)
+                self.nodes.add(v)
+                self.incidence_list[u].append((u, v, t, l))
+                self.incidence_list[v].append((v, u, t, l))
+
+    def top_k_util(self, x, alpha, beta, helper):
         total = 0
         for node in self.nodes:
             if node == x:
                 continue
             reach_set = {node}
             visited = set()
-            earliest_arrival_time = [np.inf for _ in range(self.n)]
+            earliest_arrival_time = helper.copy()
             earliest_arrival_time[node] = alpha
             PQ = PriorityQueue()
             PQ.put((earliest_arrival_time[node], node))
@@ -72,18 +90,20 @@ class TemporalGraph:
 
     def top_k_reachability(self, alpha, beta, k, output_name):
         start_time = time.time()
+        helper = [np.inf for _ in range(self.n)]
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
         for node in self.nodes:
-            pool.apply_async(self.top_k_util, args=(node, alpha, beta), callback=log_result)
+            pool.apply_async(self.top_k_util, args=(node, alpha, beta, helper), callback=log_result)
         pool.close()
         pool.join()
         finish = time.time() - start_time
         with open(path + output_name, 'w') as f:
-            max_heap.sort(key=lambda tup: tup[0])
+            max_heap.sort()
             f.write(str(max_heap) + "\n")
             f.write("abgeschlossen in %s Sekunden" % finish + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
             f.write("abgeschlossen in %s Stunden" % (finish / 3600))
+        # # version without parallelization
         # start_time = time.time()
         # for p in self.nodes:
         #     total = 0
