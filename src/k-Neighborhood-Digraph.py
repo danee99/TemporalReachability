@@ -181,7 +181,7 @@ if __name__ == '__main__':
         # f.write("Min " + str(min(result)) + "\n")
         # f.write("Max " + str(max(result)) + "\n")
         # result.sort(reverse=True)
-        result.sort(reverse=False)
+        result.sort()
         f.write(str(result) + "\n")
         f.write("wurde auf die " + str(k) + "-Nachbarschaft jedes Knotens angewendet." + "\n")
         f.write("|V| = " + str(G.n) + ", |E| = " + str(G.m) + "\n")
