@@ -17,7 +17,7 @@ def import_ranking(degree_input, reachability_input, output_name, number_of_node
                 with open(path + "/Rankings/Temporal Betweenness Centrality/" + betw_input, "r") as c:
                     for line in c:
                         arr = line.split(",")
-                        betw_rank = int(arr[1])
+                        betw_rank = float(arr[1])
                         arr3.append(betw_rank)
                 line1 = a.readlines()
                 line2 = b.readlines()
@@ -27,14 +27,17 @@ def import_ranking(degree_input, reachability_input, output_name, number_of_node
                     f.write(str(j) + "," + str(arr1[j]) + "," + str(arr2[j]) + "," + str(arr3[j]) + '\n')
 
 
-# mydataframe = pd.read_csv(os.getcwd() + "/Dataframes/email-dnc")
-# sns.heatmap(data=mydataframe.corr(method='kendall'))
+mydataframe = pd.read_csv(path + "/Dataframes/fb-forum")
+obj = sns.heatmap(data=mydataframe.corr(method='kendall'), annot=True)
+obj.set_xticklabels(obj.get_xticklabels(), rotation=90)
 # plt.show()
+plt.tight_layout()
+plt.savefig(path+'/Plots/fb-forum.svg')
 
-name = "fb-forum"
-import_ranking(name + "-Outdegrees.txt",
-               name + "-Ranking.txt",
-               name,
-               899,
-               "fb-forum-temporal-betweenness.txt"
-               )
+# name = "fb-forum"
+# import_ranking(name + "-Outdegrees.txt",
+#                name + "-Rangliste.txt",
+#                name,
+#                899,
+#                "fb-forum-temporal-betweenness.txt"
+#                )
