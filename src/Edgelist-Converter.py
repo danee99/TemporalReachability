@@ -96,9 +96,44 @@ def swap(file_name, output):
 
 
 def fail(file_name, output):
-    E = []
-    edge_before = (-1, -1, -1, -1)
-    t_before = -1
+    # E = []
+    # edge_before = (-1, -1, -1, -1)
+    # with open(path + file_name, "r") as f:
+    #     f.readline()
+    #     for line in f:
+    #         arr = line.split()
+    #         u = int(arr[0])
+    #         v = int(arr[1])
+    #         t = int(arr[2])
+    #         l = int(arr[3])
+    #         l_h = edge_before[3]
+    #         if edge_before[0] == u and edge_before[1] == v and edge_before[2] + edge_before[3] == t:
+    #             l_h += l
+    #             E.remove(edge_before)
+    #             E.append((u, v, edge_before[2], l_h))
+    #             edge_before = (u, v, edge_before[2], l_h)
+    #         else:
+    #             edge_before = (u, v, t, l)
+    #             E.append((u, v, t, l))
+    #     with open(path + output, "w") as o:
+    #         for (u, v, t, l) in E:
+    #             o.write((str(u) + " " + str(v) + " " + str(t) + " " + str(l) + "\n"))
+    with open(path + file_name, "r") as f:
+        f.readline()
+        with open(path + output, "w") as o:
+            for line in f:
+                arr = line.split()
+                u = int(arr[0])
+                v = int(arr[1])
+                t = int(arr[2])
+                l = int(arr[3])
+                o.write((str(u) + " " + str(v) + " " + str(t - 20) + " " + str(20) + "\n"))
+
+
+def fail2(file_name, output):
+    E = {}
+    edges = []
+    # {(u,v) : [t, l]}
     with open(path + file_name, "r") as f:
         f.readline()
         for line in f:
@@ -107,35 +142,26 @@ def fail(file_name, output):
             v = int(arr[1])
             t = int(arr[2])
             l = int(arr[3])
-            if edge_before[0] == u and edge_before[1] == v:
-                if edge_before[2] + edge_before[3] == t:
-                    # E.append((u, v, edge_before[2], t+(2*l)-t_before))
-                    E.append((u, v, edge_before[2], t + l - t_before))
-                    E.remove(edge_before)
+            if (u, v) not in E:
+                E[(u, v)] = [t, l]
+                edges.append((u, v, E[(u, v)][0], E[(u, v)][1]))
             else:
-                edge_before = (u, v, t, l)
-                t_before = t
-                E.append(edge_before)
-
+                if E[(u, v)][0] + E[(u, v)][1] == t:
+                    edges.remove((u, v, E[(u, v)][0], E[(u, v)][1]))
+                    E[(u, v)][1] += l
+                    edges.append((u, v, E[(u, v)][0], E[(u, v)][1]))
+                else:
+                    E[(u, v)] = [t, l]
+                    edges.append((u, v, E[(u, v)][0], E[(u, v)][1]))
         with open(path + output, "w") as o:
-            for (u, v, t, l) in E:
+            for (u, v, t, l) in edges:
                 o.write((str(u) + " " + str(v) + " " + str(t) + " " + str(l) + "\n"))
-    # with open(path + file_name, "r") as f:
-    #     f.readline()
-    #     with open(path + output, "w") as o:
-    #         for line in f:
-    #             arr = line.split()
-    #             u = int(arr[0])
-    #             v = int(arr[1])
-    #             t = int(arr[2])
-    #             l = int(arr[3])
-    #             o.write((str(u) + " " + str(v) + " " + str(t - 20) + " " + str(20) + "\n"))
 
 
 if __name__ == '__main__':
     # convert2('twitter.txt', 'testing.txt')
-    # fail('tij (fail).txt', 'tij (good).txt')
-    betw('email-dnc.txt', '0_email-dnc.txt')
+    fail2('ht09_contact (richtig).txt', 'ht09_contact (r).txt')
+    # betw('email-dnc.txt', '0_email-dnc.txt')
     # inp = input('Edgeliste eingeben:')
     # file_in = '/edge-lists/' + str(inp)
     # file_out ='/edge-lists/' + '0_'+str(inp)

@@ -4,8 +4,8 @@ from queue import PriorityQueue
 import numpy as np
 import os
 
-# path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
-path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
+path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+# path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
 
 
 class TemporalGraph:
@@ -139,7 +139,8 @@ class TemporalGraph:
         finish2 = time.time() - start_time
         with open(path + output_name, 'w') as f:
             ranking.sort(key=lambda tup: tup[1][0])
-            f.write(str(ranking) + "\n")
+            # f.write(str(ranking) + "\n")
+            f.write(str([tup[0] for tup in ranking]) + "\n")
             f.write("mit Tiefe = " + str(depth) + "\n")
             f.write("geloeschte Knotenanzahl = " + str(num_nodes - self.n) + "\n")
             f.write("geloeschte Kanten = " + str(num_edges - self.m) + "\n")
