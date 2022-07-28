@@ -1,8 +1,0 @@
-[(2, (11, 17)), (6, (12, 20)), (0, (13, 19)), (5, (14, 20)), (1, (15, 21))]
-mit Tiefe = 2
-geloeschte Knotenanzahl = 2
-geloeschte Kanten = 3
---- filter_nodes() finished in 0.0 minutes ---
---- finished in 0.3673384189605713 seconds ---
---- finished in 0.006122306982676188 minutes ---
---- finished in 0.0001020384497112698 hours ---

@@ -4,8 +4,8 @@ import time
 from queue import PriorityQueue
 import numpy as np
 
-# path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
-path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
+path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+# path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
 
 
 class TemporalGraph:
@@ -126,7 +126,8 @@ class TemporalGraph:
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
             total += len(reach_set)
-        return 1 - (total / before), x
+        # return 1 - (total / before), x
+        return 1 - (total / before)
 
     # parallelized node ranking
     def node_ranking(self, a, b, output_name):
@@ -141,9 +142,9 @@ class TemporalGraph:
         pool.join()
         finish = time.time() - start_time
         with open(path + output_name, 'w') as f:
-            # f.write(str(ranking) + "\n")
-            ranking.sort(reverse=True)
-            f.write(str([tup[1] for tup in ranking]) + "\n")
+            f.write(str(ranking) + "\n")
+            # ranking.sort(reverse=True)
+            # f.write(str([tup[1] for tup in ranking]) + "\n")
             f.write("abgeschlossen in %s Sekunden" % finish + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
             f.write("abgeschlossen in %s Stunden" % (finish / 3600))

@@ -1,8 +1,0 @@
---- finished in 0.3995234966278076 seconds ---
---- finished in 0.006658724943796794 minutes ---
---- finished in 0.00011097874906327989 hours ---
-[(385, 237), (384, 436), (385, 138), (384, 249), (379, 233), (382, 252), (376, 245), (345, 235), (383, 238), (368, 239)]
-[237, 436, 138, 249, 233, 252, 245, 235, 238, 239]
-geloeschte Knoten Anzahl 366
-Knotenanzahl des Graphen 79
-Kantenanzahl des Graphen 79

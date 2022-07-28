@@ -20,9 +20,9 @@ class TemporalGraph:
         if u not in self.graph:
             self.graph[u] = [[(u, v, t, l)], 1, 0]
         else:
-            if v not in [self.graph[u][0][i][1] for i in range(0, len(self.graph[u][0]))]:
-                self.graph[u][1] += 1
-            # self.graph[u][1] += 1
+            # if v not in [self.graph[u][0][i][1] for i in range(0, len(self.graph[u][0]))]:
+            #     self.graph[u][1] += 1
+            self.graph[u][1] += 1
             self.graph[u][0].append((u, v, t, l))
         if v not in self.graph:
             self.graph[v] = [[], 0, 0]
@@ -58,14 +58,20 @@ class TemporalGraph:
 
     def degrees_info(self):
         var = [self.graph[u][1] for u in self.graph]
-        print("Durchschnitt = " + str(round(sum(var) / len(var))))
-        print("Minimum = " + str(int(min(var))))
-        print("Maximum = " + str(int(max(var))))
+        # print("Durchschnitt = " + str(round(sum(var) / len(var))))
+        # print("Minimum = " + str(int(min(var))))
+        # print("Maximum = " + str(int(max(var))))
+        print("& " + str(round(sum(var) / len(var))) + " & " + str(int(min(var))) + " & " +str(int(max(var))))
 
     def degree_centrality(self, output_name):
+        result = []
+        # with open(path + output_name, 'w') as f:
+        #     for node in range(0, self.n):
+        #         f.write(str(self.graph[node][1]) + "\n")
         with open(path + output_name, 'w') as f:
             for node in range(0, self.n):
-                f.write(str(self.graph[node][1]) + "\n")
+                result.append(self.graph[node][1])
+            f.write(str(result))
 
     def filter_nodes(self, depth):
         # Problem 1: Erreichbarkeiten der In-Nachbarn der gelöschten Knoten speichern
@@ -173,7 +179,7 @@ class TemporalGraph:
 if __name__ == '__main__':
     input_graph = input('Edgeliste eingeben:')
     directed = (input('Ist der Graph gerichtet? [y/n]:'))
-    depth = int(input('Tiefe eingeben:'))
+    # depth = int(input('Tiefe eingeben:'))
     degree_output_file = input_graph.split(".")[0] + '-Outdegrees' + '.txt'
     heuristik_output_file = input_graph.split(".")[0] + '-Heuristik' + '.txt'
     G = TemporalGraph()
@@ -181,4 +187,6 @@ if __name__ == '__main__':
         G.import_edgelist(input_graph)
     elif directed == 'n':
         G.import_undirected_edgelist(input_graph)
-    G.heuristik(0, np.inf, heuristik_output_file, depth)
+    # G.heuristik(0, np.inf, heuristik_output_file, depth)
+    G.degrees_info()
+    G.degree_centrality(degree_output_file)
