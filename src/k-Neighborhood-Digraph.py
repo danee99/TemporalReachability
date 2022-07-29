@@ -4,8 +4,8 @@ from queue import PriorityQueue
 import numpy as np
 import os
 
-# path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
-path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
+path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+# path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
 
 
 class TemporalGraph:
@@ -110,27 +110,27 @@ class TemporalGraph:
     def total_reachability_after(self, deleted_node, a, b, k):
         total = 0
         k_neighbours = self.k_neighborhood_subgraph(deleted_node, k)
-        # before = 0
-        # for node in k_neighbours:
-        #     reach_set = {node}
-        #     visited = set()
-        #     earliest_arrival_time = {j: np.inf for j in k_neighbours}
-        #     earliest_arrival_time[node] = a
-        #     PQ = PriorityQueue()
-        #     PQ.put((earliest_arrival_time[node], node))
-        #     while not PQ.empty():
-        #         (current_arrival_time, current_node) = PQ.get()
-        #         if current_node not in visited:
-        #             for (u, v, t, l) in k_neighbours[current_node]:
-        #                 # for (u, v, t, l) in self.graph[current_node][0]:
-        #                 #     if u not in k_neighbours or v not in k_neighbours: continue
-        #                 if t < a or t + l > b: continue
-        #                 if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-        #                     reach_set.add(v)
-        #                     earliest_arrival_time[v] = t + l
-        #                     PQ.put((earliest_arrival_time[v], v))
-        #             visited.add(current_node)
-        #     before += len(reach_set)
+        before = 0
+        size = len(k_neighbours)
+        for node in k_neighbours:
+            reach_set = {node}
+            visited = set()
+            earliest_arrival_time = {j: np.inf for j in k_neighbours}
+            earliest_arrival_time[node] = a
+            PQ = PriorityQueue()
+            PQ.put((earliest_arrival_time[node], node))
+            while not PQ.empty():
+                (current_arrival_time, current_node) = PQ.get()
+                if current_node not in visited:
+                    for (u, v, t, l) in k_neighbours[current_node]:
+                        if t < a or t + l > b: continue
+                        if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+                            reach_set.add(v)
+                            earliest_arrival_time[v] = t + l
+                            PQ.put((earliest_arrival_time[v], v))
+                    visited.add(current_node)
+            before += len(reach_set)
+
         for node in k_neighbours:
             if node == deleted_node:
                 continue
@@ -144,8 +144,6 @@ class TemporalGraph:
                 (current_arrival_time, current_node) = PQ.get()
                 if current_node not in visited:
                     for (u, v, t, l) in k_neighbours[current_node]:
-                        # for (u, v, t, l) in self.graph[current_node][0]:
-                        #     if u not in k_neighbours or v not in k_neighbours: continue
                         if v != deleted_node and u != deleted_node:
                             if t < a or t + l > b: continue
                             if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
@@ -154,8 +152,14 @@ class TemporalGraph:
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
             total += len(reach_set)
-        # return 1 - (total/before), deleted_node
-        return total, deleted_node
+        # print("del: " + str(deleted_node))
+        # print(before)
+        # print(total)
+        # print(1 - ((size * total) / ((size - 1) * before)))
+        # print(size)
+        # print("----")
+        # return total, deleted_node
+        return 1-((size * total) / ((size - 1) * before)), deleted_node
 
 
 if __name__ == '__main__':
@@ -172,17 +176,14 @@ if __name__ == '__main__':
     pool.join()
     finish = time.time() - start_time
     with open(path + output_file, 'w') as f:
-        # f.write("Avg " + str(int(sum(result) / len(result))) + "\n")
-        # f.write("Min " + str(min(result)) + "\n")
-        # f.write("Max " + str(max(result)) + "\n")
-        result.sort()
+        result.sort(reverse=True)
         f.write(str(result) + "\n")
         f.write("wurde auf die " + str(k) + "-Nachbarschaft jedes Knotens angewendet." + "\n")
         f.write("|V| = " + str(G.n) + ", |E| = " + str(G.m) + "\n")
         f.write("abgeschlossen in %s Sekunden" % finish + "\n")
         f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
         f.write("abgeschlossen in %s Stunden" % (finish / 3600))
-    # if G.is_connected():
+    # if G.is_connected():example_graph1.txt
     #     print('Der Graph ist stark verbunden')
     # else:
     #     print('Der Graph ist nicht stark verbunden')

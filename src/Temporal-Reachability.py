@@ -145,6 +145,7 @@ class TemporalGraph:
             f.write(str(ranking) + "\n")
             # ranking.sort(reverse=True)
             # f.write(str([tup[1] for tup in ranking]) + "\n")
+            f.write("R(G) = %s" % self.total_reachability + "\n")
             f.write("abgeschlossen in %s Sekunden" % finish + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
             f.write("abgeschlossen in %s Stunden" % (finish / 3600))
