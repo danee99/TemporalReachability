@@ -160,7 +160,7 @@ def fail2(file_name, output):
 
 if __name__ == '__main__':
     # convert2('twitter.txt', 'testing.txt')
-    fail2('ht09_contact (richtig).txt', 'ht09_contact (r).txt')
+    convert('wiki_talk_el.txt', 'wiki_talk_elr.txt')
     # betw('email-dnc.txt', '0_email-dnc.txt')
     # inp = input('Edgeliste eingeben:')
     # file_in = '/edge-lists/' + str(inp)
