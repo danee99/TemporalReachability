@@ -107,7 +107,7 @@ class TemporalGraph:
             sub_graph[u] = [(u, v, t, l) for (u, v, t, l) in self.graph[u][0] if v in sub_graph]
         return sub_graph
 
-    def total_reachability_after(self, deleted_node, a, b, k):
+    def total_reachability_after(self, deleted_node, a, b, k, p):
         # total = 0
         # k_neighbours = self.k_neighborhood_subgraph(deleted_node, k)
         # before = 0
@@ -164,9 +164,8 @@ class TemporalGraph:
         # return 1-((size * total) / ((size - 1) * before)), deleted_node
         total = 0
         k_neighbours = self.k_neighborhood_subgraph(deleted_node, k)
-        size = len(k_neighbours)
-        if size <= 1:
-            return 0, deleted_node
+        if len(k_neighbours) <= p:
+            return
         for node in k_neighbours:
             if node == deleted_node:
                 continue
@@ -194,12 +193,13 @@ class TemporalGraph:
 if __name__ == '__main__':
     input_graph = input('Edgeliste eingeben:')
     k = int(input('k-Nachbarschaft, Gebe den Wert k ein:'))
+    p = int(input('Schranke für die Größe der Nachbarschaft:'))
     output_file = input_graph.split(".")[0] + '-k-Nachbarschaft-Ranking (Digraph)' + '.txt'
     G = TemporalGraph()
     G.import_edgelist(input_graph)
     start_time = time.time()
     pool = multiprocessing.Pool(multiprocessing.cpu_count())
-    result_objects = [pool.apply_async(G.total_reachability_after, args=(node, 0, np.inf, k)) for node in range(0, G.n)]
+    result_objects = [pool.apply_async(G.total_reachability_after, args=(node, 0, np.inf, k, p)) for node in range(0, G.n)]
     result = [r.get() for r in result_objects]
     pool.close()
     pool.join()
