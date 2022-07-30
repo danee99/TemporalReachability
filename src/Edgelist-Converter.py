@@ -59,27 +59,15 @@ def convert2(file_name, output):
 
 
 def betw(file_name, output):
-    nodemanager = {}
     with open(path + output, "w") as o:
         with open(path + file_name, "r") as f:
-            n = int(f.readline())
-            id = 0
+            int(f.readline())
             for line in f:
                 arr = line.split()
                 u = int(arr[0])
                 v = int(arr[1])
                 t = int(arr[2])
-                try:
-                    l = int(arr[3])
-                except IndexError:
-                    l = 1
-                if u not in nodemanager.keys():
-                    nodemanager[u] = id
-                    id = id + 1
-                if v not in nodemanager.keys():
-                    nodemanager[v] = id
-                    id = id + 1
-                o.write((str(nodemanager[u]) + " " + str(nodemanager[v]) + " " + str(t) + "\n"))
+                o.write((str(u) + " " + str(v) + " " + str(t) + "\n"))
 
 
 def swap(file_name, output):
@@ -160,8 +148,8 @@ def fail2(file_name, output):
 
 if __name__ == '__main__':
     # convert2('twitter.txt', 'testing.txt')
-    convert('wiki_talk_el.txt', 'wiki_talk_elr.txt')
-    # betw('email-dnc.txt', '0_email-dnc.txt')
+    # convert('wiki_talk_el.txt', 'wiki_talk_elr.txt')
+    betw('UC-Irvine-messages.txt', 'B_UC-Irvine-messages.txt')
     # inp = input('Edgeliste eingeben:')
     # file_in = '/edge-lists/' + str(inp)
     # file_out ='/edge-lists/' + '0_'+str(inp)
