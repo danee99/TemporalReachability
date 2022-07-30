@@ -112,6 +112,8 @@ class TemporalGraph:
         k_neighbours = self.k_neighborhood_subgraph(deleted_node, k)
         before = 0
         size = len(k_neighbours)
+        if size <= 1:
+            return 0, deleted_node
         for node in k_neighbours:
             reach_set = {node}
             visited = set()
