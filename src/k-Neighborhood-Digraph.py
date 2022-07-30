@@ -165,7 +165,7 @@ class TemporalGraph:
         total = 0
         k_neighbours = self.k_neighborhood_subgraph(deleted_node, k)
         if len(k_neighbours) <= p:
-            return
+            return np.inf, deleted_node
         for node in k_neighbours:
             if node == deleted_node:
                 continue
