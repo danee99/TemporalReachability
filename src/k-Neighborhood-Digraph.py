@@ -208,6 +208,7 @@ if __name__ == '__main__':
         result.sort(reverse=False)
         f.write(str(result) + "\n")
         f.write("wurde auf die " + str(k) + "-Nachbarschaft jedes Knotens angewendet." + "\n")
+        f.write("Schwellwert für die Größe der Nachbaschaft: " + str(p) + "\n")
         f.write("|V| = " + str(G.n) + ", |E| = " + str(G.m) + "\n")
         f.write("abgeschlossen in %s Sekunden" % finish + "\n")
         f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")

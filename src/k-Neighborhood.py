@@ -4,8 +4,8 @@ from queue import PriorityQueue
 import numpy as np
 import os
 
-path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
-# path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
+# path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
 
 
 class TemporalGraph:
@@ -87,19 +87,21 @@ class TemporalGraph:
                 else:
                     continue
             else:
-                for (u, neighbour_of_u, t, l) in self.graph[current_node]:
-                    if neighbour_of_u not in sub_graph:
-                        sub_graph[neighbour_of_u] = []
-                        sub_graph[u].append((u, neighbour_of_u, t, l))
-                        queue.append(neighbour_of_u)
-        # for x in sub_graph:
-        #     sub_graph[x] = [(u, v, t, l) for (u, v, t, l) in self.graph[x] if v in sub_graph]
-        # return sub_graph
-        print(sub_graph)
+                for (u, neighbour, t, l) in self.graph[current_node]:
+                    if neighbour not in sub_graph:
+                        sub_graph[neighbour] = []
+                        # sub_graph[u].append((u, neighbour, t, l))
+                        queue.append(neighbour)
+        for x in sub_graph:
+            sub_graph[x] = [(u, v, t, l) for (u, v, t, l) in self.graph[x] if v in sub_graph]
+        return sub_graph
+        # print(sub_graph)
 
-    def total_reachability_after(self, deleted_node, a, b, k):
+    def total_reachability_after(self, deleted_node, a, b, k, p):
         total = 0
         subgraph = self.k_neighborhood_subgraph(deleted_node, k)
+        if len(subgraph) <= p:
+            return np.inf, deleted_node
         for node in subgraph:
             if node == deleted_node:
                 continue
@@ -129,6 +131,7 @@ class TemporalGraph:
 if __name__ == '__main__':
     input_graph = input('Edgeliste eingeben:')
     k = int(input('k-Nachbarschaft, Gebe den Wert k ein:'))
+    p = int(input('Schranke für die Größe der Nachbarschaft:'))
     directed = (input('Ist das Format der Kantenliste bereits ungerichtet? [y/n]:'))
     output_file = input_graph.split(".")[0] + '-k-Nachbarschaft-Ranking' + '.txt'
     G = TemporalGraph()
@@ -136,18 +139,19 @@ if __name__ == '__main__':
         G.import_edgelist(input_graph)
     elif directed == 'n':
         G.import_undirected_edgelist(input_graph)
-    G.k_neighborhood_subgraph(6,2)
-    # start_time = time.time()
-    # pool = multiprocessing.Pool(multiprocessing.cpu_count())
-    # result_objects = [pool.apply_async(G.total_reachability_after, args=(node, 0, np.inf, k)) for node in range(0, G.n)]
-    # result = [r.get() for r in result_objects]
-    # pool.close()
-    # pool.join()
-    # finish = time.time() - start_time
-    # with open(path + output_file, 'w') as f:
-    #     f.write(str(result) + "\n")
-    #     f.write("wurde auf die " + str(k) + "-Nachbarschaft jedes Knotens angewendet." + "\n")
-    #     f.write("|V| = " + str(G.n) + ", |E| = " + str(G.m) + "\n")
-    #     f.write("abgeschlossen in %s Sekunden" % finish + "\n")
-    #     f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
-    #     f.write("abgeschlossen in %s Stunden" % (finish / 3600))
+    start_time = time.time()
+    pool = multiprocessing.Pool(multiprocessing.cpu_count())
+    result_objects = [pool.apply_async(G.total_reachability_after, args=(node, 0, np.inf, k, p)) for node in range(0, G.n)]
+    result = [r.get() for r in result_objects]
+    pool.close()
+    pool.join()
+    finish = time.time() - start_time
+    with open(path + output_file, 'w') as f:
+        result.sort()
+        f.write(str(result) + "\n")
+        f.write("wurde auf die " + str(k) + "-Nachbarschaft jedes Knotens angewendet." + "\n")
+        f.write("Schwellwert für die Größe der Nachbaschaft: " + str(p) + "\n")
+        f.write("|V| = " + str(G.n) + ", |E| = " + str(G.m) + "\n")
+        f.write("abgeschlossen in %s Sekunden" % finish + "\n")
+        f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
+        f.write("abgeschlossen in %s Stunden" % (finish / 3600))
