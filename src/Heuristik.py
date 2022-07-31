@@ -4,8 +4,8 @@ from queue import PriorityQueue
 import numpy as np
 import os
 
-path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
-# path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
+# path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
 
 
 class TemporalGraph:
@@ -20,9 +20,9 @@ class TemporalGraph:
         if u not in self.graph:
             self.graph[u] = [[(u, v, t, l)], 1, 0]
         else:
-            # if v not in [self.graph[u][0][i][1] for i in range(0, len(self.graph[u][0]))]:
-            #     self.graph[u][1] += 1
-            self.graph[u][1] += 1
+            if v not in [self.graph[u][0][i][1] for i in range(0, len(self.graph[u][0]))]:
+                self.graph[u][1] += 1
+            # self.graph[u][1] += 1
             self.graph[u][0].append((u, v, t, l))
         if v not in self.graph:
             self.graph[v] = [[], 0, 0]
@@ -58,25 +58,16 @@ class TemporalGraph:
 
     def degrees_info(self):
         var = [self.graph[u][1] for u in self.graph]
-        # print("Durchschnitt = " + str(round(sum(var) / len(var))))
-        # print("Minimum = " + str(int(min(var))))
-        # print("Maximum = " + str(int(max(var))))
-        print("& " + str(round(sum(var) / len(var))) + " & " + str(int(min(var))) + " & " +str(int(max(var))))
+        print("& " + str(round(sum(var) / len(var))) + " & " + str(int(min(var))) + " & " + str(int(max(var))))
 
     def degree_centrality(self, output_name):
         result = []
-        # with open(path + output_name, 'w') as f:
-        #     for node in range(0, self.n):
-        #         f.write(str(self.graph[node][1]) + "\n")
         with open(path + output_name, 'w') as f:
             for node in range(0, self.n):
                 result.append(self.graph[node][1])
             f.write(str(result))
 
     def filter_nodes(self, depth):
-        # Problem 1: Erreichbarkeiten der In-Nachbarn der gelöschten Knoten speichern
-        # Problem 2: Erreichbarkeiten der gelöschten Knoten speichern
-        # Problem 3: Erreichbarkeiten von x fallen bei der Berechnung von R(G-x) weg
         deleted_nodes = set()
         for i in range(0, depth):
             for node in self.graph:
@@ -145,8 +136,8 @@ class TemporalGraph:
         finish2 = time.time() - start_time
         with open(path + output_name, 'w') as f:
             ranking.sort(key=lambda tup: tup[1][0])
-            # f.write(str(ranking) + "\n")
-            f.write(str([tup[0] for tup in ranking]) + "\n")
+            f.write(str(ranking) + "\n")
+            # f.write(str([tup[0] for tup in ranking]) + "\n")
             f.write("mit Tiefe = " + str(depth) + "\n")
             f.write("geloeschte Knotenanzahl = " + str(num_nodes - self.n) + "\n")
             f.write("geloeschte Kanten = " + str(num_edges - self.m) + "\n")
@@ -154,32 +145,12 @@ class TemporalGraph:
             f.write("abgeschlossen in %s Sekunden" % finish2 + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish2 / 60) + "\n")
             f.write("abgeschlossen in %s Stunden" % (finish2 / 3600))
-    # def heuristik(self, a, b, output_name, depth):
-    #     num_edges = self.m
-    #     num_nodes = self.n
-    #     start_time = time.time()
-    #     self.filter_nodes(depth)
-    #     finish1 = time.time() - start_time
-    #     ranking = []
-    #     for node in self.graph:
-    #         ranking.append(self.calculate_bounds(a, b, node))
-    #     finish2 = time.time() - start_time
-    #     with open(path + output_name, 'w') as f:
-    #         ranking.sort(key=lambda tup: tup[1][0])
-    #         f.write(str(ranking) + "\n")
-    #         f.write("mit Tiefe = " + str(depth) + "\n")
-    #         f.write("geloeschte Knotenanzahl = " + str(num_nodes - self.n) + "\n")
-    #         f.write("geloeschte Kanten = " + str(num_edges - self.m) + "\n")
-    #         f.write("filter_nodes() abgeschlossen in %s Sekunden" % finish1 + "\n")
-    #         f.write("abgeschlossen in %s Sekunden" % finish2 + "\n")
-    #         f.write("abgeschlossen in %s Minuten" % (finish2 / 60) + "\n")
-    #         f.write("abgeschlossen in %s Stunden" % (finish2 / 3600))
 
 
 if __name__ == '__main__':
     input_graph = input('Edgeliste eingeben:')
     directed = (input('Ist der Graph gerichtet? [y/n]:'))
-    # depth = int(input('Tiefe eingeben:'))
+    depth = int(input('Tiefe eingeben:'))
     degree_output_file = input_graph.split(".")[0] + '-Outdegrees' + '.txt'
     heuristik_output_file = input_graph.split(".")[0] + '-Heuristik' + '.txt'
     G = TemporalGraph()
@@ -187,6 +158,6 @@ if __name__ == '__main__':
         G.import_edgelist(input_graph)
     elif directed == 'n':
         G.import_undirected_edgelist(input_graph)
-    # G.heuristik(0, np.inf, heuristik_output_file, depth)
-    G.degrees_info()
-    G.degree_centrality(degree_output_file)
+    G.heuristik(0, np.inf, heuristik_output_file, depth)
+    # G.degrees_info()
+    # G.degree_centrality(degree_output_file)
