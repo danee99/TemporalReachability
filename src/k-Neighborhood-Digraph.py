@@ -155,7 +155,7 @@ class TemporalGraph:
                     visited.add(current_node)
             total += len(reach_set)
         # return 1-((size * total) / ((size - 1) * before)), deleted_node
-        return 1 - ((total / before)/size), deleted_node
+        return 1 - ((total / before) * (size - 1 / size)), deleted_node
         # total = 0
         # k_neighbours = self.k_neighborhood_subgraph(deleted_node, k)
         # if len(k_neighbours) <= p:
@@ -193,7 +193,8 @@ if __name__ == '__main__':
     G.import_edgelist(input_graph)
     start_time = time.time()
     pool = multiprocessing.Pool(multiprocessing.cpu_count())
-    result_objects = [pool.apply_async(G.total_reachability_after, args=(node, 0, np.inf, k, p)) for node in range(0, G.n)]
+    result_objects = [pool.apply_async(G.total_reachability_after, args=(node, 0, np.inf, k, p)) for node in
+                      range(0, G.n)]
     result = [r.get() for r in result_objects]
     pool.close()
     pool.join()
