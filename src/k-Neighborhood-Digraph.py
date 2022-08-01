@@ -186,7 +186,7 @@ class TemporalGraph:
                                 earliest_arrival_time[v] = t + l
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
-            total += len(reach_set)
+            total += (len(reach_set)/len(k_neighbours))
         return total, deleted_node
 
 
