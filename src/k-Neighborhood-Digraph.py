@@ -154,14 +154,8 @@ class TemporalGraph:
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
             total += len(reach_set)
-        # print("del: " + str(deleted_node))
-        # print(before)
-        # print(total)
-        # print(1 - ((size * total) / ((size - 1) * before)))
-        # print(size)
-        # print("----")
-        # return total, deleted_node
-        return 1-((size * total) / ((size - 1) * before)), deleted_node
+        # return 1-((size * total) / ((size - 1) * before)), deleted_node
+        return 1 - ((total / before)/size), deleted_node
         # total = 0
         # k_neighbours = self.k_neighborhood_subgraph(deleted_node, k)
         # if len(k_neighbours) <= p:
