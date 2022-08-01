@@ -205,7 +205,7 @@ if __name__ == '__main__':
     pool.join()
     finish = time.time() - start_time
     with open(path + output_file, 'w') as f:
-        result.sort(reverse=False)
+        result.sort(reverse=True)
         f.write(str(result) + "\n")
         f.write("wurde auf die " + str(k) + "-Nachbarschaft jedes Knotens angewendet." + "\n")
         f.write("Schwellwert für die Größe der Nachbaschaft: " + str(p) + "\n")
