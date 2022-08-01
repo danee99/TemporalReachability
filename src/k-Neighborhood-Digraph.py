@@ -108,64 +108,31 @@ class TemporalGraph:
         return sub_graph
 
     def total_reachability_after(self, deleted_node, a, b, k, p):
-        # total = 0
-        # k_neighbours = self.k_neighborhood_subgraph(deleted_node, k)
-        # before = 0
-        # size = len(k_neighbours)
-        # if size <= 1:
-        #     return 0, deleted_node
-        # for node in k_neighbours:
-        #     reach_set = {node}
-        #     visited = set()
-        #     earliest_arrival_time = {j: np.inf for j in k_neighbours}
-        #     earliest_arrival_time[node] = a
-        #     PQ = PriorityQueue()
-        #     PQ.put((earliest_arrival_time[node], node))
-        #     while not PQ.empty():
-        #         (current_arrival_time, current_node) = PQ.get()
-        #         if current_node not in visited:
-        #             for (u, v, t, l) in k_neighbours[current_node]:
-        #                 if t < a or t + l > b: continue
-        #                 if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-        #                     reach_set.add(v)
-        #                     earliest_arrival_time[v] = t + l
-        #                     PQ.put((earliest_arrival_time[v], v))
-        #             visited.add(current_node)
-        #     before += len(reach_set)
-        #
-        # for node in k_neighbours:
-        #     if node == deleted_node:
-        #         continue
-        #     reach_set = {node}
-        #     visited = set()
-        #     earliest_arrival_time = {j: np.inf for j in k_neighbours}
-        #     earliest_arrival_time[node] = a
-        #     PQ = PriorityQueue()
-        #     PQ.put((earliest_arrival_time[node], node))
-        #     while not PQ.empty():
-        #         (current_arrival_time, current_node) = PQ.get()
-        #         if current_node not in visited:
-        #             for (u, v, t, l) in k_neighbours[current_node]:
-        #                 if v != deleted_node and u != deleted_node:
-        #                     if t < a or t + l > b: continue
-        #                     if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-        #                         reach_set.add(v)
-        #                         earliest_arrival_time[v] = t + l
-        #                         PQ.put((earliest_arrival_time[v], v))
-        #             visited.add(current_node)
-        #     total += len(reach_set)
-        # # print("del: " + str(deleted_node))
-        # # print(before)
-        # # print(total)
-        # # print(1 - ((size * total) / ((size - 1) * before)))
-        # # print(size)
-        # # print("----")
-        # # return total, deleted_node
-        # return 1-((size * total) / ((size - 1) * before)), deleted_node
         total = 0
         k_neighbours = self.k_neighborhood_subgraph(deleted_node, k)
-        if len(k_neighbours) <= p:
-            return np.inf, deleted_node
+        before = 0
+        size = len(k_neighbours)
+        if size <= 1:
+            return 0, deleted_node
+        for node in k_neighbours:
+            reach_set = {node}
+            visited = set()
+            earliest_arrival_time = {j: np.inf for j in k_neighbours}
+            earliest_arrival_time[node] = a
+            PQ = PriorityQueue()
+            PQ.put((earliest_arrival_time[node], node))
+            while not PQ.empty():
+                (current_arrival_time, current_node) = PQ.get()
+                if current_node not in visited:
+                    for (u, v, t, l) in k_neighbours[current_node]:
+                        if t < a or t + l > b: continue
+                        if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+                            reach_set.add(v)
+                            earliest_arrival_time[v] = t + l
+                            PQ.put((earliest_arrival_time[v], v))
+                    visited.add(current_node)
+            before += len(reach_set)
+
         for node in k_neighbours:
             if node == deleted_node:
                 continue
@@ -186,8 +153,41 @@ class TemporalGraph:
                                 earliest_arrival_time[v] = t + l
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
-            total += (len(reach_set)/len(k_neighbours))
-        return total, deleted_node
+            total += len(reach_set)
+        # print("del: " + str(deleted_node))
+        # print(before)
+        # print(total)
+        # print(1 - ((size * total) / ((size - 1) * before)))
+        # print(size)
+        # print("----")
+        # return total, deleted_node
+        return 1-((size * total) / ((size - 1) * before)), deleted_node
+        # total = 0
+        # k_neighbours = self.k_neighborhood_subgraph(deleted_node, k)
+        # if len(k_neighbours) <= p:
+        #     return np.inf, deleted_node
+        # for node in k_neighbours:
+        #     if node == deleted_node:
+        #         continue
+        #     reach_set = {node}
+        #     visited = set()
+        #     earliest_arrival_time = {j: np.inf for j in k_neighbours}
+        #     earliest_arrival_time[node] = a
+        #     PQ = PriorityQueue()
+        #     PQ.put((earliest_arrival_time[node], node))
+        #     while not PQ.empty():
+        #         (current_arrival_time, current_node) = PQ.get()
+        #         if current_node not in visited:
+        #             for (u, v, t, l) in k_neighbours[current_node]:
+        #                 if v != deleted_node and u != deleted_node:
+        #                     if t < a or t + l > b: continue
+        #                     if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+        #                         reach_set.add(v)
+        #                         earliest_arrival_time[v] = t + l
+        #                         PQ.put((earliest_arrival_time[v], v))
+        #             visited.add(current_node)
+        #     total += (len(reach_set)/len(k_neighbours))
+        # return total, deleted_node
 
 
 if __name__ == '__main__':
