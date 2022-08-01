@@ -21,9 +21,9 @@ class TemporalGraph:
         if u not in self.graph:
             self.graph[u] = [[(u, v, t, l)], 1, 0]
         else:
-            if v not in [self.graph[u][0][i][1] for i in range(0, len(self.graph[u][0]))]:
-                self.graph[u][1] += 1
-            # self.graph[u][1] += 1
+            # if v not in [self.graph[u][0][i][1] for i in range(0, len(self.graph[u][0]))]:
+            #     self.graph[u][1] += 1
+            self.graph[u][1] += 1
             self.graph[u][0].append((u, v, t, l))
         if v not in self.graph:
             self.graph[v] = [[], 0, 0]
@@ -84,7 +84,7 @@ class TemporalGraph:
                     if v in deleted_nodes:
                         if v not in visited:  # because of multi edges
                             self.graph[node][2] += 1
-                            self.graph[node][1] -= 1
+                        self.graph[node][1] -= 1
                         self.graph[u][0].remove((u, v, t, l))
                         self.m -= 1
                         visited.add(v)
