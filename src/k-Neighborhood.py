@@ -98,10 +98,56 @@ class TemporalGraph:
         # print(sub_graph)
 
     def total_reachability_after(self, deleted_node, a, b, k, p):
+        # total = 0
+        # subgraph = self.k_neighborhood_subgraph(deleted_node, k)
+        # if len(subgraph) <= p:
+        #     return np.inf, deleted_node
+        # for node in subgraph:
+        #     if node == deleted_node:
+        #         continue
+        #     reach_set = {node}
+        #     visited = set()
+        #     earliest_arrival_time = {j: np.inf for j in subgraph}
+        #     earliest_arrival_time[node] = a
+        #     PQ = PriorityQueue()
+        #     PQ.put((earliest_arrival_time[node], node))
+        #     while not PQ.empty():
+        #         (current_arrival_time, current_node) = PQ.get()
+        #         if current_node not in visited:
+        #             for (u, v, t, l) in subgraph[current_node]:
+        #                 if v != deleted_node and u != deleted_node:
+        #                     if t < a or t + l > b: continue
+        #                     if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+        #                         reach_set.add(v)
+        #                         earliest_arrival_time[v] = t + l
+        #                         PQ.put((earliest_arrival_time[v], v))
+        #             visited.add(current_node)
+        #     total += len(reach_set)
+        # return total, deleted_node
         total = 0
+        before = 0
         subgraph = self.k_neighborhood_subgraph(deleted_node, k)
-        if len(subgraph) <= p:
-            return np.inf, deleted_node
+        size = len(subgraph)
+        if size <= p:
+            return 0, deleted_node
+        for node in subgraph:
+            reach_set = {node}
+            visited = set()
+            earliest_arrival_time = {j: np.inf for j in subgraph}
+            earliest_arrival_time[node] = a
+            PQ = PriorityQueue()
+            PQ.put((earliest_arrival_time[node], node))
+            while not PQ.empty():
+                (current_arrival_time, current_node) = PQ.get()
+                if current_node not in visited:
+                    for (u, v, t, l) in subgraph[current_node]:
+                        if t < a or t + l > b: continue
+                        if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+                            reach_set.add(v)
+                            earliest_arrival_time[v] = t + l
+                            PQ.put((earliest_arrival_time[v], v))
+                    visited.add(current_node)
+            before += len(reach_set)
         for node in subgraph:
             if node == deleted_node:
                 continue
@@ -115,8 +161,6 @@ class TemporalGraph:
                 (current_arrival_time, current_node) = PQ.get()
                 if current_node not in visited:
                     for (u, v, t, l) in subgraph[current_node]:
-                        # for (u, v, t, l) in self.graph[current_node][0]:
-                        #     if u not in k_neighbours or v not in k_neighbours: continue
                         if v != deleted_node and u != deleted_node:
                             if t < a or t + l > b: continue
                             if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
@@ -125,7 +169,7 @@ class TemporalGraph:
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
             total += len(reach_set)
-        return total, deleted_node
+        return 1 - ((total / before) * (size / (size - 1))), deleted_node
 
 
 if __name__ == '__main__':
@@ -141,7 +185,8 @@ if __name__ == '__main__':
         G.import_undirected_edgelist(input_graph)
     start_time = time.time()
     pool = multiprocessing.Pool(multiprocessing.cpu_count())
-    result_objects = [pool.apply_async(G.total_reachability_after, args=(node, 0, np.inf, k, p)) for node in range(0, G.n)]
+    result_objects = [pool.apply_async(G.total_reachability_after, args=(node, 0, np.inf, k, p)) for node in
+                      range(0, G.n)]
     result = [r.get() for r in result_objects]
     pool.close()
     pool.join()
