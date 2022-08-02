@@ -212,6 +212,7 @@ if __name__ == '__main__':
         # f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
         # f.write("abgeschlossen in %s Stunden" % (finish / 3600))
         f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
+        f.write("wurde auf die " + str(k) + "-Nachbarschaft jedes Knotens angewendet." + "\n")
         result.sort(reverse=True)
         for i in range(len(result)):
             f.write(str(i + 1) + ".Platz: " + str(result[i][1]) + " mit " + str(result[i][0]) + "\n")
