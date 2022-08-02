@@ -94,7 +94,7 @@ class TemporalGraph:
             if current_node == -1:
                 i += 1
                 queue.append(-1)
-                if i == k:
+                if i >= k:
                     break
                 else:
                     continue
