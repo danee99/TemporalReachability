@@ -154,7 +154,11 @@ class TemporalGraph:
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
             total += len(reach_set)
-        rank = 1 - ((total / before) * (size / (size - 1)))
+        try:
+            z = (total / before) * (size / (size - 1))
+        except ZeroDivisionError:
+            z = 1
+        rank = 1 - z
         if rank < 0:
             return 0, deleted_node
         else:
