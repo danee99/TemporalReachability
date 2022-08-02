@@ -52,27 +52,6 @@ class TemporalGraph:
                 self.add_edge(u, v, t, l)
                 self.add_edge(v, u, t, l)
 
-    def k_neighborhood(self, node, k):
-        visited = set()
-        visited.add(node)
-        queue = [node, -1]
-        i = 0
-        while queue:
-            current_node = queue.pop(0)
-            if current_node == -1:
-                i += 1
-                queue.append(-1)
-                if i == k:
-                    break
-                else:
-                    continue
-            else:
-                for (u, neighbour, t, l) in self.graph[current_node]:
-                    if neighbour not in visited:
-                        visited.add(neighbour)
-                        queue.append(neighbour)
-        return visited
-
     def k_neighborhood_subgraph(self, node, k):
         sub_graph = {node: []}
         queue = [node, -1]
@@ -90,40 +69,12 @@ class TemporalGraph:
                 for (u, neighbour, t, l) in self.graph[current_node]:
                     if neighbour not in sub_graph:
                         sub_graph[neighbour] = []
-                        # sub_graph[u].append((u, neighbour, t, l))
                         queue.append(neighbour)
         for x in sub_graph:
             sub_graph[x] = [(u, v, t, l) for (u, v, t, l) in self.graph[x] if v in sub_graph]
         return sub_graph
-        # print(sub_graph)
 
     def total_reachability_after(self, deleted_node, a, b, k, p):
-        # total = 0
-        # subgraph = self.k_neighborhood_subgraph(deleted_node, k)
-        # if len(subgraph) <= p:
-        #     return np.inf, deleted_node
-        # for node in subgraph:
-        #     if node == deleted_node:
-        #         continue
-        #     reach_set = {node}
-        #     visited = set()
-        #     earliest_arrival_time = {j: np.inf for j in subgraph}
-        #     earliest_arrival_time[node] = a
-        #     PQ = PriorityQueue()
-        #     PQ.put((earliest_arrival_time[node], node))
-        #     while not PQ.empty():
-        #         (current_arrival_time, current_node) = PQ.get()
-        #         if current_node not in visited:
-        #             for (u, v, t, l) in subgraph[current_node]:
-        #                 if v != deleted_node and u != deleted_node:
-        #                     if t < a or t + l > b: continue
-        #                     if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-        #                         reach_set.add(v)
-        #                         earliest_arrival_time[v] = t + l
-        #                         PQ.put((earliest_arrival_time[v], v))
-        #             visited.add(current_node)
-        #     total += len(reach_set)
-        # return total, deleted_node
         total = 0
         before = 0
         subgraph = self.k_neighborhood_subgraph(deleted_node, k)

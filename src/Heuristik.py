@@ -4,10 +4,8 @@ from queue import PriorityQueue
 import numpy as np
 import os
 
-path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
-
-
-# path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
+# path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
 
 
 class TemporalGraph:
@@ -145,11 +143,10 @@ class TemporalGraph:
         with open(path + output_name, 'w') as f:
             ranking.sort(key=lambda tup: tup[1][0])
             f.write(str(ranking) + "\n")
-            # f.write(str([tup[0] for tup in ranking]) + "\n")
             f.write("mit Tiefe = " + str(depth) + "\n")
+            f.write("filter_nodes() abgeschlossen in %s Sekunden" % finish1 + "\n")
             f.write("geloeschte Knotenanzahl = " + str(num_nodes - self.n) + "\n")
             f.write("geloeschte Kanten = " + str(num_edges - self.m) + "\n")
-            f.write("filter_nodes() abgeschlossen in %s Sekunden" % finish1 + "\n")
             f.write("abgeschlossen in %s Sekunden" % finish2 + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish2 / 60) + "\n")
             f.write("abgeschlossen in %s Stunden" % (finish2 / 3600))
@@ -166,6 +163,6 @@ if __name__ == '__main__':
         G.import_edgelist(input_graph)
     elif directed == 'n':
         G.import_undirected_edgelist(input_graph)
-    # G.heuristik(0, np.inf, heuristik_output_file, depth)
-    G.degrees_info()
-    G.degree_centrality(degree_output_file)
+    G.heuristik(0, np.inf, heuristik_output_file, depth)
+    # G.degrees_info()
+    # G.degree_centrality(degree_output_file)

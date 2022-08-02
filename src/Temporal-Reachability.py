@@ -126,8 +126,8 @@ class TemporalGraph:
                                 PQ.put((earliest_arrival_time[v], v))
                     visited.add(current_node)
             total += len(reach_set)
-        # return 1 - (total / before)
-        return total, x
+        return 1 - (total / before)
+        # return total, x
 
     # parallelized node ranking
     def node_ranking(self, a, b, output_name):
@@ -142,14 +142,14 @@ class TemporalGraph:
         pool.join()
         finish = time.time() - start_time
         with open(path + output_name, 'w') as f:
-            ranking.sort()
-            for i in range(len(ranking)):
-                f.write(str(i+1)+".Platz: "+str(ranking[i][1]) + "\n")
-            # f.write(str(ranking) + "\n")
-            # f.write("R(G) = %s" % self.total_reachability + "\n")
-            # f.write("abgeschlossen in %s Sekunden" % finish + "\n")
-            # f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
-            # f.write("abgeschlossen in %s Stunden" % (finish / 3600))
+            # ranking.sort()
+            # for i in range(len(ranking)):
+            #     f.write(str(i+1)+".Platz: "+str(ranking[i][1]) + "\n")
+            f.write(str(ranking) + "\n")
+            f.write("R(G) = %s" % self.total_reachability + "\n")
+            f.write("abgeschlossen in %s Sekunden" % finish + "\n")
+            f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
+            f.write("abgeschlossen in %s Stunden" % (finish / 3600))
 
 
 if __name__ == '__main__':
