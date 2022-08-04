@@ -66,7 +66,7 @@ class TemporalGraph:
                         sub_graph[neighbour] = []
                         queue.append(neighbour)
         for x in sub_graph:
-            sub_graph[x] = [(u, v, t, l) for (u, v, t, l) in self.edge_stream[x] if v in sub_graph]
+            sub_graph[x] = [(u, v, t, l) for (u, v, t, l) in self.edge_stream if v in sub_graph]
         return sub_graph
 
     def rank_node(self, deleted_node, a, b, k, p):
@@ -123,7 +123,7 @@ if __name__ == '__main__':
         G.import_undirected_edgelist(input_graph)
     start_time = time.time()
     pool = multiprocessing.Pool(multiprocessing.cpu_count())
-    result_objects = [pool.apply_async(G.rank_node, args=(node, 0, np.inf, k, p)) for node in
+    result_objects = [pool.apply_async(G.rank_node, args=(i, 0, np.inf, k, p)) for i in
                       range(0, G.n)]
     result = [r.get() for r in result_objects]
     pool.close()
