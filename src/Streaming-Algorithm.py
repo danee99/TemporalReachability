@@ -2,9 +2,22 @@ import multiprocessing
 import os
 import time
 import numpy as np
+from queue import PriorityQueue
+import heapq_max
 
 # path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
 path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
+max_heap = []
+k = 10
+
+
+def log_result(result):
+    if result[0] != -1:
+        if len(max_heap) < k:
+            heapq_max.heappush_max(max_heap, (result[0], result[1]))
+        if len(max_heap) >= k:
+            if result[0] < max_heap[0][0]:
+                heapq_max.heappushpop_max(max_heap, (result[0], result[1]))
 
 
 class TemporalGraph:
@@ -97,14 +110,53 @@ class TemporalGraph:
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
             f.write("abgeschlossen in %s Stunden" % (finish / 3600))
 
+    def top_k_util(self, x, a, b, helper):
+        total = 0
+        for node in self.nodes:
+            if node == x:
+                continue
+            reach_num = 1
+            arrival_time = helper.copy()
+            arrival_time[node] = a
+            for (u, v, t, l) in self.edge_stream:
+                if u != x and v != x:
+                    if t < a or t + l > b: continue
+                    if arrival_time[u] <= t and arrival_time[v] > t + l:
+                        arrival_time[v] = t + l
+                        reach_num = reach_num + 1
+            total += reach_num
+            if max_heap != [] and len(max_heap) >= k and total > max_heap[0][0]:
+                return -1, x
+        return total, x
+
+    def top_k_reachability(self, alpha, beta, k, output_name):
+        start_time = time.time()
+        helper = [np.inf for _ in range(self.n)]
+        pool = multiprocessing.Pool(multiprocessing.cpu_count())
+        for node in self.nodes:
+            pool.apply_async(self.top_k_util, args=(node, alpha, beta, helper), callback=log_result)
+        pool.close()
+        pool.join()
+        finish = time.time() - start_time
+        with open(path + output_name, 'w') as f:
+            max_heap.sort()
+            f.write(str(max_heap) + "\n")
+            f.write("abgeschlossen in %s Sekunden" % finish + "\n")
+            f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
+            f.write("abgeschlossen in %s Stunden" % (finish / 3600))
 
 if __name__ == '__main__':
     input_graph = input('Edgeliste eingeben:')
     directed = (input('Soll die Kantenliste als gerichtet betrachtet werden? [y/n]:'))
+    run_topk = (input('Soll der Top-K-Algorithmus durchgeführt werden? [y/n]:'))
     output_file = input_graph.split(".")[0] + '-Streaming-Ranking' + '.txt'
+    topk_file = input_graph.split(".")[0] + '-Top' + str(k) + '.txt'
     G = TemporalGraph()
     if directed == 'y':
         G.import_edgelist(input_graph)
     elif directed == 'n':
         G.import_undirected_edgelist(input_graph)
-    G.node_ranking(0, np.inf, output_file)
+    if run_topk == 'y':
+        G.top_k_reachability(0, np.inf, k, topk_file)
+    elif run_topk == 'n':
+        G.node_ranking(0, np.inf, topk_file)
