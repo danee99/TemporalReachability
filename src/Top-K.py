@@ -147,5 +147,9 @@ if __name__ == '__main__':
     input_graph = input('Edgeliste eingeben:')
     output_file = input_graph.split(".")[0] + '-Top' + str(k) + '.txt'
     G = TemporalGraph()
-    G.import_edgelist(input_graph)
+    directed = (input('Soll die Kantenliste als gerichtet betrachtet werden? [y/n]:'))
+    if directed == 'y':
+        G.import_edgelist(input_graph)
+    elif directed == 'n':
+        G.import_undirected_edgelist(input_graph)
     G.top_k_reachability(0, np.inf, k, output_file)
