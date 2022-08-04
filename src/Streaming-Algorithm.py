@@ -57,7 +57,7 @@ class TemporalGraph:
                     if arrival_time[u] <= t and arrival_time[v] > t + l:
                         arrival_time[v] = t + l
                         reach_num = reach_num + 1
-            total_reach = total_reach + reach_num
+            total_reach += reach_num
         return total_reach
 
     def rank_node(self, a, b, x, helper, before):
@@ -74,8 +74,8 @@ class TemporalGraph:
                     if arrival_time[u] <= t and arrival_time[v] > t + l:
                         arrival_time[v] = t + l
                         reach_num = reach_num + 1
-            total_reach = total_reach + reach_num
-        return 1 - (total_reach / before), x
+            total_reach += reach_num
+        return 1 - (total_reach / before)
         # return total_reach
 
     def node_ranking(self, a, b, output_name):
@@ -92,6 +92,7 @@ class TemporalGraph:
         with open(path + output_name, 'w') as f:
             # ranking.sort(key=lambda tup: tup[0], reverse=True)
             f.write(str(ranking) + "\n")
+            f.write("R(G) = %s" % before + "\n")
             f.write("abgeschlossen in %s Sekunden" % finish + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
             f.write("abgeschlossen in %s Stunden" % (finish / 3600))

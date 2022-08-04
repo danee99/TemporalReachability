@@ -80,6 +80,30 @@ class TemporalGraph:
                     PQ.put((earliest_arrival_time[v], v))
         return len(reach_set)
 
+    # # please ignore
+    # def BFS(self, source, a, b):
+    #     arrival_time = {i: np.inf for i in self.nodes}
+    #     arrival_time[source] = 0
+    #     visited = set()
+    #     visited.add(source)
+    #     queue = [source]
+    #     while queue:
+    #         current_node = queue.pop(0)
+    #         for (u, neighbour, t, l) in self.incidence_list[current_node]:
+    #             if t < a or t + l > b:
+    #                 break
+    #             if t + l < arrival_time[neighbour] and t >= arrival_time[current_node] and neighbour not in visited:
+    #                 visited.add(neighbour)
+    #                 queue.append(neighbour)
+    #     return len(visited)
+    #
+    # def result(self, a, b):
+    #     res = 0
+    #     for i in self.nodes:
+    #         res += self.BFS(i, a, b)
+    #         print(i, self.BFS(i, a, b))
+    #     print(res)
+
     # calculates the total reachability of the given temporal graph in a time interval [a,b]
     def calc_total_reachability(self, a, b):
         for node in self.nodes:

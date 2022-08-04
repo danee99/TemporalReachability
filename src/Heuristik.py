@@ -4,8 +4,8 @@ from queue import PriorityQueue
 import numpy as np
 import os
 
-# path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
-path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
+path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+# path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
 
 
 class TemporalGraph:
@@ -163,6 +163,6 @@ if __name__ == '__main__':
         G.import_edgelist(input_graph)
     elif directed == 'n':
         G.import_undirected_edgelist(input_graph)
-    G.heuristik(0, np.inf, heuristik_output_file, depth)
-    # G.degrees_info()
-    # G.degree_centrality(degree_output_file)
+    # G.heuristik(0, np.inf, heuristik_output_file, depth)
+    G.degrees_info()
+    G.degree_centrality(degree_output_file)
