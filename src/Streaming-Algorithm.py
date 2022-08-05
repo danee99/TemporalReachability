@@ -159,4 +159,4 @@ if __name__ == '__main__':
     if run_topk == 'y':
         G.top_k_reachability(0, np.inf, k, topk_file)
     elif run_topk == 'n':
-        G.node_ranking(0, np.inf, topk_file)
+        G.node_ranking(0, np.inf, output_file)
