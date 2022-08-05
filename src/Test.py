@@ -91,7 +91,7 @@ class TemporalGraph:
     # calculates the total reachability of the given temporal graph in a time interval [a,b]
     def calc_total_reachability(self, a, b):
         for node in self.nodes:
-            reach_set = {node}
+            # reach_set = {node}
             visited = set()
             earliest_arrival_time = [np.inf for _ in range(self.n)]
             earliest_arrival_time[node] = a
@@ -109,10 +109,10 @@ class TemporalGraph:
                             #     PQ.remove((earliest_arrival_time[v], v))
                             # except ValueError:
                             #     pass
-                            reach_set.add(v)
+                            # reach_set.add(v)
                             earliest_arrival_time[v] = t + l
                             heapq.heappush(PQ, (earliest_arrival_time[v], v))
-            self.total_reachability += len(reach_set)
+            self.total_reachability += len(visited)
 
     # ranks the node "x", where the ranking is a floating point number between 0 and 1
     def rank_node(self, x, a, b, before, helper):
@@ -120,7 +120,7 @@ class TemporalGraph:
         for node in self.nodes:
             if node == x:
                 continue
-            reach_set = {node}
+            # reach_set = {node}
             visited = set()
             earliest_arrival_time = helper.copy()
             earliest_arrival_time[node] = a
@@ -138,10 +138,10 @@ class TemporalGraph:
                             #     PQ.remove((earliest_arrival_time[v], v))
                             # except ValueError:
                             #     pass
-                            reach_set.add(v)
+                            # reach_set.add(v)
                             earliest_arrival_time[v] = t + l
                             heapq.heappush(PQ, (earliest_arrival_time[v], v))
-            total += len(reach_set)
+            total += len(visited)
         return 1 - (total / before)
         # return total, x
 
