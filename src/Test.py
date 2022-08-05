@@ -105,10 +105,8 @@ class TemporalGraph:
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                             if earliest_arrival_time[v] != np.inf:
                                 try:
-                                    # PQ.remove((earliest_arrival_time[v], v))
-                                    # heapq.heapify(PQ) # Das ist lästig
-                                    index = PQ.index((earliest_arrival_time[v], v))
-                                    PQ[index] = (t + l, v)
+                                    PQ.remove((earliest_arrival_time[v], v))
+                                    heapq.heapify(PQ) # Das ist lästig
                                 except ValueError:
                                     heapq.heappush(PQ, (earliest_arrival_time[v], v))
                             else:
@@ -137,10 +135,8 @@ class TemporalGraph:
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                             if earliest_arrival_time[v] != np.inf:
                                 try:
-                                    # PQ.remove((earliest_arrival_time[v], v))
-                                    # heapq.heapify(PQ) # Das ist lästig
-                                    index = PQ.index((earliest_arrival_time[v], v))
-                                    PQ[index] = (t + l, v)
+                                    PQ.remove((earliest_arrival_time[v], v))
+                                    heapq.heapify(PQ) # Das ist lästig
                                 except ValueError:
                                     heapq.heappush(PQ, (earliest_arrival_time[v], v))
                             else:
