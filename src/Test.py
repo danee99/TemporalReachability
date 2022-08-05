@@ -106,7 +106,7 @@ class TemporalGraph:
                             if earliest_arrival_time[v] != np.inf:
                                 try:
                                     PQ.remove((earliest_arrival_time[v], v))
-                                    heapq.heapify(PQ) # That is annoying
+                                    # heapq.heapify(PQ) # That is annoying
                                 except ValueError:
                                     pass
                             earliest_arrival_time[v] = t + l
@@ -135,7 +135,7 @@ class TemporalGraph:
                             if earliest_arrival_time[v] != np.inf:
                                 try:
                                     PQ.remove((earliest_arrival_time[v], v))
-                                    heapq.heapify(PQ) # That is annoying
+                                    # heapq.heapify(PQ) # That is annoying
                                 except ValueError:
                                     pass
                             earliest_arrival_time[v] = t + l
