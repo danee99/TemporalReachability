@@ -91,7 +91,6 @@ class TemporalGraph:
     # calculates the total reachability of the given temporal graph in a time interval [a,b]
     def calc_total_reachability(self, a, b):
         for node in self.nodes:
-            # reach_set = {node}
             visited = set()
             earliest_arrival_time = [np.inf for _ in range(self.n)]
             earliest_arrival_time[node] = a
@@ -104,12 +103,12 @@ class TemporalGraph:
                     if v not in visited:
                         if t < a or t + l > b: continue
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                            # if earliest_arrival_time[v] != np.inf:
-                            # try:
-                            #     PQ.remove((earliest_arrival_time[v], v))
-                            # except ValueError:
-                            #     pass
-                            # reach_set.add(v)
+                            if earliest_arrival_time[v] != np.inf:
+                                try:
+                                    PQ.remove((earliest_arrival_time[v], v))
+                                    heapq.heapify(PQ)
+                                except ValueError:
+                                    pass
                             earliest_arrival_time[v] = t + l
                             heapq.heappush(PQ, (earliest_arrival_time[v], v))
             self.total_reachability += len(visited)
@@ -120,7 +119,6 @@ class TemporalGraph:
         for node in self.nodes:
             if node == x:
                 continue
-            # reach_set = {node}
             visited = set()
             earliest_arrival_time = helper.copy()
             earliest_arrival_time[node] = a
@@ -134,12 +132,12 @@ class TemporalGraph:
                     if u != x and v != x and v not in visited:
                         if t < a or t + l > b: continue
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                            # if earliest_arrival_time[v] != np.inf:
-                            # try:
-                            #     PQ.remove((earliest_arrival_time[v], v))
-                            # except ValueError:
-                            #     pass
-                            # reach_set.add(v)
+                            if earliest_arrival_time[v] != np.inf:
+                                try:
+                                    PQ.remove((earliest_arrival_time[v], v))
+                                    heapq.heapify(PQ)
+                                except ValueError:
+                                    pass
                             earliest_arrival_time[v] = t + l
                             heapq.heappush(PQ, (earliest_arrival_time[v], v))
             total += len(visited)
