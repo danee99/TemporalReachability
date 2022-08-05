@@ -105,12 +105,16 @@ class TemporalGraph:
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                             if earliest_arrival_time[v] != np.inf:
                                 try:
-                                    PQ.remove((earliest_arrival_time[v], v))
-                                    # heapq.heapify(PQ) # That is annoying
-                                except ValueError:
+                                    # PQ.remove((earliest_arrival_time[v], v))
+                                    # heapq.heapify(PQ) # Das ist lästig
+                                    index = PQ.index((earliest_arrival_time[v], v))
+                                    PQ[index] = (t + l, v)
+                                # I don't care, I catch all the exceptions that come xD
+                                except:
                                     pass
+                            else:
+                                heapq.heappush(PQ, (earliest_arrival_time[v], v))
                             earliest_arrival_time[v] = t + l
-                            heapq.heappush(PQ, (earliest_arrival_time[v], v))
             self.total_reachability += len(visited)
 
     # ranks the node "x", where the ranking is a floating point number between 0 and 1
@@ -134,12 +138,15 @@ class TemporalGraph:
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                             if earliest_arrival_time[v] != np.inf:
                                 try:
-                                    PQ.remove((earliest_arrival_time[v], v))
-                                    # heapq.heapify(PQ) # That is annoying
-                                except ValueError:
+                                    # PQ.remove((earliest_arrival_time[v], v))
+                                    # heapq.heapify(PQ) # Das ist lästig
+                                    index = PQ.index((earliest_arrival_time[v], v))
+                                    PQ[index] = (t + l, v)
+                                except:
                                     pass
+                            else:
+                                heapq.heappush(PQ, (earliest_arrival_time[v], v))
                             earliest_arrival_time[v] = t + l
-                            heapq.heappush(PQ, (earliest_arrival_time[v], v))
             total += len(visited)
         return 1 - (total / before)
         # return total, x
