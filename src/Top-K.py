@@ -3,6 +3,7 @@ import os
 import time
 from queue import PriorityQueue
 import heapq_max
+import heapq
 import numpy as np
 
 max_heap = []
@@ -66,24 +67,22 @@ class TemporalGraph:
         for node in self.nodes:
             if node == x:
                 continue
-            reach_set = {node}
             visited = set()
             earliest_arrival_time = helper.copy()
             earliest_arrival_time[node] = alpha
-            PQ = PriorityQueue()
-            PQ.put((earliest_arrival_time[node], node))
-            while not PQ.empty():
-                (current_arrival_time, current_node) = PQ.get()
-                if current_node not in visited:
-                    for (u, v, t, l) in self.incidence_list[current_node]:
-                        if u != x and v != x:
-                            if t < alpha or t + l > beta: continue
-                            if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                                reach_set.add(v)
-                                earliest_arrival_time[v] = t + l
-                                PQ.put((earliest_arrival_time[v], v))
+            PQ = []
+            heapq.heappush(PQ, (0, node))
+            while PQ:
+                (current_arrival_time, current_node) = heapq.heappop(PQ)
+                if current_node != x:
                     visited.add(current_node)
-            total = total + len(reach_set)
+                for (u, v, t, l) in self.incidence_list[current_node]:
+                    if u != x and v != x and v not in visited:
+                        if t < alpha or t + l > beta: continue
+                        if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+                            earliest_arrival_time[v] = t + l
+                            heapq.heappush(PQ, (earliest_arrival_time[v], v))
+            total = total + len(visited)
             if max_heap != [] and len(max_heap) >= k and total > max_heap[0][0]:
                 return -1, x
         return total, x
@@ -103,44 +102,6 @@ class TemporalGraph:
             f.write("abgeschlossen in %s Sekunden" % finish + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
             f.write("abgeschlossen in %s Stunden" % (finish / 3600))
-        # # version without parallelization
-        # start_time = time.time()
-        # for p in self.nodes:
-        #     total = 0
-        #     for node in self.nodes:
-        #         if node == p:
-        #             continue
-        #         reach_set = {node}
-        #         visited = set()
-        #         earliest_arrival_time = [np.inf for _ in range(self.n)]
-        #         earliest_arrival_time[node] = alpha
-        #         PQ = PriorityQueue()
-        #         PQ.put((earliest_arrival_time[node], node))
-        #         while not PQ.empty():
-        #             (current_arrival_time, current_node) = PQ.get()
-        #             if current_node not in visited:
-        #                 for (u, v, t, l) in self.incidence_list[current_node]:
-        #                     if u != p and v != p:
-        #                         if t < alpha or t + l > beta: continue
-        #                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-        #                             reach_set.add(v)
-        #                             earliest_arrival_time[v] = t + l
-        #                             PQ.put((earliest_arrival_time[v], v))
-        #                 visited.add(current_node)
-        #         total = total + len(reach_set)
-        #         if max_heap != [] and len(max_heap) >= k and total > max_heap[0][0]:
-        #             break
-        #     if len(max_heap) < k:
-        #         heapq_max.heappush_max(max_heap, (total, p))
-        #     if len(max_heap) >= k:
-        #         if total < max_heap[0][0]:
-        #             heapq_max.heappushpop_max(max_heap, (total, p))
-        # finish = time.time() - start_time
-        # with open(path + output_name, 'w') as f:
-        #     f.write(str(max_heap) + "\n")
-        #     f.write("abgeschlossen in %s Sekunden" % finish + "\n")
-        #     f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
-        #     f.write("abgeschlossen in %s Stunden" % (finish / 3600))
 
 
 if __name__ == '__main__':

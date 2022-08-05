@@ -145,6 +145,7 @@ class TemporalGraph:
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
             f.write("abgeschlossen in %s Stunden" % (finish / 3600))
 
+
 if __name__ == '__main__':
     input_graph = input('Edgeliste eingeben:')
     directed = (input('Soll die Kantenliste als gerichtet betrachtet werden? [y/n]:'))

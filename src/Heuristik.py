@@ -1,6 +1,7 @@
 import multiprocessing
 import time
 from queue import PriorityQueue
+import heapq
 import numpy as np
 import os
 
@@ -12,8 +13,8 @@ class TemporalGraph:
     def __init__(self):
         self.n = 0
         self.m = 0
-        self.T = set()
-        self.Es = set()
+        # self.T = set()
+        # self.Es = set()
         self.graph = {}
         self.reachability_change_of_deleted_nodes = 0
         self.num_deleted_nodes = 0
@@ -22,15 +23,13 @@ class TemporalGraph:
         if u not in self.graph:
             self.graph[u] = [[(u, v, t, l)], 1, 0]
         else:
-            # if v not in [self.graph[u][0][i][1] for i in range(0, len(self.graph[u][0]))]:
-            #     self.graph[u][1] += 1
             self.graph[u][1] += 1
             self.graph[u][0].append((u, v, t, l))
         if v not in self.graph:
             self.graph[v] = [[], 0, 0]
         self.m += 1
-        self.T.add(t)
-        self.Es.add((u, v))
+        # self.T.add(t)
+        # self.Es.add((u, v))
 
     def print_graph(self):
         print("|V| = " + str(self.n) + ", |E| = " + str(self.m))
@@ -62,9 +61,8 @@ class TemporalGraph:
 
     def degrees_info(self):
         var = [self.graph[u][1] for u in self.graph]
-        # print(self.n, self.m, len(self.T), len(self.Es))
-        print("& " + str(self.n) + " & " + str(self.m) + " & " + str(len(self.Es)) + " & " + str(len(self.T)) + " & " + str(
-            round(sum(var) / len(var))) + " & " + str(int(min(var))) + " & " + str(int(max(var))))
+        # print("& " + str(self.n) + " & " + str(self.m) + " & " + str(len(self.Es)) + " & " + str(len(self.T)) + " & " + str(
+        #     round(sum(var) / len(var))) + " & " + str(int(min(var))) + " & " + str(int(max(var))))
 
     def degree_centrality(self, output_name):
         result = []
@@ -85,7 +83,7 @@ class TemporalGraph:
                 visited = set()
                 for (u, v, t, l) in self.graph[node][0][:]:
                     if v in deleted_nodes:
-                        if v not in visited:  # because of multi edges
+                        if v not in visited:
                             self.graph[node][2] += 1
                         self.graph[node][1] -= 1
                         self.graph[u][0].remove((u, v, t, l))
@@ -106,25 +104,23 @@ class TemporalGraph:
         for node in self.graph:
             if node == x:
                 continue
-            reach_set = {node}
             visited = set()
             earliest_arrival_time = {v: np.inf for v in self.graph}
             earliest_arrival_time[node] = a
-            PQ = PriorityQueue()
-            PQ.put((earliest_arrival_time[node], node))
-            while not PQ.empty():
-                (current_arrival_time, current_node) = PQ.get()
-                if current_node not in visited:
-                    for (u, v, t, l) in self.graph[current_node][0]:
-                        if u != x and v != x:
-                            if t < a or t + l > b: continue
-                            if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                                reach_set.add(v)
-                                earliest_arrival_time[v] = t + l
-                                PQ.put((earliest_arrival_time[v], v))
+            PQ = []
+            heapq.heappush(PQ, (0, node))
+            while PQ:
+                (current_arrival_time, current_node) = heapq.heappop(PQ)
+                if current_node != x:
                     visited.add(current_node)
-            lower_bound += len(reach_set) + self.graph[node][2]
-            upper_bound += len(reach_set) + self.num_deleted_nodes
+                for (u, v, t, l) in self.graph[current_node][0]:
+                    if u != x and v != x and v not in visited:
+                        if t < a or t + l > b: continue
+                        if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+                            earliest_arrival_time[v] = t + l
+                            heapq.heappush(PQ, (earliest_arrival_time[v], v))
+            lower_bound += len(visited) + self.graph[node][2]
+            upper_bound += len(visited) + self.num_deleted_nodes
         return x, (lower_bound, upper_bound)
 
     def heuristik(self, a, b, output_name, depth):
@@ -163,6 +159,6 @@ if __name__ == '__main__':
         G.import_edgelist(input_graph)
     elif directed == 'n':
         G.import_undirected_edgelist(input_graph)
-    # G.heuristik(0, np.inf, heuristik_output_file, depth)
-    G.degrees_info()
-    G.degree_centrality(degree_output_file)
+    G.heuristik(0, np.inf, heuristik_output_file, depth)
+    # G.degrees_info()
+    # G.degree_centrality(degree_output_file)

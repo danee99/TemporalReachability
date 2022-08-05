@@ -1,6 +1,7 @@
 import multiprocessing
 import time
 from queue import PriorityQueue
+import heapq
 import numpy as np
 import os
 
@@ -115,45 +116,40 @@ class TemporalGraph:
         if size <= p:
             return 0, deleted_node
         for node in k_neighbours:
-            reach_set = {node}
             visited = set()
             earliest_arrival_time = {j: np.inf for j in k_neighbours}
             earliest_arrival_time[node] = a
-            PQ = PriorityQueue()
-            PQ.put((earliest_arrival_time[node], node))
-            while not PQ.empty():
-                (current_arrival_time, current_node) = PQ.get()
-                if current_node not in visited:
-                    for (u, v, t, l) in k_neighbours[current_node]:
+            PQ = []
+            heapq.heappush(PQ, (earliest_arrival_time[node], node))
+            while PQ:
+                (current_arrival_time, current_node) = heapq.heappop(PQ)
+                visited.add(current_node)
+                for (u, v, t, l) in k_neighbours[current_node]:
+                    if v not in visited:
                         if t < a or t + l > b: continue
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                            reach_set.add(v)
                             earliest_arrival_time[v] = t + l
-                            PQ.put((earliest_arrival_time[v], v))
-                    visited.add(current_node)
-            before += len(reach_set)
-
+                            heapq.heappush(PQ, (earliest_arrival_time[v], v))
+            before += len(visited)
         for node in k_neighbours:
             if node == deleted_node:
                 continue
-            reach_set = {node}
             visited = set()
             earliest_arrival_time = {j: np.inf for j in k_neighbours}
             earliest_arrival_time[node] = a
-            PQ = PriorityQueue()
-            PQ.put((earliest_arrival_time[node], node))
-            while not PQ.empty():
-                (current_arrival_time, current_node) = PQ.get()
-                if current_node not in visited:
-                    for (u, v, t, l) in k_neighbours[current_node]:
+            PQ = []
+            heapq.heappush(PQ, (0, node))
+            while PQ:
+                (current_arrival_time, current_node) = heapq.heappop(PQ)
+                visited.add(current_node)
+                for (u, v, t, l) in k_neighbours[current_node]:
+                    if v not in visited:
                         if v != deleted_node and u != deleted_node:
                             if t < a or t + l > b: continue
                             if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                                reach_set.add(v)
                                 earliest_arrival_time[v] = t + l
-                                PQ.put((earliest_arrival_time[v], v))
-                    visited.add(current_node)
-            total += len(reach_set)
+                                heapq.heappush(PQ, (earliest_arrival_time[v], v))
+            total += len(visited)
         try:
             z = (total / before) * (size / (size - 1))
         except ZeroDivisionError:
