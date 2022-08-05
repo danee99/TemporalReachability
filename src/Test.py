@@ -103,16 +103,12 @@ class TemporalGraph:
                     if v not in visited:
                         if t < a or t + l > b: continue
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                            if earliest_arrival_time[v] != np.inf:
-                                try:
-                                    # PQ.remove((earliest_arrival_time[v], v))
-                                    # heapq.heapify(PQ) # Das ist lästig
-                                    index = PQ.index((earliest_arrival_time[v], v))
-                                    PQ[index] = (t + l, v)
-                                # I don't care, I catch all the exceptions that come xD
-                                except:
-                                    pass
-                            else:
+                            try:
+                                # PQ.remove((earliest_arrival_time[v], v))
+                                # heapq.heapify(PQ) # Das ist lästig
+                                index = PQ.index((earliest_arrival_time[v], v))
+                                PQ[index] = (t + l, v)
+                            except ValueError:
                                 heapq.heappush(PQ, (earliest_arrival_time[v], v))
                             earliest_arrival_time[v] = t + l
             self.total_reachability += len(visited)
@@ -136,15 +132,12 @@ class TemporalGraph:
                     if u != x and v != x and v not in visited:
                         if t < a or t + l > b: continue
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                            if earliest_arrival_time[v] != np.inf:
-                                try:
-                                    # PQ.remove((earliest_arrival_time[v], v))
-                                    # heapq.heapify(PQ) # Das ist lästig
-                                    index = PQ.index((earliest_arrival_time[v], v))
-                                    PQ[index] = (t + l, v)
-                                except:
-                                    pass
-                            else:
+                            try:
+                                # PQ.remove((earliest_arrival_time[v], v))
+                                # heapq.heapify(PQ) # Das ist lästig
+                                index = PQ.index((earliest_arrival_time[v], v))
+                                PQ[index] = (t + l, v)
+                            except ValueError:
                                 heapq.heappush(PQ, (earliest_arrival_time[v], v))
                             earliest_arrival_time[v] = t + l
             total += len(visited)
