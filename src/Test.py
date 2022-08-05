@@ -128,7 +128,8 @@ class TemporalGraph:
             heapq.heappush(PQ, (0, node))
             while PQ:
                 (current_arrival_time, current_node) = heapq.heappop(PQ)
-                visited.add(current_node)
+                if current_node != x:
+                    visited.add(current_node)
                 for (u, v, t, l) in self.incidence_list[current_node]:
                     if u != x and v != x and v not in visited:
                         if t < a or t + l > b: continue
