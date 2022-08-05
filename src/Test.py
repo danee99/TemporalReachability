@@ -104,12 +104,12 @@ class TemporalGraph:
                     if v not in visited:
                         if t < a or t + l > b: continue
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                            try:
-                                PQ.remove((earliest_arrival_time[v], v))
-                            except ValueError:
-                                pass
-                            if earliest_arrival_time[v] == np.inf:
-                                reach_set.add(v)
+                            if earliest_arrival_time[v] != np.inf:
+                                try:
+                                    PQ.remove((earliest_arrival_time[v], v))
+                                except ValueError:
+                                    pass
+                            reach_set.add(v)
                             earliest_arrival_time[v] = t + l
                             heapq.heappush(PQ, (earliest_arrival_time[v], v))
             self.total_reachability += len(reach_set)
@@ -133,12 +133,12 @@ class TemporalGraph:
                     if u != x and v != x and v not in visited:
                         if t < a or t + l > b: continue
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                            try:
-                                PQ.remove((earliest_arrival_time[v], v))
-                            except ValueError:
-                                pass
-                            if earliest_arrival_time[v] == np.inf:
-                                reach_set.add(v)
+                            if earliest_arrival_time[v] != np.inf:
+                                try:
+                                    PQ.remove((earliest_arrival_time[v], v))
+                                except ValueError:
+                                    pass
+                            reach_set.add(v)
                             earliest_arrival_time[v] = t + l
                             heapq.heappush(PQ, (earliest_arrival_time[v], v))
             total += len(reach_set)
