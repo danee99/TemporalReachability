@@ -54,7 +54,8 @@ class StaticGraph:
         return len(visited)
 
     def calc_total_reachability(self):
-        return sum([self.num_reachable_nodes(i) for i in self.graph])
+        self.total_reachability = sum([self.num_reachable_nodes(i) for i in self.graph])
+        return self.total_reachability
 
     def rank_node(self, x, before):
         total = 0
