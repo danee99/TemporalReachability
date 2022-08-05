@@ -13,22 +13,18 @@ class StaticGraph:
         self.graph = {}
         self.total_reachability = 0
 
-    def add_edge(self, u, v):
-        if u not in self.graph:
-            self.graph[u] = set()
-        if v not in self.graph:
-            self.graph[v] = set()
-        self.graph[u].add(v)
-        self.graph[v].add(u)
-
-    def import_edgelist(self, file_name):
+    def import_undirected_edgelist(self, file_name):
         with open(path + file_name, "r") as f:
             self.n = int(f.readline())
             for line in f:
                 arr = line.split()
                 u = int(arr[0])
                 v = int(arr[1])
-                self.add_edge(u, v)
+                if u not in self.graph:
+                    self.graph[u] = set()
+                if v not in self.graph:
+                    self.graph[v] = set()
+                self.graph[u].add(v)
 
     def import_directed_edgelist(self, file_name):
         with open(path + file_name, "r") as f:
@@ -42,6 +38,7 @@ class StaticGraph:
                 if v not in self.graph:
                     self.graph[v] = set()
                 self.graph[u].add(v)
+                self.graph[v].add(u)
 
     # calculate the number of reachable nodes of src
     def num_reachable_nodes(self, src):
@@ -100,7 +97,7 @@ if __name__ == '__main__':
     input_graph = input('Edgeliste eingeben:')
     directed = (input('Soll die Kantenliste als gerichtet betrachtet werden? [y/n]:'))
     if directed == 'y':
-        G.import_edgelist(input_graph)
-    elif directed == 'n':
         G.import_directed_edgelist(input_graph)
+    elif directed == 'n':
+        G.import_undirected_edgelist(input_graph)
     G.static_node_ranking(input_graph.split(".")[0] + '-Ranking (static)' + '.txt')
