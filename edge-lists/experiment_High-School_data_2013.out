@@ -1,0 +1,21 @@
+expsetup_gen_alltopk2_B_High-School_data_2013
+
+B_High-School_data_2013_dur
+/home/stud/degenste/BA/TemporalReachability/edge-lists/Temp-Betw-edge-lists/B_High-School_data_2013.tg2 0 -k=10 -o=/home/stud/degenste/BA/TemporalReachability/edge-lists/Temp-Betw-edge-lists/B_High-School_data_2013_dur.out
+
+B_High-School_data_2013_streamdur
+/home/stud/degenste/BA/TemporalReachability/edge-lists/Temp-Betw-edge-lists/B_High-School_data_2013.tg2 2 -k=10 -o=/home/stud/degenste/BA/TemporalReachability/edge-lists/Temp-Betw-edge-lists/B_High-School_data_2013_streamdur.out
+
+B_High-School_data_2013_top1
+/home/stud/degenste/BA/TemporalReachability/edge-lists/Temp-Betw-edge-lists/B_High-School_data_2013.tg2 1 -k=1 -o=/home/stud/degenste/BA/TemporalReachability/edge-lists/Temp-Betw-edge-lists/B_High-School_data_2013_top1.out
+
+B_High-School_data_2013_top10
+/home/stud/degenste/BA/TemporalReachability/edge-lists/Temp-Betw-edge-lists/B_High-School_data_2013.tg2 1 -k=10 -o=/home/stud/degenste/BA/TemporalReachability/edge-lists/Temp-Betw-edge-lists/B_High-School_data_2013_top10.out
+
+B_High-School_data_2013_top100
+/home/stud/degenste/BA/TemporalReachability/edge-lists/Temp-Betw-edge-lists/B_High-School_data_2013.tg2 1 -k=100 -o=/home/stud/degenste/BA/TemporalReachability/edge-lists/Temp-Betw-edge-lists/B_High-School_data_2013_top100.out
+
+B_High-School_data_2013_top1000
+/home/stud/degenste/BA/TemporalReachability/edge-lists/Temp-Betw-edge-lists/B_High-School_data_2013.tg2 1 -k=1000 -o=/home/stud/degenste/BA/TemporalReachability/edge-lists/Temp-Betw-edge-lists/B_High-School_data_2013_top1000.out
+
+
