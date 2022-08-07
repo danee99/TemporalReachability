@@ -149,7 +149,7 @@ def fail2(file_name, output):
 if __name__ == '__main__':
     # convert2('twitter.txt', 'testing.txt')
     # convert('wiki_talk_el.txt', 'wiki_talk_elr.txt')
-    betw('UC-Irvine-messages.txt', 'B_UC-Irvine-messages.txt')
+    betw('Haggle.txt', 'B_Haggle.txt')
     # inp = input('Edgeliste eingeben:')
     # file_in = '/edge-lists/' + str(inp)
     # file_out ='/edge-lists/' + '0_'+str(inp)
