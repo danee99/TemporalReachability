@@ -116,7 +116,8 @@ class TemporalGraph:
                             if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                                 earliest_arrival_time[v] = t + l
                                 heapq.heappush(PQ, (earliest_arrival_time[v], v))
-            total += len(visited) * (1 / (size - 1))
+            # total += len(visited) * (1 / (size - 1))
+            total += len(visited)
         # rank = 1 - (total / before)
         # if rank < 0:
         #     return 0, deleted_node
