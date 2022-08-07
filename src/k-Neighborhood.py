@@ -97,7 +97,7 @@ class TemporalGraph:
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                             earliest_arrival_time[v] = t + l
                             heapq.heappush(PQ, (earliest_arrival_time[v], v))
-            before += len(visited)
+            before += len(visited) * (1/size)
         for node in k_neighbours:
             if node == deleted_node:
                 continue
@@ -116,12 +116,8 @@ class TemporalGraph:
                             if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                                 earliest_arrival_time[v] = t + l
                                 heapq.heappush(PQ, (earliest_arrival_time[v], v))
-            total += len(visited)
-        try:
-            z = (total / before) * (size / (size - 1))
-        except ZeroDivisionError:
-            z = 1
-        rank = 1 - z
+            total += len(visited) * (1/(size-1))
+        rank = 1 - (total / before)
         if rank < 0:
             return 0, deleted_node
         else:
