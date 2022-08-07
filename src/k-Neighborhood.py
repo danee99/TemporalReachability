@@ -78,26 +78,26 @@ class TemporalGraph:
     def total_reachability_after(self, deleted_node, a, b, k, p):
         total = 0
         k_neighbours = self.k_neighborhood_subgraph(deleted_node, k)
-        before = 0
+        # before = 0
         size = len(k_neighbours)
         if size <= p:
             return 0, deleted_node
-        for node in k_neighbours:
-            visited = set()
-            earliest_arrival_time = {j: np.inf for j in k_neighbours}
-            earliest_arrival_time[node] = a
-            PQ = []
-            heapq.heappush(PQ, (earliest_arrival_time[node], node))
-            while PQ:
-                (current_arrival_time, current_node) = heapq.heappop(PQ)
-                visited.add(current_node)
-                for (u, v, t, l) in k_neighbours[current_node]:
-                    if v not in visited:
-                        if t < a or t + l > b: continue
-                        if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                            earliest_arrival_time[v] = t + l
-                            heapq.heappush(PQ, (earliest_arrival_time[v], v))
-            before += len(visited) * (1/size)
+        # for node in k_neighbours:
+        #     visited = set()
+        #     earliest_arrival_time = {j: np.inf for j in k_neighbours}
+        #     earliest_arrival_time[node] = a
+        #     PQ = []
+        #     heapq.heappush(PQ, (earliest_arrival_time[node], node))
+        #     while PQ:
+        #         (current_arrival_time, current_node) = heapq.heappop(PQ)
+        #         visited.add(current_node)
+        #         for (u, v, t, l) in k_neighbours[current_node]:
+        #             if v not in visited:
+        #                 if t < a or t + l > b: continue
+        #                 if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+        #                     earliest_arrival_time[v] = t + l
+        #                     heapq.heappush(PQ, (earliest_arrival_time[v], v))
+        #     before += len(visited) * (1/size)
         for node in k_neighbours:
             if node == deleted_node:
                 continue
@@ -116,12 +116,13 @@ class TemporalGraph:
                             if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                                 earliest_arrival_time[v] = t + l
                                 heapq.heappush(PQ, (earliest_arrival_time[v], v))
-            total += len(visited) * (1/(size-1))
-        rank = 1 - (total / before)
-        if rank < 0:
-            return 0, deleted_node
-        else:
-            return rank, deleted_node
+            total += len(visited) * (1 / (size - 1))
+        # rank = 1 - (total / before)
+        # if rank < 0:
+        #     return 0, deleted_node
+        # else:
+        #     return rank, deleted_node
+        return total, deleted_node, size
 
 
 if __name__ == '__main__':
@@ -154,6 +155,7 @@ if __name__ == '__main__':
         # f.write("abgeschlossen in %s Stunden" % (finish / 3600))
         f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
         f.write("wurde auf die " + str(k) + "-Nachbarschaft jedes Knotens angewendet." + "\n")
-        result.sort(reverse=True)
+        result.sort()
         for i in range(len(result)):
-            f.write(str(i + 1) + ".Platz: " + str(result[i][1]) + " mit " + str(result[i][0]) + "\n")
+            f.write(str(i + 1) + ".Platz: " + str(result[i][1]) + " mit R(K-v) = " + str(
+                result[i][0]) + " und |K| = " + str(result[i][2]) + "\n")
