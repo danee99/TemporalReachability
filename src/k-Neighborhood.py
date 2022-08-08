@@ -80,6 +80,7 @@ class TemporalGraph:
         k_neighbours = self.k_neighborhood_subgraph(deleted_node, k)
         before = 0
         size = len(k_neighbours)
+        size_alt = size - 1
         if size <= p:
             return 0, deleted_node, size
         for node in k_neighbours:
@@ -108,7 +109,8 @@ class TemporalGraph:
             heapq.heappush(PQ, (0, node))
             while PQ:
                 (current_arrival_time, current_node) = heapq.heappop(PQ)
-                visited.add(current_node)
+                if current_node != deleted_node:
+                    visited.add(current_node)
                 for (u, v, t, l) in k_neighbours[current_node]:
                     if v not in visited:
                         if v != deleted_node and u != deleted_node:
@@ -119,7 +121,7 @@ class TemporalGraph:
             total += len(visited)
         if total < size:
             return 0, deleted_node, size
-        rank = 1 - ((total / before) * (size / size-1))
+        rank = 1 - (total * size) / (before * size_alt)
         if rank < 0:
             return 0, deleted_node, size
         else:

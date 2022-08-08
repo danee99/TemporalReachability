@@ -113,6 +113,7 @@ class TemporalGraph:
         k_neighbours = self.k_neighborhood_subgraph(deleted_node, k)
         before = 0
         size = len(k_neighbours)
+        size_alt = size - 1
         if size <= p:
             return 0, deleted_node
         for node in k_neighbours:
@@ -130,7 +131,7 @@ class TemporalGraph:
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                             earliest_arrival_time[v] = t + l
                             heapq.heappush(PQ, (earliest_arrival_time[v], v))
-            before += len(visited) * (1 / size)
+            before += len(visited)
         for node in k_neighbours:
             if node == deleted_node:
                 continue
@@ -141,7 +142,8 @@ class TemporalGraph:
             heapq.heappush(PQ, (0, node))
             while PQ:
                 (current_arrival_time, current_node) = heapq.heappop(PQ)
-                visited.add(current_node)
+                if current_node != deleted_node:
+                    visited.add(current_node)
                 for (u, v, t, l) in k_neighbours[current_node]:
                     if v not in visited:
                         if v != deleted_node and u != deleted_node:
@@ -149,12 +151,14 @@ class TemporalGraph:
                             if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                                 earliest_arrival_time[v] = t + l
                                 heapq.heappush(PQ, (earliest_arrival_time[v], v))
-            total += len(visited) * (1 / size)
-        rank = 1 - (total / before)
+            total += len(visited)
+        if total < size:
+            return 0, deleted_node, size
+        rank = 1 - (total * size) / (before * size_alt)
         if rank < 0:
-            return 0, deleted_node
+            return 0, deleted_node, size
         else:
-            return rank, deleted_node
+            return rank, deleted_node, size
 
 
 if __name__ == '__main__':
@@ -185,4 +189,5 @@ if __name__ == '__main__':
         f.write("wurde auf die " + str(k) + "-Nachbarschaft jedes Knotens angewendet." + "\n")
         result.sort(reverse=True)
         for i in range(len(result)):
-            f.write(str(i + 1) + ".Platz: " + str(result[i][1]) + " mit " + str(result[i][0]) + "\n")
+            f.write(str(i + 1) + ".Platz: " + str(result[i][1]) + " mit rank(u) = " + str(
+                result[i][0]) + " und |K| = " + str(result[i][2]) + "\n")

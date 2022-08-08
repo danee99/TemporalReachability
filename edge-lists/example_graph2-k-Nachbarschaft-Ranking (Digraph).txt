@@ -1,0 +1,9 @@
+abgeschlossen in 0.006508386135101319 Minuten
+wurde auf die 6-Nachbarschaft jedes Knotens angewendet.
+1.Platz: 6 mit rank(u) = 0.41666666666666663 und |K| = 7
+2.Platz: 2 mit rank(u) = 0.3680555555555556 und |K| = 7
+3.Platz: 0 mit rank(u) = 0.17361111111111116 und |K| = 7
+4.Platz: 5 mit rank(u) = 0.125 und |K| = 7
+5.Platz: 4 mit rank(u) = 0.125 und |K| = 7
+6.Platz: 3 mit rank(u) = 0.125 und |K| = 7
+7.Platz: 1 mit rank(u) = 0 und |K| = 7

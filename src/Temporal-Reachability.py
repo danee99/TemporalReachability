@@ -124,7 +124,7 @@ class TemporalGraph:
                             heapq.heappush(PQ, (earliest_arrival_time[v], v))
             total += len(visited)
         return 1 - (total / before)
-        # return total, x
+        # return 1 - (total / before), x
 
     # parallelized node ranking
     def node_ranking(self, a, b, output_name):
@@ -139,9 +139,9 @@ class TemporalGraph:
         pool.join()
         finish = time.time() - start_time
         with open(path + output_name, 'w') as f:
-            # ranking.sort()
+            # ranking.sort(reverse=True)
             # for i in range(len(ranking)):
-            #     f.write(str(i+1)+".Platz: "+str(ranking[i][1]) + "\n")
+            #     f.write(str(i+1)+".Platz: "+str(ranking[i][1])+" mit rank = "+str(ranking[i][0]) + "\n")
             f.write(str(ranking) + "\n")
             f.write("R(G) = %s" % self.total_reachability + "\n")
             f.write("abgeschlossen in %s Sekunden" % finish + "\n")
