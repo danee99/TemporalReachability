@@ -81,7 +81,7 @@ class TemporalGraph:
         # before = 0
         size = len(k_neighbours)
         if size <= p:
-            return 0, deleted_node
+            return 0, deleted_node, size
         # for node in k_neighbours:
         #     visited = set()
         #     earliest_arrival_time = {j: np.inf for j in k_neighbours}
