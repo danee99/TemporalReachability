@@ -1,0 +1,2 @@
+abgeschlossen in 89.28894395828247 Minuten
+wurde auf die 6-Nachbarschaft jedes Knotens angewendet.
