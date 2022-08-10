@@ -33,15 +33,15 @@ def convert2(file_name, output):
     nodemanager = {}
     E = []
     with open(path + file_name, "r") as f:
-        n = int(f.readline())
+        # n = int(f.readline())
         id = 0
         for line in f:
             arr = line.split()
             u = int(arr[0])
             v = int(arr[1])
-            t = int(arr[2])
+            t = int(arr[3])
             try:
-                l = int(arr[3])
+                l = int(arr[2])
             except IndexError:
                 l = 1
             if u not in nodemanager.keys():
@@ -147,9 +147,9 @@ def fail2(file_name, output):
 
 
 if __name__ == '__main__':
-    # convert2('DBLP.txt', 'DBLPCite.txt')
+    convert('wiki_talklv.txt', 'wiki_talk_lv.txt')
     # convert('wiki_talk_el.txt', 'wiki_talk_elr.txt')
-    betw('dblp-cite.txt', 'B_dblp-cite.txt')
+    # betw('dblp-cite.txt', 'B_dblp-cite.txt')
     # inp = input('Edgeliste eingeben:')
     # file_in = '/edge-lists/' + str(inp)
     # file_out ='/edge-lists/' + '0_'+str(inp)
