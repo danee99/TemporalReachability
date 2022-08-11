@@ -11,7 +11,7 @@ path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
 
 class TemporalGraph:
     def __init__(self):
-        self.nodes = []
+        self.nodes = set()
         self.incidence_list = []
         self.n = 0
         self.m = 0
@@ -27,7 +27,6 @@ class TemporalGraph:
         with open(path + file_name, "r") as f:
             n = int(f.readline())
             self.n = n
-            self.nodes = [i for i in range(0, self.n)]
             self.incidence_list = [[] for _ in range(n)]
             for line in f:
                 arr = line.split()
@@ -38,8 +37,8 @@ class TemporalGraph:
                     l = int(arr[3])
                 except IndexError:
                     l = 1
-                # self.nodes.add(u)
-                # self.nodes.add(v)
+                self.nodes.add(u)
+                self.nodes.add(v)
                 self.incidence_list[u].append((u, v, t, l))
                 self.m += 1
 
@@ -49,7 +48,6 @@ class TemporalGraph:
         with open(path + file_name, "r") as f:
             n = int(f.readline())
             self.n = n
-            self.nodes = [i for i in range(0, self.n)]
             self.incidence_list = [[] for _ in range(n)]
             for line in f:
                 arr = line.split()
@@ -60,8 +58,8 @@ class TemporalGraph:
                     l = int(arr[3])
                 except IndexError:
                     l = 1
-                # self.nodes.add(u)
-                # self.nodes.add(v)
+                self.nodes.add(u)
+                self.nodes.add(v)
                 self.incidence_list[u].append((u, v, t, l))
                 self.incidence_list[v].append((v, u, t, l))
                 self.m += 2
@@ -86,7 +84,7 @@ class TemporalGraph:
 
     # calculates the total reachability of the given temporal graph in a time interval [a,b]
     def calc_total_reachability(self, a, b):
-        for node in range(0, self.n):
+        for node in self.nodes:
             visited = set()
             earliest_arrival_time = [np.inf for _ in range(self.n)]
             earliest_arrival_time[node] = a
@@ -106,7 +104,7 @@ class TemporalGraph:
     # ranks the node "x", where the ranking is a floating point number between 0 and 1
     def rank_node(self, x, a, b, before, helper):
         total = 0
-        for node in range(0,self.n):
+        for node in self.nodes:
             if node == x:
                 continue
             visited = set()
