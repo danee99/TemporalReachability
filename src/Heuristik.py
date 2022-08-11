@@ -13,8 +13,8 @@ class TemporalGraph:
     def __init__(self):
         self.n = 0
         self.m = 0
-        self.T = set()
-        self.Es = set()
+        # self.T = set()
+        # self.Es = set()
         self.graph = {}
         self.reachability_change_of_deleted_nodes = 0
         self.num_deleted_nodes = 0
@@ -28,8 +28,8 @@ class TemporalGraph:
         if v not in self.graph:
             self.graph[v] = [[], 0, 0]
         self.m += 1
-        self.T.add(t)
-        self.Es.add((u, v))
+        # self.T.add(t)
+        # self.Es.add((u, v))
 
     def print_graph(self):
         print("|V| = " + str(self.n) + ", |E| = " + str(self.m))
@@ -61,8 +61,8 @@ class TemporalGraph:
 
     def degrees_info(self):
         var = [self.graph[u][1] for u in self.graph]
-        print("& " + str(self.n) + " & " + str(self.m) + " & " + str(len(self.Es)) + " & " + str(len(self.T)) + " & " + str(
-            round(sum(var) / len(var))) + " & " + str(int(min(var))) + " & " + str(int(max(var))))
+        # print("& " + str(self.n) + " & " + str(self.m) + " & " + str(len(self.Es)) + " & " + str(len(self.T)) + " & " + str(
+        #     round(sum(var) / len(var))) + " & " + str(int(min(var))) + " & " + str(int(max(var))))
 
     def degree_centrality(self, output_name):
         result = []
@@ -159,6 +159,6 @@ if __name__ == '__main__':
         G.import_edgelist(input_graph)
     elif directed == 'n':
         G.import_undirected_edgelist(input_graph)
-    # G.heuristik(0, np.inf, heuristik_output_file, depth)
-    G.degrees_info()
-    G.degree_centrality(degree_output_file)
+    G.heuristik(0, np.inf, heuristik_output_file, depth)
+    # G.degrees_info()
+    # G.degree_centrality(degree_output_file)
