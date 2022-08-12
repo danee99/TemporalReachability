@@ -93,12 +93,15 @@ class TemporalGraph:
             while PQ:
                 (current_arrival_time, current_node) = heapq.heappop(PQ)
                 visited.add(current_node)
-                for (u, v, t, l) in self.incidence_list[current_node]:
-                    if v not in visited:
-                        if t < a or t + l > b: continue
-                        if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                            earliest_arrival_time[v] = t + l
-                            heapq.heappush(PQ, (earliest_arrival_time[v], v))
+                if self.incidence_list[current_node]:
+                    for (u, v, t, l) in self.incidence_list[current_node]:
+                        if v not in visited:
+                            if t < a or t + l > b: continue
+                            if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+                                earliest_arrival_time[v] = t + l
+                                heapq.heappush(PQ, (earliest_arrival_time[v], v))
+                else:
+                    continue
             self.total_reachability += len(visited)
 
     # ranks the node "x", where the ranking is a floating point number between 0 and 1
@@ -116,15 +119,18 @@ class TemporalGraph:
                 (current_arrival_time, current_node) = heapq.heappop(PQ)
                 if current_node != x:
                     visited.add(current_node)
-                for (u, v, t, l) in self.incidence_list[current_node]:
-                    if u != x and v != x and v not in visited:
-                        if t < a or t + l > b: continue
-                        if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                            earliest_arrival_time[v] = t + l
-                            heapq.heappush(PQ, (earliest_arrival_time[v], v))
+                if self.incidence_list[current_node]:
+                    for (u, v, t, l) in self.incidence_list[current_node]:
+                        if u != x and v != x and v not in visited:
+                            if t < a or t + l > b: continue
+                            if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+                                earliest_arrival_time[v] = t + l
+                                heapq.heappush(PQ, (earliest_arrival_time[v], v))
+                else:
+                    continue
             total += len(visited)
-        return 1 - (total / before)
-        # return 1 - (total / before), x
+        # return 1 - (total / before)
+        return total
 
     # parallelized node ranking
     def node_ranking(self, a, b, output_name):
@@ -139,9 +145,9 @@ class TemporalGraph:
         pool.join()
         finish = time.time() - start_time
         with open(path + output_name, 'w') as f:
-            # ranking.sort(reverse=True)
+            # ranking.sort(reverse=False)
             # for i in range(len(ranking)):
-            #     f.write(str(i+1)+".Platz: "+str(ranking[i][1])+" mit rank = "+str(ranking[i][0]) + "\n")
+            #     f.write(str(i+1)+".Platz: "+str(ranking[i][1])+" mit R(G-v) = "+str(ranking[i][0]) + "\n")
             f.write(str(ranking) + "\n")
             f.write("R(G) = %s" % self.total_reachability + "\n")
             f.write("abgeschlossen in %s Sekunden" % finish + "\n")

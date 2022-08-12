@@ -6,6 +6,8 @@ import numpy as np
 import os
 
 path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+
+
 # path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
 
 
@@ -99,8 +101,10 @@ class TemporalGraph:
                     continue
 
     def calculate_bounds(self, a, b, x):
+        if x not in self.graph:
+            return 624038
         lower_bound = self.reachability_change_of_deleted_nodes
-        upper_bound = self.reachability_change_of_deleted_nodes
+        # upper_bound = self.reachability_change_of_deleted_nodes
         for node in self.graph:
             if node == x:
                 continue
@@ -120,8 +124,9 @@ class TemporalGraph:
                             earliest_arrival_time[v] = t + l
                             heapq.heappush(PQ, (earliest_arrival_time[v], v))
             lower_bound += len(visited) + self.graph[node][2]
-            upper_bound += len(visited) + self.num_deleted_nodes
-        return x, (lower_bound, upper_bound)
+            # upper_bound += len(visited) + self.num_deleted_nodes
+        # return x, (lower_bound, upper_bound)
+        return lower_bound
 
     def heuristik(self, a, b, output_name, depth):
         num_edges = self.m
@@ -131,13 +136,13 @@ class TemporalGraph:
         finish1 = time.time() - start_time
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
         result_objects = [pool.apply_async(self.calculate_bounds, args=(a, b, node)) for node
-                          in self.graph]
+                          in range(0, num_nodes)]
         ranking = [r.get() for r in result_objects]
         pool.close()
         pool.join()
         finish2 = time.time() - start_time
         with open(path + output_name, 'w') as f:
-            ranking.sort(key=lambda tup: tup[1][0])
+            # ranking.sort(key=lambda tup: tup[1][0])
             f.write(str(ranking) + "\n")
             f.write("mit Tiefe = " + str(depth) + "\n")
             f.write("filter_nodes() abgeschlossen in %s Sekunden" % finish1 + "\n")
