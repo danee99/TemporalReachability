@@ -40,11 +40,11 @@ def import_ranking(degree_input, reachability_input, output_name, number_of_node
                                 str(arr4[j]) + '\n')
 
 
-mydataframe = pd.read_csv(path + "/Dataframes/UC-Irvine-messages")
+mydataframe = pd.read_csv(path + "/Dataframes/fb-messages")
 obj = sns.heatmap(data=mydataframe.corr(method='kendall'), annot=True)
-obj.set_xticklabels(obj.get_xticklabels(), rotation=90)
+obj.set_xticklabels(obj.get_xticklabels(), rotation=45)
 plt.tight_layout()
-plt.savefig(path + '/Plots/UC-Irvine-messages.svg')
+plt.savefig(path + '/Plots/fb-messages.svg')
 
 # name = "UC-Irvine-messages"
 # import_ranking(name + "-Outdegrees.txt",

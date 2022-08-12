@@ -101,10 +101,8 @@ class TemporalGraph:
                     continue
 
     def calculate_bounds(self, a, b, x):
-        if x not in self.graph:
-            return 624038, x
         lower_bound = self.reachability_change_of_deleted_nodes
-        # upper_bound = self.reachability_change_of_deleted_nodes
+        upper_bound = self.reachability_change_of_deleted_nodes
         for node in self.graph:
             if node == x:
                 continue
@@ -124,10 +122,10 @@ class TemporalGraph:
                             earliest_arrival_time[v] = t + l
                             heapq.heappush(PQ, (earliest_arrival_time[v], v))
             lower_bound += len(visited) + self.graph[node][2]
-            # upper_bound += len(visited) + self.num_deleted_nodes
+            upper_bound += len(visited) + self.num_deleted_nodes
         # return x, (lower_bound, upper_bound)
         # return lower_bound
-        return lower_bound, x
+        return lower_bound, upper_bound, x
 
     def heuristik(self, a, b, output_name, depth):
         num_edges = self.m
@@ -137,15 +135,14 @@ class TemporalGraph:
         finish1 = time.time() - start_time
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
         result_objects = [pool.apply_async(self.calculate_bounds, args=(a, b, node)) for node
-                          in range(0, num_nodes)]
+                          in self.graph]
         ranking = [r.get() for r in result_objects]
         pool.close()
         pool.join()
         finish2 = time.time() - start_time
         with open(path + output_name, 'w') as f:
             # f.write(str(ranking) + "\n")
-            ranking.sort(key=lambda tup: tup[0])
-            f.write(str(ranking[:][100][1]) + "\n")
+            ranking.sort()
             f.write("mit Tiefe = " + str(depth) + "\n")
             f.write("filter_nodes() abgeschlossen in %s Sekunden" % finish1 + "\n")
             f.write("geloeschte Knotenanzahl = " + str(num_nodes - self.n) + "\n")
@@ -153,6 +150,9 @@ class TemporalGraph:
             f.write("abgeschlossen in %s Sekunden" % finish2 + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish2 / 60) + "\n")
             f.write("abgeschlossen in %s Stunden" % (finish2 / 3600))
+            for i in range(len(ranking)):
+                f.write(str(i + 1) + ".Platz: " + str(ranking[i][2]) + " mit " + str(ranking[i][0]) + " und " + str(
+                    ranking[i][1]) + "\n")
 
 
 if __name__ == '__main__':
