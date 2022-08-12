@@ -147,9 +147,9 @@ def fail2(file_name, output):
 
 
 if __name__ == '__main__':
-    convert('wiki_talklv.txt', 'wiki_talk_lv.txt')
+    # convert('wiki_talklv.txt', 'wiki_talk_lv.txt')
     # convert('wiki_talk_el.txt', 'wiki_talk_elr.txt')
-    # betw('dblp-cite.txt', 'B_dblp-cite.txt')
+    betw('UC-Irvine-messages.txt', 'B_UC-Irvine-messages.txt')
     # inp = input('Edgeliste eingeben:')
     # file_in = '/edge-lists/' + str(inp)
     # file_out ='/edge-lists/' + '0_'+str(inp)
