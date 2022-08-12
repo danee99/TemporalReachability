@@ -1,0 +1,5 @@
+Haggle_top1000
+
+/home/stud/degenste/BA/TemporalReachability/edge-lists/Haggle.tg2 1 -k=1000 -o=/home/stud/degenste/BA/TemporalReachability/edge-lists/Haggle_top1000.out
+
+1.746139 s
