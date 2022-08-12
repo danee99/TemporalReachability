@@ -102,7 +102,7 @@ class TemporalGraph:
 
     def calculate_bounds(self, a, b, x):
         if x not in self.graph:
-            return 624038
+            return 624038, x
         lower_bound = self.reachability_change_of_deleted_nodes
         # upper_bound = self.reachability_change_of_deleted_nodes
         for node in self.graph:
@@ -126,7 +126,8 @@ class TemporalGraph:
             lower_bound += len(visited) + self.graph[node][2]
             # upper_bound += len(visited) + self.num_deleted_nodes
         # return x, (lower_bound, upper_bound)
-        return lower_bound
+        # return lower_bound
+        return lower_bound, x
 
     def heuristik(self, a, b, output_name, depth):
         num_edges = self.m
@@ -142,8 +143,9 @@ class TemporalGraph:
         pool.join()
         finish2 = time.time() - start_time
         with open(path + output_name, 'w') as f:
-            # ranking.sort(key=lambda tup: tup[1][0])
-            f.write(str(ranking) + "\n")
+            # f.write(str(ranking) + "\n")
+            ranking.sort(key=lambda tup: tup[0])
+            f.write(str(ranking[:][100][1]) + "\n")
             f.write("mit Tiefe = " + str(depth) + "\n")
             f.write("filter_nodes() abgeschlossen in %s Sekunden" % finish1 + "\n")
             f.write("geloeschte Knotenanzahl = " + str(num_nodes - self.n) + "\n")
