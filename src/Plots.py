@@ -21,22 +21,22 @@ path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
 # plt.show()
 
 
-def draw_graph(file_name):
-    G = nx.Graph()
-    file = path + file_name
-    with open(file) as fp:
-        nothing_important = int(fp.readline())
-        for line in fp:
-            arr = line.split()
-            u = arr[0]
-            v = arr[1]
-            t = arr[2]
-            G.add_edge(int(u), int(v), weight=t)
-    pos = nx.spring_layout(G)
-    weights = nx.get_edge_attributes(G, "weight")
-    nx.draw_networkx(G, pos, with_labels=True)
-    nx.draw_networkx_edge_labels(G, pos, edge_labels=weights)
-    plt.show()
-
-
-draw_graph("example_graph3.txt")
+# def draw_graph(file_name):
+#     G = nx.Graph()
+#     file = path + file_name
+#     with open(file) as fp:
+#         nothing_important = int(fp.readline())
+#         for line in fp:
+#             arr = line.split()
+#             u = arr[0]
+#             v = arr[1]
+#             t = arr[2]
+#             G.add_edge(int(u), int(v), weight=t)
+#     pos = nx.spring_layout(G)
+#     weights = nx.get_edge_attributes(G, "weight")
+#     nx.draw_networkx(G, pos, with_labels=True)
+#     nx.draw_networkx_edge_labels(G, pos, edge_labels=weights)
+#     plt.show()
+#
+#
+# draw_graph("example_graph3.txt")
