@@ -40,17 +40,17 @@ def import_ranking(degree_input, reachability_input, output_name, number_of_node
                                 str(arr4[j]) + '\n')
 
 
-mydataframe = pd.read_csv(path + "/Dataframes/email-dnc")
+mydataframe = pd.read_csv(path + "/Dataframes/UC-Irvine-messages")
 obj = sns.heatmap(data=mydataframe.corr(method='kendall'), annot=True)
 obj.set_xticklabels(obj.get_xticklabels(), rotation=90)
 plt.tight_layout()
-plt.savefig(path + '/Plots/email-dnc.svg')
+plt.savefig(path + '/Plots/UC-Irvine-messages.svg')
 
-# name = "email-dnc"
+# name = "UC-Irvine-messages"
 # import_ranking(name + "-Outdegrees.txt",
 #                name + "-Ranking.txt",
 #                name,
-#                1891,
+#                1899,
 #                name+"-temporal-betweenness.txt",
 #                name+"-temporal-closeness.txt"
 #                )
