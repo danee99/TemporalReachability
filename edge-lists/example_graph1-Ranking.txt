@@ -1,7 +1,0 @@
-1.Platz: 3 mit rank = 0.4473684210526315
-2.Platz: 2 mit rank = 0.3421052631578947
-3.Platz: 5 mit rank = 0.3157894736842105
-4.Platz: 0 mit rank = 0.2894736842105263
-5.Platz: 6 mit rank = 0.26315789473684215
-6.Platz: 4 mit rank = 0.23684210526315785
-7.Platz: 1 mit rank = 0.23684210526315785

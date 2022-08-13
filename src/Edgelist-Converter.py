@@ -82,7 +82,7 @@ def closeness(file_name, output):
                 t = int(arr[2])
                 l = int(arr[3])
                 o.write((str(u) + " " + str(v) + " " + str(t) + " " + str(l) + "\n"))
-                o.write((str(v) + " " + str(u) + " " + str(t) + " " + str(l) + "\n"))
+                # o.write((str(v) + " " + str(u) + " " + str(t) + " " + str(l) + "\n"))
 
 def swap(file_name, output):
     with open(os.getcwd() + output, "w") as o:
@@ -163,7 +163,7 @@ def fail2(file_name, output):
 if __name__ == '__main__':
     # convert('wiki_talklv.txt', 'wiki_talk_lv.txt')
     # convert('wiki_talk_el.txt', 'wiki_talk_elr.txt')
-    closeness('High-School_data_2013.txt', 'High-School_data_2013.tg2')
+    closeness('wiki_talk_gl.txt', 'wiki_talk_gl.tg2')
     # inp = input('Edgeliste eingeben:')
     # file_in = '/edge-lists/' + str(inp)
     # file_out ='/edge-lists/' + '0_'+str(inp)
