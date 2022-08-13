@@ -70,6 +70,20 @@ def betw(file_name, output):
                 o.write((str(u) + " " + str(v) + " " + str(t) + "\n"))
 
 
+def closeness(file_name, output):
+    with open(path + output, "w") as o:
+        with open(path + file_name, "r") as f:
+            n = int(f.readline())
+            o.write((str(n) + "\n"))
+            for line in f:
+                arr = line.split()
+                u = int(arr[0])
+                v = int(arr[1])
+                t = int(arr[2])
+                l = int(arr[3])
+                o.write((str(u) + " " + str(v) + " " + str(t) + " " + str(l) + "\n"))
+                o.write((str(v) + " " + str(u) + " " + str(t) + " " + str(l) + "\n"))
+
 def swap(file_name, output):
     with open(os.getcwd() + output, "w") as o:
         with open(os.getcwd() + file_name, "r") as f:
@@ -149,7 +163,7 @@ def fail2(file_name, output):
 if __name__ == '__main__':
     # convert('wiki_talklv.txt', 'wiki_talk_lv.txt')
     # convert('wiki_talk_el.txt', 'wiki_talk_elr.txt')
-    betw('UC-Irvine-messages.txt', 'B_UC-Irvine-messages.txt')
+    closeness('High-School_data_2013.txt', 'High-School_data_2013.tg2')
     # inp = input('Edgeliste eingeben:')
     # file_in = '/edge-lists/' + str(inp)
     # file_out ='/edge-lists/' + '0_'+str(inp)
