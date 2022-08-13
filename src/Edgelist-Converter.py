@@ -163,7 +163,7 @@ def fail2(file_name, output):
 if __name__ == '__main__':
     # convert('wiki_talklv.txt', 'wiki_talk_lv.txt')
     # convert('wiki_talk_el.txt', 'wiki_talk_elr.txt')
-    closeness('wiki_talk_gl.txt', 'wiki_talk_gl.tg2')
+    betw('wiki_talk_gl.txt', 'B_wiki_talk_gl.txt')
     # inp = input('Edgeliste eingeben:')
     # file_in = '/edge-lists/' + str(inp)
     # file_out ='/edge-lists/' + '0_'+str(inp)
