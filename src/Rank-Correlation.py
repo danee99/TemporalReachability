@@ -39,12 +39,46 @@ def import_ranking(degree_input, reachability_input, output_name, number_of_node
                         f.write(str(j) + "," + str(arr1[j]) + "," + str(arr2[j]) + "," + str(arr3[j]) + "," +
                                 str(arr4[j]) + '\n')
 
+def import_ranking_alternative(degree_input, reachability_input, output_name, number_of_nodes, betw_input, close_input, static_input):
+    arr3 = []
+    arr4 = [0 for _ in range(0,number_of_nodes)]
+    with open(path + "Dataframes\\" + output_name, 'w') as f:
+        f.write("Temp. Reachability,Stat. Reachability,Temp. Betweenness,Temp. Closeness,Degree Centrality\n")
+        with open(path + "Rankings\\Degree Centrality\\" + degree_input, "r") as a:
+            with open(path + "Rankings\\Temporal Reachability\\" + reachability_input, "r") as b:
+                with open(path + "Rankings\\Temporal Betweenness Centrality\\" + betw_input, "r") as c:
+                    with open(path + "Rankings\\Temporal Closeness\\" + close_input, "r") as d:
+                        with open(path + "Rankings\\Static Reachability\\" + static_input, "r") as e:
+                            for line in c:
+                                arr = line.split(",")
+                                betw_rank = float(arr[1])
+                                if betw_rank < 0:
+                                    arr3.append(0)
+                                else:
+                                    arr3.append(betw_rank)
+                            for line in d:
+                                arr = line.split(",")
+                                close_rank = float(arr[1])
+                                corresponding_node = int(arr[0])
+                                arr4[corresponding_node] = close_rank
+                            line1 = a.readlines()
+                            line2 = b.readlines()
+                            line5 = e.readlines()
+                            arr1 = np.fromstring(line1[0].strip('[]\n'), dtype=float, sep=',')
+                            arr2 = np.fromstring(line2[0].strip('[]\n'), dtype=float, sep=',')
+                            arr5 = np.fromstring(line5[0].strip('[]\n'), dtype=float, sep=',')
+                            for j in range(0, number_of_nodes):
+                                f.write(str(j) + "," + str(arr2[j]) + "," + str(arr5[j]) + "," + str(arr3[j]) + "," +
+                                        str(arr4[j]) + "," + str(arr1[j]) + '\n')
 
-mydataframe = pd.read_csv(path + "/Dataframes/fb-messages")
-obj = sns.heatmap(data=mydataframe.corr(method='kendall'), annot=True)
-obj.set_xticklabels(obj.get_xticklabels(), rotation=45)
+# 2 = temp reach, 5 = stat. reach, 1 = degree, 3 = temp betw, 4 = temp clos
+
+
+mydataframe = pd.read_csv(path + "/Dataframes/radoslaw_email2")
+obj = sns.heatmap(data=mydataframe.corr(method='kendall'), annot=True, square=True)
+obj.set_xticklabels(obj.get_xticklabels(), rotation=90)
 plt.tight_layout()
-plt.savefig(path + '/Plots/fb-messages.svg')
+plt.savefig(path + '/Plots/radoslaw_email2.svg')
 
 # name = "UC-Irvine-messages"
 # import_ranking(name + "-Outdegrees.txt",
@@ -54,6 +88,15 @@ plt.savefig(path + '/Plots/fb-messages.svg')
 #                name+"-temporal-betweenness.txt",
 #                name+"-temporal-closeness.txt"
 #                )
+
+# name = "radoslaw_email"
+# import_ranking_alternative(name + "-Outdegrees.txt",
+#                            name + "-Ranking.txt",
+#                            name + "2",
+#                            167,
+#                            name+"-temporal-betweenness.txt",
+#                            name+"-temporal-closeness.txt",
+#                            name+"-Ranking (static).txt")
 
 # def vs_heuristik(heuristik_input, reachability_input):
 #     with open(path + heuristik_input, 'r') as h:

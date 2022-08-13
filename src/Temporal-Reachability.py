@@ -7,7 +7,6 @@ import numpy as np
 
 # path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
 path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
-average = []
 
 class TemporalGraph:
     def __init__(self):
@@ -105,7 +104,7 @@ class TemporalGraph:
             self.total_reachability += len(visited)
 
     # ranks the node "x", where the ranking is a floating point number between 0 and 1
-    def rank_node(self, x, a, b, before, helper):
+    def rank_node(self, x, a, b, before, helper, average):
         start = time.time()
         total = 0
         for node in self.nodes:
@@ -137,11 +136,12 @@ class TemporalGraph:
 
     # parallelized node ranking
     def node_ranking(self, a, b, output_name):
+        average = []
         start_time = time.time()
         self.calc_total_reachability(a, b)
         helper = [np.inf for _ in range(self.n)]
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        result_objects = [pool.apply_async(self.rank_node, args=(node, a, b, self.total_reachability, helper)) for node
+        result_objects = [pool.apply_async(self.rank_node, args=(node, a, b, self.total_reachability, helper, average)) for node
                           in range(0, self.n)]
         ranking = [r.get() for r in result_objects]
         pool.close()
