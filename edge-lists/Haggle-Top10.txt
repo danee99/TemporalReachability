@@ -1,0 +1,5 @@
+[(10402, 17), (10526, 13), (10566, 21), (10571, 7), (10598, 9), (10598, 9), (10711, 25), (10761, 33), (10795, 44), (10806, 28)]
+Einsparung von 43908 Schleifen
+abgeschlossen in 16.81330919265747 Sekunden
+abgeschlossen in 0.2802218198776245 Minuten
+abgeschlossen in 0.004670363664627075 Stunden

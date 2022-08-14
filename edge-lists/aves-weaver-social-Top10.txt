@@ -1,0 +1,5 @@
+[(3553, 269), (3577, 415), (3652, 239), (3653, 235), (3662, 133), (3692, 170), (3697, 421), (3697, 422), (3699, 210), (3701, 31)]
+Einsparung von 1659 Schleifen
+abgeschlossen in 0.7073700428009033 Sekunden
+abgeschlossen in 0.011789500713348389 Minuten
+abgeschlossen in 0.0001964916785558065 Stunden

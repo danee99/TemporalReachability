@@ -1,0 +1,5 @@
+[(5078, 7), (5087, 9), (5087, 9), (5088, 8), (5091, 0), (5091, 1), (5091, 4), (5091, 5), (5091, 10), (5091, 11)]
+Einsparung von 0 Schleifen
+abgeschlossen in 18.457211017608643 Sekunden
+abgeschlossen in 0.3076201836268107 Minuten
+abgeschlossen in 0.005127003060446845 Stunden

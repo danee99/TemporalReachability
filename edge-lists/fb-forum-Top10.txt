@@ -1,0 +1,5 @@
+[(278543, 1), (282546, 84), (282676, 87), (284569, 41), (284682, 27), (284715, 403), (284754, 33), (285053, 23), (285689, 15), (286029, 110)]
+Einsparung von 69696 Schleifen
+abgeschlossen in 441.7436366081238 Sekunden
+abgeschlossen in 7.36239394346873 Minuten
+abgeschlossen in 0.12270656572447883 Stunden
