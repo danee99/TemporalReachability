@@ -8,6 +8,7 @@ import numpy as np
 # path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
 path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
 
+
 class TemporalGraph:
     def __init__(self):
         self.nodes = set()
@@ -104,7 +105,7 @@ class TemporalGraph:
             self.total_reachability += len(visited)
 
     # ranks the node "x", where the ranking is a floating point number between 0 and 1
-    def rank_node(self, x, a, b, before, helper, average):
+    def rank_node(self, x, a, b, before, helper):
         total = 0
         for node in self.nodes:
             if node == x:
@@ -133,38 +134,40 @@ class TemporalGraph:
 
     # parallelized node ranking
     def node_ranking(self, a, b, output_name):
-        start_time = time.time()
-        self.calc_total_reachability(a, b)
-        helper = [np.inf for _ in range(self.n)]
-        pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        result_objects = [pool.apply_async(self.rank_node, args=(node, a, b, self.total_reachability, helper, average)) for node
-                          in range(0, self.n)]
-        ranking = [r.get() for r in result_objects]
-        pool.close()
-        pool.join()
-        finish = time.time() - start_time
-        with open(path + output_name, 'w') as f:
-            ranking.sort(reverse=False)
-            for i in range(len(ranking)):
-                f.write(str(i+1)+".Platz: "+str(ranking[i][1])+" mit R(G-v) = "+str(ranking[i][0]) + "\n")
-            # f.write(str(ranking) + "\n")
-            f.write("R(G) = %s" % self.total_reachability + "\n")
-            f.write("abgeschlossen in %s Sekunden" % finish + "\n")
-            f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
-            f.write("abgeschlossen in %s Stunden" % (finish / 3600))
         # start_time = time.time()
         # self.calc_total_reachability(a, b)
         # helper = [np.inf for _ in range(self.n)]
-        # ranking = []
-        # for node in range(0, self.n):
-        #     ranking.append(self.rank_node(node, a, b, self.total_reachability, helper))
+        # pool = multiprocessing.Pool(multiprocessing.cpu_count())
+        # result_objects = [pool.apply_async(self.rank_node, args=(node, a, b, self.total_reachability, helper, average))
+        #                   for node
+        #                   in range(0, self.n)]
+        # ranking = [r.get() for r in result_objects]
+        # pool.close()
+        # pool.join()
         # finish = time.time() - start_time
         # with open(path + output_name, 'w') as f:
-        #     f.write(str(ranking) + "\n")
+        #     ranking.sort(reverse=False)
+        #     for i in range(len(ranking)):
+        #         f.write(str(i + 1) + ".Platz: " + str(ranking[i][1]) + " mit R(G-v) = " + str(ranking[i][0]) + "\n")
+        #     # f.write(str(ranking) + "\n")
         #     f.write("R(G) = %s" % self.total_reachability + "\n")
         #     f.write("abgeschlossen in %s Sekunden" % finish + "\n")
         #     f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
         #     f.write("abgeschlossen in %s Stunden" % (finish / 3600))
+        start_time = time.time()
+        self.calc_total_reachability(a, b)
+        helper = [np.inf for _ in range(self.n)]
+        ranking = []
+        for node in range(0, self.n):
+            ranking.append(self.rank_node(node, a, b, self.total_reachability, helper))
+        finish = time.time() - start_time
+        with open(path + output_name, 'w') as f:
+            ranking.sort()
+            f.write(str(ranking) + "\n")
+            f.write("R(G) = %s" % self.total_reachability + "\n")
+            f.write("abgeschlossen in %s Sekunden" % finish + "\n")
+            f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
+            f.write("abgeschlossen in %s Stunden" % (finish / 3600))
 
 
 if __name__ == '__main__':

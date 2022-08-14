@@ -7,12 +7,14 @@ import scipy.stats as stats
 from numpy import loadtxt
 
 path = "C:\\Users\\Daniel\\Documents\\GitHub\\TemporalReachability\\"
+
+
 # path = "/home/stud/degenste/BA/TemporalReachability"
 
 
 def import_ranking(degree_input, reachability_input, output_name, number_of_nodes, betw_input, close_input):
     arr3 = []
-    arr4 = [0 for _ in range(0,number_of_nodes)]
+    arr4 = [0 for _ in range(0, number_of_nodes)]
     with open(path + "Dataframes\\" + output_name, 'w') as f:
         f.write("Degree Centrality,Reachability Centrality,Temporal Betweenness,Temporal Closeness\n")
         with open(path + "Rankings\\Degree Centrality\\" + degree_input, "r") as a:
@@ -39,46 +41,85 @@ def import_ranking(degree_input, reachability_input, output_name, number_of_node
                         f.write(str(j) + "," + str(arr1[j]) + "," + str(arr2[j]) + "," + str(arr3[j]) + "," +
                                 str(arr4[j]) + '\n')
 
-def import_ranking_alternative(degree_input, reachability_input, output_name, number_of_nodes, betw_input, close_input, static_input):
+
+def import_ranking_alternative(degree_input, reachability_input, output_name, number_of_nodes, betw_input, close_input,
+                               static_input, static_degree_input):
     arr3 = []
-    arr4 = [0 for _ in range(0,number_of_nodes)]
-    with open(path + "Dataframes\\" + output_name, 'w') as f:
-        f.write("Temp. Reachability,Stat. Reachability,Temp. Betweenness,Temp. Closeness,Degree Centrality\n")
+    arr4 = []
+    with open(path + "Dataframes\\" + output_name, 'w') as g:
+        g.write(
+            "Temp. Reachability,Stat. Reachability,Temp. Betweenness,Temp. Closeness,Degree Centrality,Stat. Degree\n")
         with open(path + "Rankings\\Degree Centrality\\" + degree_input, "r") as a:
-            with open(path + "Rankings\\Temporal Reachability\\" + reachability_input, "r") as b:
-                with open(path + "Rankings\\Temporal Betweenness Centrality\\" + betw_input, "r") as c:
-                    with open(path + "Rankings\\Temporal Closeness\\" + close_input, "r") as d:
-                        with open(path + "Rankings\\Static Reachability\\" + static_input, "r") as e:
-                            for line in c:
-                                arr = line.split(",")
-                                betw_rank = float(arr[1])
-                                if betw_rank < 0:
-                                    arr3.append(0)
-                                else:
-                                    arr3.append(betw_rank)
-                            for line in d:
-                                arr = line.split(",")
-                                close_rank = float(arr[1])
-                                corresponding_node = int(arr[0])
-                                arr4[corresponding_node] = close_rank
-                            line1 = a.readlines()
-                            line2 = b.readlines()
-                            line5 = e.readlines()
-                            arr1 = np.fromstring(line1[0].strip('[]\n'), dtype=float, sep=',')
-                            arr2 = np.fromstring(line2[0].strip('[]\n'), dtype=float, sep=',')
-                            arr5 = np.fromstring(line5[0].strip('[]\n'), dtype=float, sep=',')
-                            for j in range(0, number_of_nodes):
-                                f.write(str(j) + "," + str(arr2[j]) + "," + str(arr5[j]) + "," + str(arr3[j]) + "," +
-                                        str(arr4[j]) + "," + str(arr1[j]) + '\n')
+            with open(path + "Rankings\\Degree Centrality\\" + static_degree_input, "r") as f:
+                with open(path + "Rankings\\Temporal Reachability\\" + reachability_input, "r") as b:
+                    with open(path + "Rankings\\Temporal Betweenness Centrality\\" + betw_input, "r") as c:
+                        with open(path + "Rankings\\Temporal Closeness\\" + close_input, "r") as d:
+                            with open(path + "Rankings\\Static Reachability\\" + static_input, "r") as e:
+                                for line in c:
+                                    arr = line.split(",")
+                                    betw_rank = float(arr[1])
+                                    if betw_rank < 0:
+                                        arr3.append(0)
+                                    else:
+                                        arr3.append(betw_rank)
+                                for line in d:
+                                    arr = line.split(",")
+                                    close_rank = float(arr[1])
+                                    if close_rank < 0:
+                                        arr4.append(0)
+                                    else:
+                                        arr4.append(close_rank)
+                                line1 = a.readlines()
+                                line2 = b.readlines()
+                                line5 = e.readlines()
+                                line6 = f.readlines()
+                                arr1 = np.fromstring(line1[0].strip('[]\n'), dtype=float, sep=',')
+                                arr2 = np.fromstring(line2[0].strip('[]\n'), dtype=float, sep=',')
+                                arr5 = np.fromstring(line5[0].strip('[]\n'), dtype=float, sep=',')
+                                arr6 = np.fromstring(line6[0].strip('[]\n'), dtype=float, sep=',')
+                                for j in range(0, number_of_nodes):
+                                    g.write(
+                                        str(j) + "," + str(arr2[j]) + "," + str(arr5[j]) + "," + str(arr3[j]) + "," +
+                                        str(arr4[j]) + "," + str(arr1[j]) + "," + str(arr6[j]) + '\n')
+
 
 # 2 = temp reach, 5 = stat. reach, 1 = degree, 3 = temp betw, 4 = temp clos
 
-
-mydataframe = pd.read_csv(path + "/Dataframes/radoslaw_email2")
+name = "UC-Irvine-messages"
+mydataframe = pd.read_csv(path + "/Dataframes/"+name)
+mydataframe = mydataframe.rename(columns={'Temp. Reachability': 'Temporal\nReachability',
+                                          'Stat. Reachability': 'Static\nReachability',
+                                          'Temp. Betweenness': 'Temporal\nBetweenness',
+                                          'Temp. Closeness': 'Temporal\nCloseness',
+                                          'Degree Centrality': 'Temporal\nOutdegree',
+                                          'Stat. Degree': 'Static\nOutdegree'
+                                          })
 obj = sns.heatmap(data=mydataframe.corr(method='kendall'), annot=True, square=True)
 obj.set_xticklabels(obj.get_xticklabels(), rotation=90)
 plt.tight_layout()
-plt.savefig(path + '/Plots/radoslaw_email2.svg')
+plt.savefig(path + '/Plots/'+name+'.svg')
+
+# aves-weaver-social 445
+# email-dnc 1891
+# fb-forum 899
+# fb-messages 1.899
+# Haggle 274
+# ia-hospital-ward-proximity-attr 75
+# ia-workplace-contacts 92
+# radoslaw_email 167
+# twitter 4605
+# UC-Irvine-messages 1899
+
+# name = "UC-Irvine-messages"
+# import_ranking_alternative(name + "-Outdegrees.txt",
+#                            name + "-Ranking.txt",
+#                            name,
+#                            1899,
+#                            name + "-temporal-betweenness.txt",
+#                            name + "-temporal-closeness.txt",
+#                            name + "-Ranking (static).txt",
+#                            name + "-Outdegrees-static.txt"
+#                            )
 
 # name = "UC-Irvine-messages"
 # import_ranking(name + "-Outdegrees.txt",
@@ -88,15 +129,6 @@ plt.savefig(path + '/Plots/radoslaw_email2.svg')
 #                name+"-temporal-betweenness.txt",
 #                name+"-temporal-closeness.txt"
 #                )
-
-# name = "radoslaw_email"
-# import_ranking_alternative(name + "-Outdegrees.txt",
-#                            name + "-Ranking.txt",
-#                            name + "2",
-#                            167,
-#                            name+"-temporal-betweenness.txt",
-#                            name+"-temporal-closeness.txt",
-#                            name+"-Ranking (static).txt")
 
 # def vs_heuristik(heuristik_input, reachability_input):
 #     with open(path + heuristik_input, 'r') as h:

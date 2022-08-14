@@ -26,6 +26,7 @@ class TemporalGraph:
         self.n = 0
         self.nodes = set()
         self.incidence_list = []
+        self.loop_counter = 0
 
     def import_edgelist(self, file_name):
         with open(path + file_name, "r") as f:
@@ -62,12 +63,12 @@ class TemporalGraph:
                 self.incidence_list[u].append((u, v, t, l))
                 self.incidence_list[v].append((v, u, t, l))
 
-    def top_k_util(self, x, alpha, beta, helper, loop_counter):
+    def top_k_util(self, x, alpha, beta, helper):
         total = 0
         for node in self.nodes:
             if node == x:
                 continue
-            loop_counter += 1
+            self.loop_counter += 1
             visited = set()
             earliest_arrival_time = helper.copy()
             earliest_arrival_time[node] = alpha
@@ -104,15 +105,15 @@ class TemporalGraph:
         #     f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
         #     f.write("abgeschlossen in %s Stunden" % (finish / 3600))
         start_time = time.time()
-        loop_counter = 0
         helper = [np.inf for _ in range(self.n)]
         for node in self.nodes:
-            log_result(self.top_k_util(node, alpha, beta, helper, loop_counter))
+            log_result(self.top_k_util(node, alpha, beta, helper))
         finish = time.time() - start_time
         with open(path + output_name, 'w') as f:
             max_heap.sort()
             f.write(str(max_heap) + "\n")
-            f.write("Schleifendurchläufe: %s" % loop_counter + "\n")
+            expected = (self.n ** 2) - self.n
+            f.write("Einsparung von %s Schleifen" % (expected - self.loop_counter) + "\n")
             f.write("abgeschlossen in %s Sekunden" % finish + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
             f.write("abgeschlossen in %s Stunden" % (finish / 3600))
