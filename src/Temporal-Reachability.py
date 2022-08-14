@@ -105,7 +105,6 @@ class TemporalGraph:
 
     # ranks the node "x", where the ranking is a floating point number between 0 and 1
     def rank_node(self, x, a, b, before, helper, average):
-        start = time.time()
         total = 0
         for node in self.nodes:
             if node == x:
@@ -129,14 +128,11 @@ class TemporalGraph:
                 else:
                     continue
             total += len(visited)
-        stop = time.time() - start
-        average.append(stop)
         # return 1 - (total / before)
         return total, x
 
     # parallelized node ranking
     def node_ranking(self, a, b, output_name):
-        average = []
         start_time = time.time()
         self.calc_total_reachability(a, b)
         helper = [np.inf for _ in range(self.n)]
@@ -156,7 +152,6 @@ class TemporalGraph:
             f.write("abgeschlossen in %s Sekunden" % finish + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
             f.write("abgeschlossen in %s Stunden" % (finish / 3600))
-            f.write("Sekunden pro Knoten: %s " % (sum(average) / len(average)))
         # start_time = time.time()
         # self.calc_total_reachability(a, b)
         # helper = [np.inf for _ in range(self.n)]
