@@ -183,7 +183,7 @@ if __name__ == '__main__':
     finish = time.time() - start_time
     with open(path + output_file, 'w') as f:
         result.sort(reverse=False)
-        f.write(str(str([v for (ranking, v, size) in result[:j]]) + "\n"))
+        f.write(str(str([v for (ranking, v) in result[:j]]) + "\n"))
         f.write("wurde auf die " + str(k) + "-Nachbarschaft jedes Knotens angewendet." + "\n")
         f.write("Schwellwert fuer die Groesse der Nachbaschaft: " + str(p) + "\n")
         f.write("|V| = " + str(G.n) + ", |E| = " + str(G.m) + "\n")
