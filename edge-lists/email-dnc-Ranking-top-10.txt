@@ -1,0 +1,5 @@
+[100, 62, 5, 353, 16, 341, 49, 4, 182, 3]
+R(G) = 624039
+abgeschlossen in 728.3577909469604 Sekunden
+abgeschlossen in 12.139296515782673 Minuten
+abgeschlossen in 0.2023216085963779 Stunden
