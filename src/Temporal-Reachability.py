@@ -39,6 +39,8 @@ class TemporalGraph:
                     l = 1
                 self.nodes.add(u)
                 self.nodes.add(v)
+                # if v not in [self.incidence_list[u][0][i][1] for i in range(0, len(self.incidence_list[u][0]))]:
+                #     self.incidence_list[u].append((u, v, t, l))
                 self.incidence_list[u].append((u, v, t, l))
                 self.m += 1
 
@@ -60,6 +62,10 @@ class TemporalGraph:
                     l = 1
                 self.nodes.add(u)
                 self.nodes.add(v)
+                # if v not in [self.incidence_list[u][0][i][1] for i in range(0, len(self.incidence_list[u][0]))]:
+                #     self.incidence_list[u].append((u, v, t, l))
+                # if u not in [self.incidence_list[v][0][i][1] for i in range(0, len(self.incidence_list[v][0]))]:
+                #     self.incidence_list[v].append((v, u, t, l))
                 self.incidence_list[u].append((u, v, t, l))
                 self.incidence_list[v].append((v, u, t, l))
                 self.m += 2
@@ -129,50 +135,52 @@ class TemporalGraph:
                 else:
                     continue
             total += len(visited)
-        # return 1 - (total / before)
-        return total, x
+        return 1 - (total / before), x
+        # return total, x
 
     # parallelized node ranking
-    def node_ranking(self, a, b, output_name):
-        # start_time = time.time()
-        # self.calc_total_reachability(a, b)
-        # helper = [np.inf for _ in range(self.n)]
-        # pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        # result_objects = [pool.apply_async(self.rank_node, args=(node, a, b, self.total_reachability, helper, average))
-        #                   for node
-        #                   in range(0, self.n)]
-        # ranking = [r.get() for r in result_objects]
-        # pool.close()
-        # pool.join()
-        # finish = time.time() - start_time
-        # with open(path + output_name, 'w') as f:
-        #     ranking.sort(reverse=False)
-        #     for i in range(len(ranking)):
-        #         f.write(str(i + 1) + ".Platz: " + str(ranking[i][1]) + " mit R(G-v) = " + str(ranking[i][0]) + "\n")
-        #     # f.write(str(ranking) + "\n")
-        #     f.write("R(G) = %s" % self.total_reachability + "\n")
-        #     f.write("abgeschlossen in %s Sekunden" % finish + "\n")
-        #     f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
-        #     f.write("abgeschlossen in %s Stunden" % (finish / 3600))
+    def node_ranking(self, a, b, output_name, k):
         start_time = time.time()
         self.calc_total_reachability(a, b)
         helper = [np.inf for _ in range(self.n)]
-        ranking = []
-        for node in range(0, self.n):
-            ranking.append(self.rank_node(node, a, b, self.total_reachability, helper))
+        pool = multiprocessing.Pool(multiprocessing.cpu_count())
+        result_objects = [pool.apply_async(self.rank_node, args=(node, a, b, self.total_reachability, helper))
+                          for node
+                          in range(0, self.n)]
+        ranking = [r.get() for r in result_objects]
+        pool.close()
+        pool.join()
         finish = time.time() - start_time
         with open(path + output_name, 'w') as f:
-            ranking.sort()
-            f.write(str(ranking) + "\n")
+            ranking.sort(reverse=True)
+            # for i in range(len(ranking)):
+            #     f.write(str(i + 1) + ".Platz: " + str(ranking[i][1]) + " mit R(G-v) = " + str(ranking[i][0]) + "\n")
+            # f.write(str(ranking) + "\n")
+            f.write(str([v for (rank, v) in ranking[:k]]) + "\n")
             f.write("R(G) = %s" % self.total_reachability + "\n")
             f.write("abgeschlossen in %s Sekunden" % finish + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
             f.write("abgeschlossen in %s Stunden" % (finish / 3600))
+        # start_time = time.time()
+        # self.calc_total_reachability(a, b)
+        # helper = [np.inf for _ in range(self.n)]
+        # ranking = []
+        # for node in range(0, self.n):
+        #     ranking.append(self.rank_node(node, a, b, self.total_reachability, helper))
+        # finish = time.time() - start_time
+        # with open(path + output_name, 'w') as f:
+        #     ranking.sort()
+        #     f.write(str(ranking) + "\n")
+        #     f.write("R(G) = %s" % self.total_reachability + "\n")
+        #     f.write("abgeschlossen in %s Sekunden" % finish + "\n")
+        #     f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
+        #     f.write("abgeschlossen in %s Stunden" % (finish / 3600))
 
 
 if __name__ == '__main__':
     input_graph = input('Edgeliste eingeben:')
     directed = (input('Soll die Kantenliste als gerichtet betrachtet werden? [y/n]:'))
+    k = int(input('k eingeben:'))
     a = int(input('Intervall a eingeben: '))
     b = np.inf
     output_file = input_graph.split(".")[0] + '-Ranking' + '.txt'
@@ -181,4 +189,4 @@ if __name__ == '__main__':
         G.import_edgelist(input_graph)
     elif directed == 'n':
         G.import_undirected_edgelist(input_graph)
-    G.node_ranking(a, b, output_file)
+    G.node_ranking(a, b, output_file, k)

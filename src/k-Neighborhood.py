@@ -5,9 +5,8 @@ import heapq
 import numpy as np
 import os
 
-# path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
-path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
-
+path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+# path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
 
 class TemporalGraph:
     def __init__(self):
@@ -133,6 +132,7 @@ if __name__ == '__main__':
     input_graph = input('Edgeliste eingeben:')
     k = int(input('k-Nachbarschaft, Gebe den Wert k ein:'))
     p = int(input('Schranke für die Größe der Nachbarschaft:'))
+    j = int(input('top k, k eingeben:'))
     directed = (input('Ist das Format der Kantenliste bereits ungerichtet? [y/n]:'))
     output_file = input_graph.split(".")[0] + '-k-Nachbarschaft-Ranking' + '.txt'
     G = TemporalGraph()
@@ -149,6 +149,15 @@ if __name__ == '__main__':
     pool.join()
     finish = time.time() - start_time
     with open(path + output_file, 'w') as f:
+        result.sort(reverse=True)
+        f.write(str(str([v for (ranking, v, size) in result[:j]]) + "\n"))
+        f.write("wurde auf die " + str(k) + "-Nachbarschaft jedes Knotens angewendet." + "\n")
+        f.write("Schwellwert fuer die Groesse der Nachbaschaft: " + str(p) + "\n")
+        f.write("|V| = " + str(G.n) + ", |E| = " + str(G.m) + "\n")
+        f.write("abgeschlossen in %s Sekunden" % finish + "\n")
+        f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
+        f.write("abgeschlossen in %s Stunden" % (finish / 3600))
+
         # result.sort()
         # f.write(str(result) + "\n")
         # f.write("wurde auf die " + str(k) + "-Nachbarschaft jedes Knotens angewendet." + "\n")
@@ -157,9 +166,10 @@ if __name__ == '__main__':
         # f.write("abgeschlossen in %s Sekunden" % finish + "\n")
         # f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
         # f.write("abgeschlossen in %s Stunden" % (finish / 3600))
-        f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
-        f.write("wurde auf die " + str(k) + "-Nachbarschaft jedes Knotens angewendet." + "\n")
-        result.sort(reverse=True)
-        for i in range(len(result)):
-            f.write(str(i + 1) + ".Platz: " + str(result[i][1]) + " mit rank(u) = " + str(
-                result[i][0]) + " und |K| = " + str(result[i][2]) + "\n")
+
+        # f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
+        # f.write("wurde auf die " + str(k) + "-Nachbarschaft jedes Knotens angewendet." + "\n")
+        # result.sort(reverse=True)
+        # for i in range(len(result)):
+        #     f.write(str(i + 1) + ".Platz: " + str(result[i][1]) + " mit rank(u) = " + str(
+        #         result[i][0]) + " und |K| = " + str(result[i][2]) + "\n")

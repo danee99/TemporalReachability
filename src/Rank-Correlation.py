@@ -5,6 +5,7 @@ import seaborn as sns
 import os
 import scipy.stats as stats
 from numpy import loadtxt
+from sklearn.metrics import jaccard_score
 
 path = "C:\\Users\\Daniel\\Documents\\GitHub\\TemporalReachability\\"
 
@@ -83,21 +84,23 @@ def import_ranking_alternative(degree_input, reachability_input, output_name, nu
                                         str(arr4[j]) + "," + str(arr1[j]) + "," + str(arr6[j]) + '\n')
 
 
-# 2 = temp reach, 5 = stat. reach, 1 = degree, 3 = temp betw, 4 = temp clos
+# name = "UC-Irvine-messages"
+# mydataframe = pd.read_csv(path + "/Dataframes/"+name)
+# mydataframe = mydataframe.rename(columns={'Temp. Reachability': 'Temporal\nReachability',
+#                                           'Stat. Reachability': 'Static\nReachability',
+#                                           'Temp. Betweenness': 'Temporal\nBetweenness',
+#                                           'Temp. Closeness': 'Temporal\nCloseness',
+#                                           'Degree Centrality': 'Temporal\nOutdegree',
+#                                           'Stat. Degree': 'Static\nOutdegree'
+#                                           })
+# obj = sns.heatmap(data=mydataframe.corr(method='kendall'), annot=True, square=True)
+# obj.set_xticklabels(obj.get_xticklabels(), rotation=90)
+# plt.tight_layout()
+# plt.savefig(path + '/Plots/'+name+'.svg')
 
-name = "UC-Irvine-messages"
-mydataframe = pd.read_csv(path + "/Dataframes/"+name)
-mydataframe = mydataframe.rename(columns={'Temp. Reachability': 'Temporal\nReachability',
-                                          'Stat. Reachability': 'Static\nReachability',
-                                          'Temp. Betweenness': 'Temporal\nBetweenness',
-                                          'Temp. Closeness': 'Temporal\nCloseness',
-                                          'Degree Centrality': 'Temporal\nOutdegree',
-                                          'Stat. Degree': 'Static\nOutdegree'
-                                          })
-obj = sns.heatmap(data=mydataframe.corr(method='kendall'), annot=True, square=True)
-obj.set_xticklabels(obj.get_xticklabels(), rotation=90)
-plt.tight_layout()
-plt.savefig(path + '/Plots/'+name+'.svg')
+optimal = {6, 2}
+heuristik = {2, 6}
+print(len(optimal.intersection(heuristik)) / len(optimal.union(heuristik)))
 
 # aves-weaver-social 445
 # email-dnc 1891

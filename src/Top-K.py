@@ -6,8 +6,8 @@ import heapq_max
 import heapq
 import numpy as np
 
-max_heap = []
 k = 10
+max_heap = []
 # path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
 path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
 
@@ -90,20 +90,6 @@ class TemporalGraph:
         return total, x
 
     def top_k_reachability(self, alpha, beta, k, output_name):
-        # start_time = time.time()
-        # helper = [np.inf for _ in range(self.n)]
-        # pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        # for node in self.nodes:
-        #     pool.apply_async(self.top_k_util, args=(node, alpha, beta, helper), callback=log_result)
-        # pool.close()
-        # pool.join()
-        # finish = time.time() - start_time
-        # with open(path + output_name, 'w') as f:
-        #     max_heap.sort()
-        #     f.write(str(max_heap) + "\n")
-        #     f.write("abgeschlossen in %s Sekunden" % finish + "\n")
-        #     f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
-        #     f.write("abgeschlossen in %s Stunden" % (finish / 3600))
         start_time = time.time()
         helper = [np.inf for _ in range(self.n)]
         for node in self.nodes:
