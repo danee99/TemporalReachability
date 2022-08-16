@@ -1,0 +1,6 @@
+[2, 712, 41, 522, 1623, 127, 1542, 637, 31, 1712]
+filter_nodes() abgeschlossen in 0.020607709884643555 Sekunden
+geloeschte Knotenanzahl = 562
+geloeschte Kanten = 1372
+abgeschlossen in 29.096999875704448 Minuten
+mit Tiefe = 5
