@@ -98,9 +98,17 @@ def import_ranking_alternative(degree_input, reachability_input, output_name, nu
 # plt.tight_layout()
 # plt.savefig(path + '/Plots/'+name+'.svg')
 
-optimal = {6, 2}
-heuristik = {2, 6}
-print(len(optimal.intersection(heuristik)) / len(optimal.union(heuristik)))
+top_k = 100
+dataset = "radoslaw_email"
+with open(path + "edge-lists\\" + dataset + "-Heuristik-top-"+str(top_k)+".txt", "r") as h:
+    with open(path + "edge-lists\\" + dataset + "-Ranking-top-"+str(top_k)+".txt", "r") as o:
+        line1 = h.readlines()
+        line2 = o.readlines()
+        arr1 = np.fromstring(line1[0].strip('[]\n'), dtype=float, sep=',')
+        arr2 = np.fromstring(line2[0].strip('[]\n'), dtype=float, sep=',')
+        optimal = set(arr2)
+        heuristik = set(arr1)
+        print(len(optimal.intersection(heuristik)) / len(optimal.union(heuristik)))
 
 # aves-weaver-social 445
 # email-dnc 1891
