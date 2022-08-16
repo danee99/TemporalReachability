@@ -1,0 +1,7 @@
+[841, 1279, 100, 1664, 1503, 811, 1453, 1294, 840, 368]
+wurde auf die 2-Nachbarschaft jedes Knotens angewendet.
+Schwellwert fuer die Groesse der Nachbaschaft: 0
+|V| = 1891, |E| = 39264
+abgeschlossen in 154.73869967460632 Sekunden
+abgeschlossen in 2.5789783279101055 Minuten
+abgeschlossen in 0.04298297213183509 Stunden
