@@ -93,15 +93,17 @@ def import_ranking_alternative(degree_input, reachability_input, output_name, nu
 #                                           'Degree Centrality': 'Temporal\nOutdegree',
 #                                           'Stat. Degree': 'Static\nOutdegree'
 #                                           })
-# obj = sns.heatmap(data=mydataframe.corr(method='kendall'), annot=True, square=True)
+# sns.set(font_scale=1.1)
+# obj = sns.heatmap(data=mydataframe.corr(method='kendall'), annot=True, square=True, annot_kws={"size": 12}, linewidths=1)
 # obj.set_xticklabels(obj.get_xticklabels(), rotation=90)
 # plt.tight_layout()
 # plt.savefig(path + '/Plots/'+name+'.svg')
 
-top_k = 100
+top_k = 10
 dataset = "radoslaw_email"
-with open(path + "edge-lists\\" + dataset + "-Heuristik-top-"+str(top_k)+".txt", "r") as h:
-    with open(path + "edge-lists\\" + dataset + "-Ranking-top-"+str(top_k)+".txt", "r") as o:
+# with open(path + "edge-lists\\" + dataset + "-Heuristik-top-"+str(top_k)+".txt", "r") as h:
+with open(path + "edge-lists\\" + dataset + "-k-Nachbarschaft-Ranking (Digraph)-top-" + str(top_k) + ".txt", "r") as h:
+    with open(path + "edge-lists\\" + "radoslaw-email" + "-Ranking-top-"+str(top_k)+".txt", "r") as o:
         line1 = h.readlines()
         line2 = o.readlines()
         arr1 = np.fromstring(line1[0].strip('[]\n'), dtype=float, sep=',')

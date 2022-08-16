@@ -4,7 +4,33 @@ from matplotlib import pyplot as plt
 import networkx as nx
 
 path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+name = "Auswirkungen-der-Modifikationen"
 
+bar_width = 0.25
+x = ['radoslaw-\nemail', 'email-dnc', 'UC-Irvine-\nmessages', 'dblp-cite', 'wiki_talk_\ngl']
+heuristik = [0.61, 4.85, 0.0, 0.0, 0.0]
+normal = [0.67, 12.15, 40.79, 44.29, 230.33]
+k_neighborhood = [0.0, 0.0, 0.0, 0.0, 0.0]
+
+bar1 = np.arange(len(x))
+bar2 = [i + bar_width for i in bar1]
+bar3 = [i + bar_width for i in bar2]
+
+plt.grid(linestyle='dashed')
+
+plt.bar(bar1, normal, bar_width, label="Knoten-Ranking", edgecolor='black')
+plt.bar(bar2, heuristik, bar_width, label="Heuristik", edgecolor='black')
+plt.bar(bar3, k_neighborhood, bar_width, label="k Nachbarschaft", edgecolor='black')
+
+plt.xlabel("\nDatensätze")
+plt.ylabel("Laufzeit in min")
+plt.title("Auswirkungen der Heuristik auf die Laufzeit")
+
+plt.xticks([r + bar_width for r in range(len(bar1))], x)
+plt.legend()
+plt.tight_layout()
+plt.savefig(os.path.join(os.getcwd(), os.pardir) + '\\Plots\\' + name + '.svg')
+# plt.show()
 
 # print(plt.style.available)
 # plt.style.use('bmh')
