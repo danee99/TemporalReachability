@@ -134,7 +134,7 @@ if __name__ == '__main__':
     p = int(input('Schranke für die Größe der Nachbarschaft:'))
     j = int(input('top k, k eingeben:'))
     directed = (input('Ist das Format der Kantenliste bereits ungerichtet? [y/n]:'))
-    output_file = input_graph.split(".")[0] + '-k-Nachbarschaft-Ranking' + '.txt'
+    output_file = input_graph.split(".")[0] + '-k-Nachbarschaft-Ranking-top-' + str(j) + '.txt'
     G = TemporalGraph()
     if directed == 'y':
         G.import_edgelist(input_graph)

@@ -166,7 +166,7 @@ if __name__ == '__main__':
     k = int(input('k-Nachbarschaft, Gebe den Wert k ein:'))
     j = int(input('top k, k eingeben:'))
     p = int(input('Schranke für die Größe der Nachbarschaft:'))
-    output_file = input_graph.split(".")[0] + '-k-Nachbarschaft-Ranking (Digraph)' + '.txt'
+    output_file = input_graph.split(".")[0] + '-k-Nachbarschaft-Ranking (Digraph)-top-' + str(j) + '.txt'
     G = TemporalGraph()
     G.import_edgelist(input_graph)
     start_time = time.time()

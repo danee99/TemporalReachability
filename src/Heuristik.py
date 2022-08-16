@@ -165,7 +165,7 @@ if __name__ == '__main__':
     directed = (input('Ist der Graph gerichtet? [y/n]:'))
     depth = int(input('Tiefe eingeben:'))
     k = int(input('Top k Knoten, k eingeben:'))
-    degree_output_file = input_graph.split(".")[0] + '-Outdegrees' + '.txt'
+    degree_output_file = input_graph.split(".")[0] + '-Outdegrees-top-' + str(k) + '.txt'
     heuristik_output_file = input_graph.split(".")[0] + '-Heuristik' + '.txt'
     G = TemporalGraph()
     if directed == 'y':

@@ -183,7 +183,7 @@ if __name__ == '__main__':
     k = int(input('k eingeben:'))
     a = int(input('Intervall a eingeben: '))
     b = np.inf
-    output_file = input_graph.split(".")[0] + '-Ranking' + '.txt'
+    output_file = input_graph.split(".")[0] + '-Ranking-top-' + str(k) + '.txt'
     G = TemporalGraph()
     if directed == 'y':
         G.import_edgelist(input_graph)
