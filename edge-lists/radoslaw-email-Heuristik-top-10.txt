@@ -1,5 +1,6 @@
 [58, 13, 67, 79, 83, 37, 0, 17, 56, 85]
-filter_nodes() abgeschlossen in 0.013704299926757812 Sekunden
+filter_nodes() abgeschlossen in 0.014144659042358398 Sekunden
 geloeschte Knotenanzahl = 14
 geloeschte Kanten = 227
-abgeschlossen in 0.6087621927261353 Minuten
+abgeschlossen in 0.6087896585464477 Minuten
+mit Tiefe = 5
