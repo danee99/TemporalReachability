@@ -5,8 +5,8 @@ import heapq
 import numpy as np
 import os
 
-# path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
-path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
+path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+# path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
 
 
 class TemporalGraph:
@@ -152,6 +152,11 @@ class TemporalGraph:
                                 earliest_arrival_time[v] = t + l
                                 heapq.heappush(PQ, (earliest_arrival_time[v], v))
             total += len(visited)
+        if total < size:
+            return np.inf, deleted_node
+        else:
+            rank = total/size
+            return rank, deleted_node
         # if total < size:
         #     return 0, deleted_node, size
         # rank = 1 - (total * size) / (before * size_alt)
@@ -159,10 +164,6 @@ class TemporalGraph:
         #     return 0, deleted_node, size
         # else:
         #     return rank, deleted_node, size
-        if total < size:
-            return np.inf, deleted_node
-        rank = total/size
-        return rank, deleted_node
 
 
 if __name__ == '__main__':
