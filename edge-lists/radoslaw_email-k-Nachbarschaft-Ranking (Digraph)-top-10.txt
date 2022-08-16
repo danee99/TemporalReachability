@@ -1,7 +1,7 @@
-[146, 67, 58, 13, 83, 79, 136, 145, 37, 121]
-wurde auf die 2-Nachbarschaft jedes Knotens angewendet.
+[67, 58, 13, 79, 83, 37, 17, 85, 121, 103]
+wurde auf die 3-Nachbarschaft jedes Knotens angewendet.
 Schwellwert fuer die Groesse der Nachbaschaft: 0
 |V| = 167, |E| = 82927
-abgeschlossen in 62.1025493144989 Sekunden
-abgeschlossen in 1.0350424885749816 Minuten
-abgeschlossen in 0.017250708142916363 Stunden
+abgeschlossen in 74.39522790908813 Sekunden
+abgeschlossen in 1.2399204651514688 Minuten
+abgeschlossen in 0.020665341085857814 Stunden
