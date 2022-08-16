@@ -1,0 +1,8 @@
+[146, 67, 58, 13, 83, 79, 136, 145, 37, 121, 96, 103, 56, 35, 17, 85, 52, 14, 63, 25, 22, 80, 0, 46, 53, 114, 2, 69, 105, 3, 64, 51, 42, 30, 120, 119, 118, 11, 10, 95, 60, 38, 45, 15, 123, 32, 50, 102, 4, 5]
+Durchschnitt |K| = 136
+wurde auf die 2-Nachbarschaft jedes Knotens angewendet.
+Schwellwert fuer die Groesse der Nachbaschaft: 2
+|V| = 167, |E| = 82927
+abgeschlossen in 62.16839241981506 Sekunden
+abgeschlossen in 1.0361398736635843 Minuten
+abgeschlossen in 0.017268997894393075 Stunden
