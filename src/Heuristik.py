@@ -148,7 +148,7 @@ class TemporalGraph:
             f.write("geloeschte Knotenanzahl = " + str(num_nodes - self.n) + "\n")
             f.write("geloeschte Kanten = " + str(num_edges - self.m) + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish2 / 60) + "\n")
-            # f.write("mit Tiefe = " + str(depth) + "\n")
+            f.write("mit Tiefe = " + str(depth) + "\n")
             # f.write("filter_nodes() abgeschlossen in %s Sekunden" % finish1 + "\n")
             # f.write("geloeschte Knotenanzahl = " + str(num_nodes - self.n) + "\n")
             # f.write("geloeschte Kanten = " + str(num_edges - self.m) + "\n")

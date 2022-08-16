@@ -100,10 +100,10 @@ def import_ranking_alternative(degree_input, reachability_input, output_name, nu
 # plt.savefig(path + '/Plots/'+name+'.svg')
 
 top_k = 10
-dataset = "radoslaw_email"
+dataset = "email-dnc"
 # with open(path + "edge-lists\\" + dataset + "-Heuristik-top-"+str(top_k)+".txt", "r") as h:
 with open(path + "edge-lists\\" + dataset + "-k-Nachbarschaft-Ranking (Digraph)-top-" + str(top_k) + ".txt", "r") as h:
-    with open(path + "edge-lists\\" + "radoslaw-email" + "-Ranking-top-"+str(top_k)+".txt", "r") as o:
+    with open(path + "edge-lists\\" + dataset + "-Ranking-top-"+str(top_k)+".txt", "r") as o:
         line1 = h.readlines()
         line2 = o.readlines()
         arr1 = np.fromstring(line1[0].strip('[]\n'), dtype=float, sep=',')
