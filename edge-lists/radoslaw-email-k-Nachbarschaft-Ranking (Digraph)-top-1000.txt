@@ -2,6 +2,6 @@
 Durchschnitt |K| = 136
 wurde auf die 2-Nachbarschaft jedes Knotens angewendet.
 Schwellwert fuer die Groesse der Nachbaschaft: 31
-abgeschlossen in 62.088836431503296 Sekunden
-abgeschlossen in 1.034813940525055 Minuten
-abgeschlossen in 0.017246899008750916 Stunden
+abgeschlossen in 62.16041135787964 Sekunden
+abgeschlossen in 1.0360068559646607 Minuten
+abgeschlossen in 0.017266780932744343 Stunden
