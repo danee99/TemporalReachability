@@ -99,15 +99,17 @@ def import_ranking_alternative(degree_input, reachability_input, output_name, nu
 # plt.tight_layout()
 # plt.savefig(path + '/Plots/'+name+'.svg')
 
-cool = [10, 50, 100, 1000]
+# cool = [10, 50, 100, 1000]
+cool = [10]
 for top_k in cool:
     arr2 = []
-    dataset = "wiki_talk_gl"
-    with open(path + "edge-lists\\" + dataset + "-Heuristik-top-" + str(1000) + ".txt", "r") as h:
-    # with open(path + "edge-lists\\" + dataset + "-k-Nachbarschaft-Ranking (Digraph)-top-" + str(top_k) + ".txt", "r") as h:
+    dataset = "radoslaw-email"
+    # with open(path + "edge-lists\\" + dataset + "-Heuristik-top-" + str(1000) + ".txt", "r") as h:
+    with open(path + "edge-lists\\" + dataset + "-k-Nachbarschaft-Ranking (Digraph)-top-" + str(1000) + ".txt", "r") as h:
         with open(path + "edge-lists\\" + dataset + "-Optimal.txt", "r") as o:
             for line2 in o:
                 arr = line2.split()
+                print(arr)
                 if arr[1] != '=' and arr[1] != 'in':
                     arr2.append(int(arr[1]))
             line1 = h.readlines()
