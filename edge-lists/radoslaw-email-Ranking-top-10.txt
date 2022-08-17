@@ -1,5 +1,0 @@
-[67, 58, 13, 79, 83, 37, 17, 85, 103, 121]
-R(G) = 21105
-abgeschlossen in 40.313419580459595 Sekunden
-abgeschlossen in 0.6718903263409932 Minuten
-abgeschlossen in 0.01119817210568322 Stunden

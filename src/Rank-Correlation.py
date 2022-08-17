@@ -99,18 +99,22 @@ def import_ranking_alternative(degree_input, reachability_input, output_name, nu
 # plt.tight_layout()
 # plt.savefig(path + '/Plots/'+name+'.svg')
 
-top_k = 10
-dataset = "email-dnc"
-# with open(path + "edge-lists\\" + dataset + "-Heuristik-top-"+str(top_k)+".txt", "r") as h:
-with open(path + "edge-lists\\" + dataset + "-k-Nachbarschaft-Ranking (Digraph)-top-" + str(top_k) + ".txt", "r") as h:
-    with open(path + "edge-lists\\" + dataset + "-Ranking-top-"+str(top_k)+".txt", "r") as o:
-        line1 = h.readlines()
-        line2 = o.readlines()
-        arr1 = np.fromstring(line1[0].strip('[]\n'), dtype=float, sep=',')
-        arr2 = np.fromstring(line2[0].strip('[]\n'), dtype=float, sep=',')
-        optimal = set(arr2)
-        heuristik = set(arr1)
-        print(len(optimal.intersection(heuristik)) / len(optimal.union(heuristik)))
+cool = [10, 50, 100, 1000]
+for top_k in cool:
+    arr2 = []
+    dataset = "wiki_talk_gl"
+    with open(path + "edge-lists\\" + dataset + "-Heuristik-top-" + str(1000) + ".txt", "r") as h:
+    # with open(path + "edge-lists\\" + dataset + "-k-Nachbarschaft-Ranking (Digraph)-top-" + str(top_k) + ".txt", "r") as h:
+        with open(path + "edge-lists\\" + dataset + "-Optimal.txt", "r") as o:
+            for line2 in o:
+                arr = line2.split()
+                if arr[1] != '=' and arr[1] != 'in':
+                    arr2.append(int(arr[1]))
+            line1 = h.readlines()
+            arr1 = np.fromstring(line1[0].strip('[]\n'), dtype=float, sep=',')
+            optimal = set(arr2[:top_k])
+            heuristik = set(arr1[:top_k])
+            print(len(optimal.intersection(heuristik)) / len(optimal.union(heuristik)), top_k)
 
 # aves-weaver-social 445
 # email-dnc 1891

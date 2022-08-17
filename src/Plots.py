@@ -8,7 +8,7 @@ name = "Auswirkungen-der-Modifikationen"
 
 bar_width = 0.25
 x = ['radoslaw-\nemail', 'email-dnc', 'UC-Irvine-\nmessages', 'dblp-cite', 'wiki_talk_\ngl']
-heuristik = [0.61, 4.85, 0.0, 0.0, 0.0]
+heuristik = [0.61, 4.85, 29.1, 5.24, 19.76]
 normal = [0.67, 12.15, 40.79, 44.29, 230.33]
 k_neighborhood = [0.0, 0.0, 0.0, 0.0, 0.0]
 
@@ -22,15 +22,21 @@ plt.bar(bar1, normal, bar_width, label="Knoten-Ranking", edgecolor='black')
 plt.bar(bar2, heuristik, bar_width, label="Heuristik", edgecolor='black')
 plt.bar(bar3, k_neighborhood, bar_width, label="k Nachbarschaft", edgecolor='black')
 
-plt.xlabel("\nDatensätze")
-plt.ylabel("Laufzeit in min")
-plt.title("Auswirkungen der Heuristik auf die Laufzeit")
+plt.xlabel("\nDatensätze", fontsize=11)
+plt.ylabel("Laufzeit in min", fontsize=11)
+plt.title("Auswirkungen der Heuristik auf die Laufzeit", fontsize=11)
 
 plt.xticks([r + bar_width for r in range(len(bar1))], x)
 plt.legend()
+
+for i, v in enumerate(heuristik):
+    plt.text(i + 0.14, 0 / heuristik[i] + heuristik[i] + 1, heuristik[i], fontsize=10)
+for i, v in enumerate(normal):
+    plt.text(i - 0.18, 0 / normal[i] + normal[i] + 1, normal[i], fontsize=10)
+
 plt.tight_layout()
 plt.savefig(os.path.join(os.getcwd(), os.pardir) + '\\Plots\\' + name + '.svg')
-# plt.show()
+plt.show()
 
 # print(plt.style.available)
 # plt.style.use('bmh')

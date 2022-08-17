@@ -45,7 +45,6 @@ class TemporalGraph:
                 self.m += 1
 
     # scans an edgelist and creates a undirected temporal Graph in O(n+m)
-    # Here, the edge list is assumed to have no back edges, even though the graph is undirected
     def import_undirected_edgelist(self, file_name):
         with open(path + file_name, "r") as f:
             n = int(f.readline())
@@ -136,57 +135,48 @@ class TemporalGraph:
                     continue
             total += len(visited)
         return 1 - (total / before), x
-        # return total, x
 
-    # parallelized node ranking
-    def node_ranking(self, a, b, output_name, k):
+    # ranking all nodes
+    def node_ranking(self, a, b, output_name):
         start_time = time.time()
         self.calc_total_reachability(a, b)
         helper = [np.inf for _ in range(self.n)]
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
         result_objects = [pool.apply_async(self.rank_node, args=(node, a, b, self.total_reachability, helper))
-                          for node
-                          in range(0, self.n)]
+                          for node in range(0, self.n)]
         ranking = [r.get() for r in result_objects]
         pool.close()
         pool.join()
         finish = time.time() - start_time
         with open(path + output_name, 'w') as f:
             ranking.sort(reverse=True)
-            # for i in range(len(ranking)):
-            #     f.write(str(i + 1) + ".Platz: " + str(ranking[i][1]) + " mit R(G-v) = " + str(ranking[i][0]) + "\n")
-            # f.write(str(ranking) + "\n")
-            f.write(str([v for (rank, v) in ranking[:k]]) + "\n")
+            for i in range(len(ranking)):
+                f.write(str(i + 1) + ".Platz: " + str(ranking[i][1]) + "\n")
             f.write("R(G) = %s" % self.total_reachability + "\n")
             f.write("abgeschlossen in %s Sekunden" % finish + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
             f.write("abgeschlossen in %s Stunden" % (finish / 3600))
-        # start_time = time.time()
-        # self.calc_total_reachability(a, b)
-        # helper = [np.inf for _ in range(self.n)]
-        # ranking = []
-        # for node in range(0, self.n):
-        #     ranking.append(self.rank_node(node, a, b, self.total_reachability, helper))
-        # finish = time.time() - start_time
-        # with open(path + output_name, 'w') as f:
-        #     ranking.sort()
-        #     f.write(str(ranking) + "\n")
-        #     f.write("R(G) = %s" % self.total_reachability + "\n")
-        #     f.write("abgeschlossen in %s Sekunden" % finish + "\n")
-        #     f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
-        #     f.write("abgeschlossen in %s Stunden" % (finish / 3600))
+        ranking = []
+        for node in range(0, self.n):
+            ranking.append(self.rank_node(node, a, b, self.total_reachability, helper))
+        finish = time.time() - start_time
+        with open(path + output_name, 'w') as f:
+            f.write(str(ranking) + "\n")
+            f.write("R(G) = %s" % self.total_reachability + "\n")
+            f.write("abgeschlossen in %s Sekunden" % finish + "\n")
+            f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
+            f.write("abgeschlossen in %s Stunden" % (finish / 3600))
 
 
 if __name__ == '__main__':
     input_graph = input('Edgeliste eingeben:')
     directed = (input('Soll die Kantenliste als gerichtet betrachtet werden? [y/n]:'))
-    k = int(input('k eingeben:'))
     a = int(input('Intervall a eingeben: '))
     b = np.inf
-    output_file = input_graph.split(".")[0] + '-Ranking-top-' + str(k) + '.txt'
+    output_file = input_graph.split(".")[0] + '-Optimal.txt'
     G = TemporalGraph()
     if directed == 'y':
         G.import_edgelist(input_graph)
     elif directed == 'n':
         G.import_undirected_edgelist(input_graph)
-    G.node_ranking(a, b, output_file, k)
+    G.node_ranking(a, b, output_file)
