@@ -115,23 +115,24 @@ class TemporalGraph:
         size = len(k_neighbours)
         size_alt = size - 1
         if size <= p:
-            return 0, deleted_node, size
-        for node in k_neighbours:
-            visited = set()
-            earliest_arrival_time = {j: np.inf for j in k_neighbours}
-            earliest_arrival_time[node] = a
-            PQ = []
-            heapq.heappush(PQ, (earliest_arrival_time[node], node))
-            while PQ:
-                (current_arrival_time, current_node) = heapq.heappop(PQ)
-                visited.add(current_node)
-                for (u, v, t, l) in k_neighbours[current_node]:
-                    if v not in visited:
-                        if t < a or t + l > b: continue
-                        if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                            earliest_arrival_time[v] = t + l
-                            heapq.heappush(PQ, (earliest_arrival_time[v], v))
-            before += len(visited)
+            # return 0, deleted_node, size
+            return np.inf, deleted_node, size
+        # for node in k_neighbours:
+        #     visited = set()
+        #     earliest_arrival_time = {j: np.inf for j in k_neighbours}
+        #     earliest_arrival_time[node] = a
+        #     PQ = []
+        #     heapq.heappush(PQ, (earliest_arrival_time[node], node))
+        #     while PQ:
+        #         (current_arrival_time, current_node) = heapq.heappop(PQ)
+        #         visited.add(current_node)
+        #         for (u, v, t, l) in k_neighbours[current_node]:
+        #             if v not in visited:
+        #                 if t < a or t + l > b: continue
+        #                 if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+        #                     earliest_arrival_time[v] = t + l
+        #                     heapq.heappush(PQ, (earliest_arrival_time[v], v))
+        #     before += len(visited)
         for node in k_neighbours:
             if node == deleted_node:
                 continue
@@ -152,13 +153,17 @@ class TemporalGraph:
                                 earliest_arrival_time[v] = t + l
                                 heapq.heappush(PQ, (earliest_arrival_time[v], v))
             total += len(visited)
+        # if total < size:
+        #     return 0, deleted_node, size
+        # rank = 1 - (total * size) / (before * size_alt)
+        # if rank < 0:
+        #     return 0, deleted_node, size
+        # else:
+        #     return rank, deleted_node, size
         if total < size:
-            return 0, deleted_node, size
-        rank = 1 - (total * size) / (before * size_alt)
-        if rank < 0:
-            return 0, deleted_node, size
-        else:
-            return rank, deleted_node, size
+            return np.inf, deleted_node, size
+        rank = total / size
+        return rank, deleted_node, size
 
 
 if __name__ == '__main__':
@@ -177,7 +182,7 @@ if __name__ == '__main__':
     pool.join()
     finish = time.time() - start_time
     with open(path + output_file, 'w') as f:
-        result.sort(reverse=True)
+        result.sort(reverse=False)
         f.write(str([v for (ranking, v, size) in result]) + "\n")
         sizes = [size for (ranking, v, size) in result]
         f.write("Durchschnitt |K| = " + str(str(round(sum(sizes) / len(sizes))) + "\n"))

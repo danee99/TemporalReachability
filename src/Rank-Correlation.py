@@ -99,8 +99,8 @@ def import_ranking_alternative(degree_input, reachability_input, output_name, nu
 # plt.tight_layout()
 # plt.savefig(path + '/Plots/'+name+'.svg')
 
-# cool = [10, 50, 100, 1000]
-cool = [10]
+cool = [10, 50, 100, 1000]
+# cool = [10]
 for top_k in cool:
     arr2 = []
     dataset = "radoslaw-email"
