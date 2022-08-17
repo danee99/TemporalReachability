@@ -10,7 +10,7 @@ bar_width = 0.25
 x = ['radoslaw-\nemail', 'email-dnc', 'UC-Irvine-\nmessages', 'dblp-cite', 'wiki_talk_\ngl']
 heuristik = [0.61, 4.85, 29.1, 5.24, 19.76]
 normal = [0.67, 12.15, 40.79, 44.29, 230.33]
-k_neighborhood = [0.0, 0.0, 0.0, 0.0, 0.0]
+k_neighborhood = [1.03, 10.0, 10.0, 10.0, 10.0]
 
 bar1 = np.arange(len(x))
 bar2 = [i + bar_width for i in bar1]
@@ -32,7 +32,12 @@ plt.legend()
 for i, v in enumerate(heuristik):
     plt.text(i + 0.14, 0 / heuristik[i] + heuristik[i] + 1, heuristik[i], fontsize=10)
 for i, v in enumerate(normal):
-    plt.text(i - 0.18, 0 / normal[i] + normal[i] + 1, normal[i], fontsize=10)
+    plt.text(i - 0.2, 0 / normal[i] + normal[i] + 1, normal[i], fontsize=10)
+for i, v in enumerate(k_neighborhood):
+    if i == 0:
+        plt.text(i + 0.45, 0 / k_neighborhood[i] + k_neighborhood[i] + 2, k_neighborhood[i], fontsize=10)
+    else:
+        plt.text(i + 0.45, 0 / k_neighborhood[i] + k_neighborhood[i] + 1, k_neighborhood[i], fontsize=10)
 
 plt.tight_layout()
 plt.savefig(os.path.join(os.getcwd(), os.pardir) + '\\Plots\\' + name + '.svg')
