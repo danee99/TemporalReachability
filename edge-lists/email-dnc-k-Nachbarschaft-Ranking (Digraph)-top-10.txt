@@ -1,7 +1,0 @@
-[926, 1620, 1621, 311, 1168, 1169, 729, 840, 1678, 1679]
-wurde auf die 3-Nachbarschaft jedes Knotens angewendet.
-Schwellwert fuer die Groesse der Nachbaschaft: 3
-|V| = 1891, |E| = 39264
-abgeschlossen in 486.73346519470215 Sekunden
-abgeschlossen in 8.112224419911703 Minuten
-abgeschlossen in 0.13520374033186172 Stunden

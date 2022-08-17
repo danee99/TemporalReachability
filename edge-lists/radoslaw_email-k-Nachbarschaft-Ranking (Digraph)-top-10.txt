@@ -1,7 +1,0 @@
-[67, 58, 13, 79, 83, 37, 17, 85, 121, 103]
-wurde auf die 3-Nachbarschaft jedes Knotens angewendet.
-Schwellwert fuer die Groesse der Nachbaschaft: 0
-|V| = 167, |E| = 82927
-abgeschlossen in 74.39522790908813 Sekunden
-abgeschlossen in 1.2399204651514688 Minuten
-abgeschlossen in 0.020665341085857814 Stunden

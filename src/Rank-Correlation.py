@@ -109,7 +109,6 @@ for top_k in cool:
         with open(path + "edge-lists\\" + dataset + "-Optimal.txt", "r") as o:
             for line2 in o:
                 arr = line2.split()
-                print(arr)
                 if arr[1] != '=' and arr[1] != 'in':
                     arr2.append(int(arr[1]))
             line1 = h.readlines()
