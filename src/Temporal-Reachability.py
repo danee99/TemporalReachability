@@ -137,7 +137,8 @@ class TemporalGraph:
                 else:
                     continue
             total += len(visited)
-        return 1 - (total / before), x
+        # return 1 - (total / before), x
+        return 1 - (total / before)
 
     # ranking all nodes
     def node_ranking(self, a, b, output_name):
@@ -155,6 +156,7 @@ class TemporalGraph:
             # ranking.sort(reverse=True)
             # for i in range(len(ranking)):
             #     f.write(str(i + 1) + ".Platz: " + str(ranking[i][1]) + "\n")
+            f.write(str(ranking) + "\n")
             f.write("R(G) = %s" % self.total_reachability + "\n")
             f.write("abgeschlossen in %s Sekunden" % finish + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
