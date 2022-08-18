@@ -11,7 +11,8 @@ path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
 
 class TemporalGraph:
     def __init__(self):
-        self.nodes = set()
+        # self.nodes = set()
+        self.nodes = []
         self.incidence_list = []
         self.n = 0
         self.m = 0
@@ -37,8 +38,10 @@ class TemporalGraph:
                     l = int(arr[3])
                 except IndexError:
                     l = 1
-                self.nodes.add(u)
-                self.nodes.add(v)
+                # self.nodes.add(u)
+                # self.nodes.add(v)
+                self.nodes.append(u)
+                self.nodes.append(v)
                 # if v not in [self.incidence_list[u][0][i][1] for i in range(0, len(self.incidence_list[u][0]))]:
                 #     self.incidence_list[u].append((u, v, t, l))
                 self.incidence_list[u].append((u, v, t, l))
@@ -59,8 +62,10 @@ class TemporalGraph:
                     l = int(arr[3])
                 except IndexError:
                     l = 1
-                self.nodes.add(u)
-                self.nodes.add(v)
+                # self.nodes.add(u)
+                # self.nodes.add(v)
+                self.nodes.append(u)
+                self.nodes.append(v)
                 # if v not in [self.incidence_list[u][0][i][1] for i in range(0, len(self.incidence_list[u][0]))]:
                 #     self.incidence_list[u].append((u, v, t, l))
                 # if u not in [self.incidence_list[v][0][i][1] for i in range(0, len(self.incidence_list[v][0]))]:
@@ -98,15 +103,12 @@ class TemporalGraph:
             while PQ:
                 (current_arrival_time, current_node) = heapq.heappop(PQ)
                 visited.add(current_node)
-                if self.incidence_list[current_node]:
-                    for (u, v, t, l) in self.incidence_list[current_node]:
-                        if v not in visited:
-                            if t < a or t + l > b: continue
-                            if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                                earliest_arrival_time[v] = t + l
-                                heapq.heappush(PQ, (earliest_arrival_time[v], v))
-                else:
-                    continue
+                for (u, v, t, l) in self.incidence_list[current_node]:
+                    if v not in visited:
+                        if t < a or t + l > b: continue
+                        if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+                            earliest_arrival_time[v] = t + l
+                            heapq.heappush(PQ, (earliest_arrival_time[v], v))
             self.total_reachability += len(visited)
 
     # ranks the node "x", where the ranking is a floating point number between 0 and 1
@@ -124,15 +126,12 @@ class TemporalGraph:
                 (current_arrival_time, current_node) = heapq.heappop(PQ)
                 if current_node != x:
                     visited.add(current_node)
-                if self.incidence_list[current_node]:
-                    for (u, v, t, l) in self.incidence_list[current_node]:
-                        if u != x and v != x and v not in visited:
-                            if t < a or t + l > b: continue
-                            if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                                earliest_arrival_time[v] = t + l
-                                heapq.heappush(PQ, (earliest_arrival_time[v], v))
-                else:
-                    continue
+                for (u, v, t, l) in self.incidence_list[current_node]:
+                    if u != x and v != x and v not in visited:
+                        if t < a or t + l > b: continue
+                        if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+                            earliest_arrival_time[v] = t + l
+                            heapq.heappush(PQ, (earliest_arrival_time[v], v))
             total += len(visited)
         return 1 - (total / before), x
 
@@ -164,13 +163,14 @@ class TemporalGraph:
             ranking.append(self.rank_node(node, a, b, self.total_reachability, helper))
         finish = time.time() - start_time
         with open(path + output_name, 'w') as f:
-            ranking.sort(reverse=True)
-            for i in range(len(ranking)):
-                f.write(str(i + 1) + ".Platz: " + str(ranking[i][1]) + "\n")
+            # ranking.sort(reverse=True)
+            # for i in range(len(ranking)):
+            #     f.write(str(i + 1) + ".Platz: " + str(ranking[i][1]) + "\n")
             f.write("R(G) = %s" % self.total_reachability + "\n")
             f.write("abgeschlossen in %s Sekunden" % finish + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
             f.write("abgeschlossen in %s Stunden" % (finish / 3600))
+
 
 if __name__ == '__main__':
     input_graph = input('Edgeliste eingeben:')

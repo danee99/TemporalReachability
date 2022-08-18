@@ -30,7 +30,7 @@ class TemporalGraph:
         with open(path + file_name, "r") as f:
             n = int(f.readline())
             self.n = n
-            self.nodes = [i for i in range(0, n)]
+            self.nodes = [i for i in range(n)]
             for line in f:
                 arr = line.split()
                 u = int(arr[0])
@@ -46,7 +46,7 @@ class TemporalGraph:
         with open(path + file_name, "r") as f:
             n = int(f.readline())
             self.n = n
-            self.nodes = [i for i in range(0, n)]
+            self.nodes = [i for i in range(n)]
             for line in f:
                 arr = line.split()
                 u = int(arr[0])
