@@ -103,7 +103,7 @@ cool = [10, 50, 100, 1000]
 # cool = [10]
 for top_k in cool:
     arr2 = []
-    dataset = "UC-Irvine-messages"
+    dataset = "dblp-cite"
     # with open(path + "edge-lists\\" + dataset + "-Heuristik-top-" + str(1000) + ".txt", "r") as h:
     with open(path + "edge-lists\\" + dataset + "-k-Nachbarschaft-Ranking (Digraph)-top-" + str(1000) + ".txt", "r") as h:
         with open(path + "edge-lists\\" + dataset + "-Optimal.txt", "r") as o:
