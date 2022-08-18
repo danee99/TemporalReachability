@@ -29,6 +29,7 @@ class TemporalGraph:
             n = int(f.readline())
             self.n = n
             self.incidence_list = [[] for _ in range(n)]
+            self.nodes = [i for i in range(n)]
             for line in f:
                 arr = line.split()
                 u = int(arr[0])
@@ -40,8 +41,6 @@ class TemporalGraph:
                     l = 1
                 # self.nodes.add(u)
                 # self.nodes.add(v)
-                self.nodes.append(u)
-                self.nodes.append(v)
                 # if v not in [self.incidence_list[u][0][i][1] for i in range(0, len(self.incidence_list[u][0]))]:
                 #     self.incidence_list[u].append((u, v, t, l))
                 self.incidence_list[u].append((u, v, t, l))
@@ -53,6 +52,7 @@ class TemporalGraph:
             n = int(f.readline())
             self.n = n
             self.incidence_list = [[] for _ in range(n)]
+            self.nodes = [i for i in range(n)]
             for line in f:
                 arr = line.split()
                 u = int(arr[0])
@@ -64,8 +64,6 @@ class TemporalGraph:
                     l = 1
                 # self.nodes.add(u)
                 # self.nodes.add(v)
-                self.nodes.append(u)
-                self.nodes.append(v)
                 # if v not in [self.incidence_list[u][0][i][1] for i in range(0, len(self.incidence_list[u][0]))]:
                 #     self.incidence_list[u].append((u, v, t, l))
                 # if u not in [self.incidence_list[v][0][i][1] for i in range(0, len(self.incidence_list[v][0]))]:
@@ -103,12 +101,15 @@ class TemporalGraph:
             while PQ:
                 (current_arrival_time, current_node) = heapq.heappop(PQ)
                 visited.add(current_node)
-                for (u, v, t, l) in self.incidence_list[current_node]:
-                    if v not in visited:
-                        if t < a or t + l > b: continue
-                        if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                            earliest_arrival_time[v] = t + l
-                            heapq.heappush(PQ, (earliest_arrival_time[v], v))
+                if self.incidence_list[current_node]:
+                    for (u, v, t, l) in self.incidence_list[current_node]:
+                        if u != x and v != x and v not in visited:
+                            if t < a or t + l > b: continue
+                            if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+                                earliest_arrival_time[v] = t + l
+                                heapq.heappush(PQ, (earliest_arrival_time[v], v))
+                else:
+                    continue
             self.total_reachability += len(visited)
 
     # ranks the node "x", where the ranking is a floating point number between 0 and 1
@@ -126,12 +127,15 @@ class TemporalGraph:
                 (current_arrival_time, current_node) = heapq.heappop(PQ)
                 if current_node != x:
                     visited.add(current_node)
-                for (u, v, t, l) in self.incidence_list[current_node]:
-                    if u != x and v != x and v not in visited:
-                        if t < a or t + l > b: continue
-                        if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                            earliest_arrival_time[v] = t + l
-                            heapq.heappush(PQ, (earliest_arrival_time[v], v))
+                if self.incidence_list[current_node]:
+                    for (u, v, t, l) in self.incidence_list[current_node]:
+                        if u != x and v != x and v not in visited:
+                            if t < a or t + l > b: continue
+                            if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+                                earliest_arrival_time[v] = t + l
+                                heapq.heappush(PQ, (earliest_arrival_time[v], v))
+                else:
+                    continue
             total += len(visited)
         return 1 - (total / before), x
 
