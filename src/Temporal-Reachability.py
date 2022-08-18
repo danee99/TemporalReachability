@@ -103,7 +103,7 @@ class TemporalGraph:
                 visited.add(current_node)
                 if self.incidence_list[current_node]:
                     for (u, v, t, l) in self.incidence_list[current_node]:
-                        if u != x and v != x and v not in visited:
+                        if v not in visited:
                             if t < a or t + l > b: continue
                             if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                                 earliest_arrival_time[v] = t + l
