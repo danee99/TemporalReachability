@@ -5,8 +5,8 @@ import numpy as np
 from queue import PriorityQueue
 import heapq_max
 
-path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
-# path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
+# path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
 max_heap = []
 k = 10
 
