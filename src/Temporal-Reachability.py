@@ -13,8 +13,7 @@ class TemporalGraph:
     def __init__(self):
         # self.nodes = set()
         self.nodes = []
-        # self.incidence_list = []
-        self.incidence_list = {}
+        self.incidence_list = []
         self.n = 0
         self.m = 0
         self.total_reachability = 0
@@ -29,7 +28,7 @@ class TemporalGraph:
         with open(path + file_name, "r") as f:
             n = int(f.readline())
             self.n = n
-            # self.incidence_list = [[] for _ in range(n)]
+            self.incidence_list = [[] for _ in range(n)]
             self.nodes = [i for i in range(n)]
             for line in f:
                 arr = line.split()
@@ -44,10 +43,6 @@ class TemporalGraph:
                 # self.nodes.add(v)
                 # if v not in [self.incidence_list[u][0][i][1] for i in range(0, len(self.incidence_list[u][0]))]:
                 #     self.incidence_list[u].append((u, v, t, l))
-                if u not in self.incidence_list:
-                    self.incidence_list[u] = []
-                if v not in self.incidence_list:
-                    self.incidence_list[v] = []
                 self.incidence_list[u].append((u, v, t, l))
                 self.m += 1
 
@@ -56,7 +51,7 @@ class TemporalGraph:
         with open(path + file_name, "r") as f:
             n = int(f.readline())
             self.n = n
-            # self.incidence_list = [[] for _ in range(n)]
+            self.incidence_list = [[] for _ in range(n)]
             self.nodes = [i for i in range(n)]
             for line in f:
                 arr = line.split()
@@ -73,10 +68,6 @@ class TemporalGraph:
                 #     self.incidence_list[u].append((u, v, t, l))
                 # if u not in [self.incidence_list[v][0][i][1] for i in range(0, len(self.incidence_list[v][0]))]:
                 #     self.incidence_list[v].append((v, u, t, l))
-                if u not in self.incidence_list:
-                    self.incidence_list[u] = []
-                if v not in self.incidence_list:
-                    self.incidence_list[v] = []
                 self.incidence_list[u].append((u, v, t, l))
                 self.incidence_list[v].append((v, u, t, l))
                 self.m += 2
