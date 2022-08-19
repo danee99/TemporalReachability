@@ -103,11 +103,13 @@ class TemporalGraph:
                 visited.add(current_node)
                 if self.incidence_list[current_node]:
                     for (u, v, t, l) in self.incidence_list[current_node]:
-                        if v not in visited:
+                        S = set()
+                        if v not in visited and v not in S:
                             if t < a or t + l > b: continue
                             if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                                 earliest_arrival_time[v] = t + l
                                 heapq.heappush(PQ, (earliest_arrival_time[v], v))
+                                S.add(v)
                 else:
                     continue
             self.total_reachability += len(visited)
@@ -129,11 +131,13 @@ class TemporalGraph:
                     visited.add(current_node)
                 if self.incidence_list[current_node]:
                     for (u, v, t, l) in self.incidence_list[current_node]:
-                        if u != x and v != x and v not in visited:
+                        S = set()
+                        if u != x and v != x and v not in visited and v not in S:
                             if t < a or t + l > b: continue
                             if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                                 earliest_arrival_time[v] = t + l
                                 heapq.heappush(PQ, (earliest_arrival_time[v], v))
+                                S.add(v)
                 else:
                     continue
             total += len(visited)
