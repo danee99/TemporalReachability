@@ -101,19 +101,15 @@ class TemporalGraph:
             while PQ:
                 (current_arrival_time, current_node) = heapq.heappop(PQ)
                 visited.add(current_node)
-                for (u, v, t, l) in [(u, v, t, l) for (u, v, t, l) in self.incidence_list[current_node]
-                                     if v not in visited and t >= a and t + l <= b and t + l < earliest_arrival_time[v] and t >= current_arrival_time]:
-                    earliest_arrival_time[v] = t + l
-                    heapq.heappush(PQ, (earliest_arrival_time[v], v))
-                # for (u, v, t, l) in self.incidence_list[current_node]:
-                #     # S = set()
-                #     # if v not in visited and v not in S:
-                #     if v not in visited:
-                #         if t < a or t + l > b: continue
-                #         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                #             earliest_arrival_time[v] = t + l
-                #             heapq.heappush(PQ, (earliest_arrival_time[v], v))
-                #             # S.add(v)
+                for (u, v, t, l) in self.incidence_list[current_node]:
+                    # S = set()
+                    # if v not in visited and v not in S:
+                    if v not in visited:
+                        if t < a or t + l > b: continue
+                        if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+                            earliest_arrival_time[v] = t + l
+                            heapq.heappush(PQ, (earliest_arrival_time[v], v))
+                            # S.add(v)
             self.total_reachability += len(visited)
 
     # ranks the node "x", where the ranking is a floating point number between 0 and 1
@@ -131,20 +127,15 @@ class TemporalGraph:
                 (current_arrival_time, current_node) = heapq.heappop(PQ)
                 if current_node != x:
                     visited.add(current_node)
-                for (u, v, t, l) in [(u, v, t, l) for (u, v, t, l) in self.incidence_list[current_node]
-                                     if u != x and v != x and v not in visited and t >= a and t + l <= b and
-                                        t + l < earliest_arrival_time[v] and t >= current_arrival_time]:
-                    earliest_arrival_time[v] = t + l
-                    heapq.heappush(PQ, (earliest_arrival_time[v], v))
-                # for (u, v, t, l) in self.incidence_list[current_node]:
-                #     # S = set()
-                #     # if u != x and v != x and v not in visited and v not in S:
-                #     if u != x and v != x and v not in visited:
-                #         if t < a or t + l > b: continue
-                #         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                #             earliest_arrival_time[v] = t + l
-                #             heapq.heappush(PQ, (earliest_arrival_time[v], v))
-                #             # S.add(v)
+                for (u, v, t, l) in self.incidence_list[current_node]:
+                    # S = set()
+                    # if u != x and v != x and v not in visited and v not in S:
+                    if u != x and v != x and v not in visited:
+                        if t < a or t + l > b: continue
+                        if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+                            earliest_arrival_time[v] = t + l
+                            heapq.heappush(PQ, (earliest_arrival_time[v], v))
+                            # S.add(v)
             total += len(visited)
         # return 1 - (total / before), x
         return 1 - (total / before), x
