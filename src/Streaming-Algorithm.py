@@ -73,23 +73,25 @@ class TemporalGraph:
             total_reach += reach_num
         return total_reach
 
-    def rank_node(self, a, b, x, helper, before):
+    def rank_node(self, a, b, x, before):
         total_reach = 0
         for node in self.nodes:
             if node == x:
                 continue
             reach_num = 1
-            arrival_time = helper.copy()
+            arrival_time = [np.inf] * self.n
             arrival_time[node] = a
             for (u, v, t, l) in self.edge_stream:
                 if u != x and v != x:
-                    if t < a or t + l > b: break
-                    if arrival_time[u] <= t and arrival_time[v] > t + l:
-                        arrival_time[v] = t + l
+                    f = t + l
+                    if t < a or f > b:
+                        break
+                    if arrival_time[u] <= t and arrival_time[v] > f:
+                        arrival_time[v] = f
                         reach_num = reach_num + 1
             total_reach += reach_num
-        # return 1 - (total_reach / before), x
-        return 1 - (total_reach / before)
+        return 1 - (total_reach / before), x
+        # return 1 - (total_reach / before)
         # return total_reach
 
     def node_ranking(self, a, b, output_name):
@@ -114,13 +116,16 @@ class TemporalGraph:
         #     f.write("abgeschlossen in %s Stunden" % (finish / 3600))
         start_time = time.time()
         before = self.total_reachability(a, b)
-        helper = [np.inf for _ in range(self.n)]
+        # helper = [np.inf for _ in range(self.n)]
         ranking = []
         for node in range(0, self.n):
-            ranking.append(self.rank_node(a, b, node, helper, before))
+            ranking.append(self.rank_node(a, b, node, before))
         finish = time.time() - start_time
         with open(path + output_name, 'w') as f:
-            f.write(str(ranking) + "\n")
+            # f.write(str(ranking) + "\n")
+            ranking.sort(reverse=True)
+            for i in range(len(ranking)):
+                f.write(str(i + 1) + ".Platz: " + str(ranking[i][1]) + "\n")
             f.write("R(G) = %s" % before + "\n")
             f.write("abgeschlossen in %s Sekunden" % finish + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
