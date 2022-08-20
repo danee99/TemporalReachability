@@ -74,6 +74,6 @@
 74.Platz: 40
 75.Platz: 14
 R(G) = 5240
-abgeschlossen in 153.2389075756073 Sekunden
-abgeschlossen in 2.5539817929267885 Minuten
-abgeschlossen in 0.04256636321544647 Stunden
+abgeschlossen in 151.8626389503479 Sekunden
+abgeschlossen in 2.5310439825057984 Minuten
+abgeschlossen in 0.04218406637509664 Stunden
