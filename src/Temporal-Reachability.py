@@ -93,72 +93,27 @@ class TemporalGraph:
     # calculates the total reachability of the given temporal graph in a time interval [a,b]
     def calc_total_reachability(self, a, b):
         for node in self.nodes:
-            visited = [False] * self.n
-            earliest_arrival_time = [np.inf] * self.n
+            reach_set = {node}
+            visited = set()
+            earliest_arrival_time = [np.inf for _ in range(self.n)]
             earliest_arrival_time[node] = 0
-            PQ = []
-            heapq.heappush(PQ, (0, node))
-            while len(PQ) > 0:
-                (current_arrival_time, current_node) = heapq.heappop(PQ)
-                if not visited[current_node]:
-                    visited[current_node] = True
-                    self.total_reachability += 1
-                for (u, v, t, l) in self.incidence_list[current_node]:
-                    f = t + l
-                    if t < a or f > b:
-                        continue
-                    if not visited[v]:
-                        if t >= current_arrival_time and f < earliest_arrival_time[v]:
-                            earliest_arrival_time[v] = f
-                            heapq.heappush(PQ, (f, v))
-        # for node in self.nodes:
-        #     visited = set()
-        #     earliest_arrival_time = [np.inf for _ in range(self.n)]
-        #     earliest_arrival_time[node] = a
-        #     PQ = []
-        #     heapq.heappush(PQ, (0, node))
-        #     while PQ:
-        #         (current_arrival_time, current_node) = heapq.heappop(PQ)
-        #         visited.add(current_node)
-        #         if self.incidence_list[current_node]:
-        #             for (u, v, t, l) in self.incidence_list[current_node]:
-        #                 S = set()
-        #                 if v not in visited and v not in S:
-        #                     if t < a or t + l > b: continue
-        #                     if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-        #                         earliest_arrival_time[v] = t + l
-        #                         heapq.heappush(PQ, (earliest_arrival_time[v], v))
-        #                         S.add(v)
-        #         else:
-        #             continue
-        #     self.total_reachability += len(visited)
+            PQ = PriorityQueue()
+            PQ.put((earliest_arrival_time[node], node))
+            while not PQ.empty():
+                (current_arrival_time, current_node) = PQ.get()
+                if current_node not in visited:
+                    for (u, v, t, l) in self.incidence_list[current_node]:
+                        if t < a or t + l > b:
+                            continue
+                        if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+                            reach_set.add(v)
+                            earliest_arrival_time[v] = t + l
+                            PQ.put((earliest_arrival_time[v], v))
+                    visited.add(current_node)
+            self.total_reachability += len(reach_set)
 
     # ranks the node "x", where the ranking is a floating point number between 0 and 1
-    def rank_node(self, x, a, b, before):
-        total = 0
-        for node in self.nodes:
-            if node == x:
-                continue
-            visited = [False] * self.n
-            earliest_arrival_time = [np.inf] * self.n
-            earliest_arrival_time[node] = 0
-            PQ = []
-            heapq.heappush(PQ, (0, node))
-            while len(PQ) > 0:
-                (current_arrival_time, current_node) = heapq.heappop(PQ)
-                if not visited[current_node]:
-                    visited[current_node] = True
-                    total += 1
-                for (u, v, t, l) in self.incidence_list[current_node]:
-                    f = t + l
-                    if t < a or f > b:
-                        continue
-                    if u != x and v != x and not visited[v]:
-                        if t >= current_arrival_time and f < earliest_arrival_time[v]:
-                            earliest_arrival_time[v] = f
-                            heapq.heappush(PQ, (f, v))
-        rank = 1 - (total / before)
-        return rank, x
+    def rank_node(self, x, a, b, before, helper):
         # total = 0
         # for node in self.nodes:
         #     if node == x:
@@ -174,17 +129,40 @@ class TemporalGraph:
         #             visited.add(current_node)
         #         if self.incidence_list[current_node]:
         #             for (u, v, t, l) in self.incidence_list[current_node]:
-        #                 S = set()
-        #                 if u != x and v != x and v not in visited and v not in S:
-        #                     if t < a or t + l > b: continue
-        #                     if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-        #                         earliest_arrival_time[v] = t + l
+        #                 if u != x and v != x and v not in visited:
+        #                     f = t+ l
+        #                     if t < a or f > b: continue
+        #                     if f < earliest_arrival_time[v] and t >= current_arrival_time:
+        #                         earliest_arrival_time[v] = f
         #                         heapq.heappush(PQ, (earliest_arrival_time[v], v))
-        #                         S.add(v)
         #         else:
         #             continue
         #     total += len(visited)
-        # return 1 - (total / before)
+        # return 1 - (total / before), x
+        total = 0
+        for node in self.nodes:
+            if node == x:
+                continue
+            reach_set = {node}
+            visited = set()
+            earliest_arrival_time = helper.copy()
+            earliest_arrival_time[node] = 0
+            PQ = PriorityQueue()
+            PQ.put((earliest_arrival_time[node], node))
+            while not PQ.empty():
+                (current_arrival_time, current_node) = PQ.get()
+                if current_node not in visited:
+                    for (u, v, t, l) in self.incidence_list[current_node]:
+                        if u != x and v != x:
+                            if t < a or t + l > b:
+                                continue
+                            if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+                                reach_set.add(v)
+                                earliest_arrival_time[v] = t + l
+                                PQ.put((earliest_arrival_time[v], v))
+                    visited.add(current_node)
+            total += len(reach_set)
+        return 1 - (total / before), x
 
     # ranking all nodes
     def node_ranking(self, a, b, output_name):
@@ -210,9 +188,9 @@ class TemporalGraph:
         start_time = time.time()
         self.calc_total_reachability(a, b)
         ranking = []
-        # helper = [np.inf for _ in range(self.n)]
+        helper = [np.inf for _ in range(self.n)]
         for node in range(0, self.n):
-            ranking.append(self.rank_node(node, a, b, self.total_reachability))
+            ranking.append(self.rank_node(node, a, b, self.total_reachability, helper))
         finish = time.time() - start_time
         with open(path + output_name, 'w') as f:
             ranking.sort(reverse=True)

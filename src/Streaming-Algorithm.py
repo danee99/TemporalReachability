@@ -73,13 +73,13 @@ class TemporalGraph:
             total_reach += reach_num
         return total_reach
 
-    def rank_node(self, a, b, x, before):
+    def rank_node(self, a, b, x, before, helper):
         total_reach = 0
         for node in self.nodes:
             if node == x:
                 continue
             reach_num = 1
-            arrival_time = [np.inf] * self.n
+            arrival_time = helper.copy()
             arrival_time[node] = a
             for (u, v, t, l) in self.edge_stream:
                 if u != x and v != x:
@@ -116,10 +116,10 @@ class TemporalGraph:
         #     f.write("abgeschlossen in %s Stunden" % (finish / 3600))
         start_time = time.time()
         before = self.total_reachability(a, b)
-        # helper = [np.inf for _ in range(self.n)]
+        helper = [np.inf for _ in range(self.n)]
         ranking = []
         for node in range(0, self.n):
-            ranking.append(self.rank_node(a, b, node, before))
+            ranking.append(self.rank_node(a, b, node, before, helper))
         finish = time.time() - start_time
         with open(path + output_name, 'w') as f:
             # f.write(str(ranking) + "\n")
