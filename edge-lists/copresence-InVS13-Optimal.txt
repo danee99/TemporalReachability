@@ -94,6 +94,6 @@
 94.Platz: 72
 95.Platz: 19
 R(G) = 8938
-abgeschlossen in 2291.462433576584 Sekunden
-abgeschlossen in 38.19104055960973 Minuten
-abgeschlossen in 0.6365173426601621 Stunden
+abgeschlossen in 2274.6554770469666 Sekunden
+abgeschlossen in 37.910924617449446 Minuten
+abgeschlossen in 0.6318487436241573 Stunden
