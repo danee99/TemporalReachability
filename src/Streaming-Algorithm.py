@@ -88,8 +88,8 @@ class TemporalGraph:
                         arrival_time[v] = t + l
                         reach_num = reach_num + 1
             total_reach += reach_num
-        return 1 - (total_reach / before), x
         # return 1 - (total_reach / before)
+        return 1 - (total_reach / before), x
         # return total_reach
 
     def node_ranking(self, a, b, output_name):
