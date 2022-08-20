@@ -1,0 +1,11 @@
+1.Platz: 6
+2.Platz: 2
+3.Platz: 0
+4.Platz: 5
+5.Platz: 4
+6.Platz: 3
+7.Platz: 1
+R(G) = 24
+abgeschlossen in 0.0019960403442382812 Sekunden
+abgeschlossen in 3.326733907063802e-05 Minuten
+abgeschlossen in 5.544556511773003e-07 Stunden
