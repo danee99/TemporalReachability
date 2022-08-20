@@ -166,6 +166,6 @@
 166.Platz: 166
 167.Platz: 154
 R(G) = 21105
-abgeschlossen in 544.1230654716492 Sekunden
-abgeschlossen in 9.068717757860819 Minuten
-abgeschlossen in 0.151145295964347 Stunden
+abgeschlossen in 302.49946689605713 Sekunden
+abgeschlossen in 5.041657781600952 Minuten
+abgeschlossen in 0.0840276296933492 Stunden
