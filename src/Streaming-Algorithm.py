@@ -83,11 +83,9 @@ class TemporalGraph:
             arrival_time[node] = a
             for (u, v, t, l) in self.edge_stream:
                 if u != x and v != x:
-                    f = t + l
-                    if t < a or f > b:
-                        break
-                    if arrival_time[u] <= t and arrival_time[v] > f:
-                        arrival_time[v] = f
+                    if t < a or t + l > b: break
+                    if arrival_time[u] <= t and arrival_time[v] > t + l:
+                        arrival_time[v] = t + l
                         reach_num = reach_num + 1
             total_reach += reach_num
         return 1 - (total_reach / before), x
