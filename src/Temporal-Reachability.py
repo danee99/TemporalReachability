@@ -5,8 +5,8 @@ from queue import PriorityQueue
 import heapq
 import numpy as np
 
-# path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
-path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
+path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+# path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
 
 
 class TemporalGraph:
@@ -141,7 +141,7 @@ class TemporalGraph:
                             if t < a or t + l > b: continue
                             if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                                 earliest_arrival_time[v] = t + l
-                                PQ.put(earliest_arrival_time[v], v)
+                                PQ.put((earliest_arrival_time[v], v))
                                 # heapq.heappush(PQ, (earliest_arrival_time[v], v))
                                 S.add(v)
                 else:
