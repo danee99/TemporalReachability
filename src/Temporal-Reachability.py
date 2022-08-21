@@ -82,7 +82,6 @@ class TemporalGraph:
         PQ = []
         heapq.heappush(PQ, (0, source))
         while PQ:
-            print(PQ)
             (current_arrival_time, current_node) = heapq.heappop(PQ)
             visited.add(current_node)
             relevant_edges = [(u, v, t, l) for (u, v, t, l) in self.incidence_list[current_node] if
