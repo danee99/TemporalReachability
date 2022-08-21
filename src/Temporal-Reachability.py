@@ -150,7 +150,8 @@ class TemporalGraph:
                 else:
                     continue
             total += len(visited)
-        return 1 - (total / before), x
+        # return 1 - (total / before), x
+        return 1 - (total / before)
 
     # ranking all nodes
     def node_ranking(self, a, b, output_name):
