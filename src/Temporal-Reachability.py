@@ -11,8 +11,7 @@ path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
 
 class TemporalGraph:
     def __init__(self):
-        self.nodes = set()
-        # self.nodes = []
+        self.nodes = []
         self.incidence_list = []
         self.n = 0
         self.m = 0
@@ -29,7 +28,7 @@ class TemporalGraph:
             n = int(f.readline())
             self.n = n
             self.incidence_list = [[] for _ in range(n)]
-            # self.nodes = [i for i in range(n)]
+            self.nodes = [i for i in range(self.n)]
             for line in f:
                 arr = line.split()
                 u = int(arr[0])
@@ -39,8 +38,8 @@ class TemporalGraph:
                     l = int(arr[3])
                 except IndexError:
                     l = 1
-                self.nodes.add(u)
-                self.nodes.add(v)
+                # self.nodes.add(u)
+                # self.nodes.add(v)
                 # if v not in [self.incidence_list[u][0][i][1] for i in range(0, len(self.incidence_list[u][0]))]:
                 #     self.incidence_list[u].append((u, v, t, l))
                 self.incidence_list[u].append((u, v, t, l))
@@ -51,8 +50,8 @@ class TemporalGraph:
         with open(path + file_name, "r") as f:
             n = int(f.readline())
             self.n = n
-            self.incidence_list = [[] for _ in range(n)]
-            # self.nodes = [i for i in range(n)]
+            self.incidence_list = [[] for _ in range(self.n)]
+            self.nodes = [i for i in range(self.n)]
             for line in f:
                 arr = line.split()
                 u = int(arr[0])
@@ -62,8 +61,8 @@ class TemporalGraph:
                     l = int(arr[3])
                 except IndexError:
                     l = 1
-                self.nodes.add(u)
-                self.nodes.add(v)
+                # self.nodes.add(u)
+                # self.nodes.add(v)
                 # if v not in [self.incidence_list[u][0][i][1] for i in range(0, len(self.incidence_list[u][0]))]:
                 #     self.incidence_list[u].append((u, v, t, l))
                 # if u not in [self.incidence_list[v][0][i][1] for i in range(0, len(self.incidence_list[v][0]))]:
@@ -75,7 +74,6 @@ class TemporalGraph:
     # calculates for a given node "source" the number of nodes that "source" can reach
     def number_of_reachable_nodes(self, source, a, b):
         start_time = time.time()
-        print("berechne erreichb. Knoten für den Knoten " + str(source))
         visited = set()
         earliest_arrival_time = [np.inf for _ in range(self.n)]
         earliest_arrival_time[source] = a
@@ -112,15 +110,17 @@ class TemporalGraph:
             while PQ:
                 (current_arrival_time, current_node) = heapq.heappop(PQ)
                 visited.add(current_node)
-                # S = {current_node}
-                for (u, v, t, l) in self.incidence_list[current_node]:
-                    # if v not in visited and v not in S:
-                    if v not in visited:
-                        if t < a or t + l > b: continue
-                        if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                            earliest_arrival_time[v] = t + l
-                            heapq.heappush(PQ, (earliest_arrival_time[v], v))
-                            # S.add(v)
+                S = {current_node}
+                if self.incidence_list[current_node]:
+                    for (u, v, t, l) in self.incidence_list[current_node]:
+                        if v not in visited and v not in S:
+                            if t < a or t + l > b: continue
+                            if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+                                earliest_arrival_time[v] = t + l
+                                heapq.heappush(PQ, (earliest_arrival_time[v], v))
+                                S.add(v)
+                else:
+                    continue
             self.total_reachability += len(visited)
 
     # ranks the node "x", where the ranking is a floating point number between 0 and 1
@@ -138,17 +138,18 @@ class TemporalGraph:
                 (current_arrival_time, current_node) = heapq.heappop(PQ)
                 if current_node != x:
                     visited.add(current_node)
-                # S = {current_node}
-                for (u, v, t, l) in self.incidence_list[current_node]:
-                    # if u != x and v != x and v not in visited and v not in S:
-                    if u != x and v != x and v not in visited:
-                        if t < a or t + l > b: continue
-                        if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
-                            earliest_arrival_time[v] = t + l
-                            heapq.heappush(PQ, (earliest_arrival_time[v], v))
-                            # S.add(v)
+                S = {current_node}
+                if self.incidence_list[current_node]:
+                    for (u, v, t, l) in self.incidence_list[current_node]:
+                        if u != x and v != x and v not in visited and v not in S:
+                            if t < a or t + l > b: continue
+                            if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
+                                earliest_arrival_time[v] = t + l
+                                heapq.heappush(PQ, (earliest_arrival_time[v], v))
+                                S.add(v)
+                else:
+                    continue
             total += len(visited)
-        # return 1 - (total / before), x
         return 1 - (total / before), x
 
     # ranking all nodes
@@ -167,13 +168,10 @@ class TemporalGraph:
             ranking.sort(reverse=True)
             for i in range(len(ranking)):
                 f.write(str(i + 1) + ".Platz: " + str(ranking[i][1]) + "\n")
-            # f.write(str(ranking) + "\n")
             f.write("R(G) = %s" % self.total_reachability + "\n")
             f.write("abgeschlossen in %s Sekunden" % finish + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
             f.write("abgeschlossen in %s Stunden" % (finish / 3600))
-        # start_time = time.time()
-        # self.calc_total_reachability(a, b)
         # ranking = []
         # helper = [np.inf for _ in range(self.n)]
         # for node in self.nodes:
