@@ -11,8 +11,8 @@ path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
 
 class TemporalGraph:
     def __init__(self):
-        # self.nodes = set()
-        self.nodes = []
+        self.nodes = set()
+        # self.nodes = []
         self.incidence_list = []
         self.n = 0
         self.m = 0
@@ -29,7 +29,7 @@ class TemporalGraph:
             n = int(f.readline())
             self.n = n
             self.incidence_list = [[] for _ in range(n)]
-            self.nodes = [i for i in range(n)]
+            # self.nodes = [i for i in range(n)]
             for line in f:
                 arr = line.split()
                 u = int(arr[0])
@@ -39,8 +39,8 @@ class TemporalGraph:
                     l = int(arr[3])
                 except IndexError:
                     l = 1
-                # self.nodes.add(u)
-                # self.nodes.add(v)
+                self.nodes.add(u)
+                self.nodes.add(v)
                 # if v not in [self.incidence_list[u][0][i][1] for i in range(0, len(self.incidence_list[u][0]))]:
                 #     self.incidence_list[u].append((u, v, t, l))
                 self.incidence_list[u].append((u, v, t, l))
@@ -52,7 +52,7 @@ class TemporalGraph:
             n = int(f.readline())
             self.n = n
             self.incidence_list = [[] for _ in range(n)]
-            self.nodes = [i for i in range(n)]
+            # self.nodes = [i for i in range(n)]
             for line in f:
                 arr = line.split()
                 u = int(arr[0])
@@ -62,8 +62,8 @@ class TemporalGraph:
                     l = int(arr[3])
                 except IndexError:
                     l = 1
-                # self.nodes.add(u)
-                # self.nodes.add(v)
+                self.nodes.add(u)
+                self.nodes.add(v)
                 # if v not in [self.incidence_list[u][0][i][1] for i in range(0, len(self.incidence_list[u][0]))]:
                 #     self.incidence_list[u].append((u, v, t, l))
                 # if u not in [self.incidence_list[v][0][i][1] for i in range(0, len(self.incidence_list[v][0]))]:
