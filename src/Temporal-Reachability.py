@@ -105,10 +105,13 @@ class TemporalGraph:
             visited = set()
             earliest_arrival_time = [np.inf for _ in range(self.n)]
             earliest_arrival_time[node] = a
-            PQ = []
-            heapq.heappush(PQ, (0, node))
+            # PQ = []
+            # heapq.heappush(PQ, (0, node))
+            PQ = PriorityQueue()
+            PQ.put((0, node))
             while PQ:
-                (current_arrival_time, current_node) = heapq.heappop(PQ)
+                # (current_arrival_time, current_node) = heapq.heappop(PQ)
+                (current_arrival_time, current_node) = PQ.get()
                 visited.add(current_node)
                 S = {current_node}
                 if self.incidence_list[current_node]:
@@ -132,10 +135,13 @@ class TemporalGraph:
             visited = set()
             earliest_arrival_time = helper.copy()
             earliest_arrival_time[node] = a
-            PQ = []
-            heapq.heappush(PQ, (0, node))
+            # PQ = []
+            # heapq.heappush(PQ, (0, node))
+            PQ = PriorityQueue()
+            PQ.put((0, node))
             while PQ:
-                (current_arrival_time, current_node) = heapq.heappop(PQ)
+                # (current_arrival_time, current_node) = heapq.heappop(PQ)
+                (current_arrival_time, current_node) = PQ.get()
                 if current_node != x:
                     visited.add(current_node)
                 S = {current_node}
