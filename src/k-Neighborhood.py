@@ -91,12 +91,14 @@ class TemporalGraph:
             while PQ:
                 (current_arrival_time, current_node) = heapq.heappop(PQ)
                 visited.add(current_node)
+                S = {current_node}
                 for (u, v, t, l) in k_neighbours[current_node]:
-                    if v not in visited:
+                    if v not in visited and v not in S:
                         if t < a or t + l > b: continue
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                             earliest_arrival_time[v] = t + l
                             heapq.heappush(PQ, (earliest_arrival_time[v], v))
+                            S.add(v)
             before += len(visited)
         for node in k_neighbours:
             if node == deleted_node:
@@ -110,13 +112,15 @@ class TemporalGraph:
                 (current_arrival_time, current_node) = heapq.heappop(PQ)
                 if current_node != deleted_node:
                     visited.add(current_node)
+                S = {current_node}
                 for (u, v, t, l) in k_neighbours[current_node]:
-                    if v not in visited:
+                    if v not in visited and v not in S:
                         if v != deleted_node and u != deleted_node:
                             if t < a or t + l > b: continue
                             if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                                 earliest_arrival_time[v] = t + l
                                 heapq.heappush(PQ, (earliest_arrival_time[v], v))
+                                S.add(v)
             total += len(visited)
         if total < size:
             return 0, deleted_node, size
