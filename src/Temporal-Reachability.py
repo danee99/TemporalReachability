@@ -120,7 +120,8 @@ class TemporalGraph:
                             if t < a or t + l > b: continue
                             if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                                 earliest_arrival_time[v] = t + l
-                                heapq.heappush(PQ, (earliest_arrival_time[v], v))
+                                # heapq.heappush(PQ, (earliest_arrival_time[v], v))
+                                PQ.put((earliest_arrival_time[v], v))
                                 S.add(v)
                 else:
                     continue
@@ -151,7 +152,8 @@ class TemporalGraph:
                             if t < a or t + l > b: continue
                             if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                                 earliest_arrival_time[v] = t + l
-                                heapq.heappush(PQ, (earliest_arrival_time[v], v))
+                                # heapq.heappush(PQ, (earliest_arrival_time[v], v))
+                                PQ.put((earliest_arrival_time[v], v))
                                 S.add(v)
                 else:
                     continue
