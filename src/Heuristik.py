@@ -115,12 +115,14 @@ class TemporalGraph:
                 (current_arrival_time, current_node) = heapq.heappop(PQ)
                 if current_node != x:
                     visited.add(current_node)
+                S = {current_node}
                 for (u, v, t, l) in self.graph[current_node][0]:
-                    if u != x and v != x and v not in visited:
+                    if u != x and v != x and v not in visited and v not in S:
                         if t < a or t + l > b: continue
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                             earliest_arrival_time[v] = t + l
                             heapq.heappush(PQ, (earliest_arrival_time[v], v))
+                            S.add(v)
             lower_bound += len(visited) + self.graph[node][2]
             # upper_bound += len(visited) + self.num_deleted_nodes
         # return x, (lower_bound, upper_bound)
