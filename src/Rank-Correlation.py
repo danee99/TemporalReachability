@@ -111,7 +111,6 @@ for top_k in cool:
                 arr = line2.split()
                 if arr[1] != '=' and arr[1] != 'in':
                     arr2.append(int(arr[1]))
-            print(arr2)
             line1 = h.readlines()
             arr1 = np.fromstring(line1[0].strip('[]\n'), dtype=int, sep=',')
             optimal = set(arr2[:top_k])
