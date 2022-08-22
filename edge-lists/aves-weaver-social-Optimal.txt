@@ -444,6 +444,6 @@
 444.Platz: 75
 445.Platz: 17
 R(G) = 3756
-abgeschlossen in 2.425145387649536 Sekunden
-abgeschlossen in 0.04041908979415894 Minuten
-abgeschlossen in 0.0006736514965693156 Stunden
+abgeschlossen in 1.3971858024597168 Sekunden
+abgeschlossen in 0.02328643004099528 Minuten
+abgeschlossen in 0.00038810716734992136 Stunden
