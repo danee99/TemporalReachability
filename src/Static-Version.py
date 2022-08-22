@@ -24,8 +24,10 @@ class StaticGraph:
                     self.graph[u] = []
                 if v not in self.graph:
                     self.graph[v] = []
-                self.graph[u].append(v)
-                self.graph[v].append(u)
+                if v not in self.graph[u]:
+                    self.graph[u].append(v)
+                if u not in self.graph[v]:
+                    self.graph[v].append(u)
 
     def import_directed_edgelist(self, file_name):
         with open(path + file_name, "r") as f:
@@ -38,8 +40,8 @@ class StaticGraph:
                     self.graph[u] = []
                 if v not in self.graph:
                     self.graph[v] = []
-                self.graph[u].append(v)
-
+                if v not in self.graph[u]:
+                    self.graph[u].append(v)
     # calculate the number of reachable nodes of src
     def num_reachable_nodes(self, src):
         visited = set()
