@@ -91,6 +91,6 @@
 91.Platz: 74
 92.Platz: 60
 R(G) = 8364
-abgeschlossen in 53.73434042930603 Sekunden
-abgeschlossen in 0.8955723404884338 Minuten
-abgeschlossen in 0.01492620567480723 Stunden
+abgeschlossen in 2.3126933574676514 Sekunden
+abgeschlossen in 0.038544889291127524 Minuten
+abgeschlossen in 0.000642414821518792 Stunden
