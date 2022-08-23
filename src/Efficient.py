@@ -126,10 +126,7 @@ class TemporalGraph:
                         if t < a or t + l > b: continue
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                             earliest_arrival_time[v] = t + l
-                            try:
-                                PQ[v]._decrease_key(t + l)
-                            except KeyError:
-                                PQ[v] = earliest_arrival_time[v]
+                            PQ[v] = earliest_arrival_time[v]
                             S.add(v)
             self.total_reachability += len(visited)
 
@@ -153,10 +150,7 @@ class TemporalGraph:
                         if t < a or t + l > b: continue
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                             earliest_arrival_time[v] = t + l
-                            try:
-                                PQ[v]._decrease_key(t + l)
-                            except KeyError:
-                                PQ[v] = earliest_arrival_time[v]
+                            PQ[v] = earliest_arrival_time[v]
                             S.add(v)
             total += len(visited)
         return 1 - (total / before), x
