@@ -326,6 +326,6 @@
 326.Platz: 2
 327.Platz: 159
 R(G) = 106856
-abgeschlossen in 18985.385348558426 Sekunden
-abgeschlossen in 316.42308914264044 Minuten
-abgeschlossen in 5.273718152377341 Stunden
+abgeschlossen in 286.1761293411255 Sekunden
+abgeschlossen in 4.7696021556854244 Minuten
+abgeschlossen in 0.07949336926142375 Stunden
