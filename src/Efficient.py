@@ -1,10 +1,11 @@
 import multiprocessing
+import os
 import time
 import numpy as np
 from heapdict import heapdict
 
-# path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
-path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
+path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+# path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
 
 
 # class MinHeap:
@@ -125,7 +126,10 @@ class TemporalGraph:
                         if t < a or t + l > b: continue
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                             earliest_arrival_time[v] = t + l
-                            PQ[v] = earliest_arrival_time[v]
+                            try:
+                                PQ[v]._decrease_key(t + l)
+                            except KeyError:
+                                PQ[v] = earliest_arrival_time[v]
                             S.add(v)
             self.total_reachability += len(visited)
 
@@ -149,7 +153,10 @@ class TemporalGraph:
                         if t < a or t + l > b: continue
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                             earliest_arrival_time[v] = t + l
-                            PQ[v] = earliest_arrival_time[v]
+                            try:
+                                PQ[v]._decrease_key(t + l)
+                            except KeyError:
+                                PQ[v] = earliest_arrival_time[v]
                             S.add(v)
             total += len(visited)
         return 1 - (total / before), x
