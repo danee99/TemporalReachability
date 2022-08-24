@@ -4,8 +4,8 @@ import time
 import numpy as np
 from heapdict import heapdict
 
-# path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
-path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
+path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+# path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
 
 
 # class MinHeap:
@@ -171,15 +171,14 @@ class TemporalGraph:
         #     f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
         #     f.write("abgeschlossen in %s Stunden" % (finish / 3600))
         start_time = time.time()
+        self.calc_total_reachability(a, b)
         ranking = []
         helper = [np.inf for _ in range(self.n)]
         for node in self.nodes:
             ranking.append(self.rank_node(node, a, b, self.total_reachability, helper))
         finish = time.time() - start_time
         with open(path + output_name, 'w') as f:
-            ranking.sort(reverse=True)
-            for i in range(len(ranking)):
-                f.write(str(i + 1) + ".Platz: " + str(ranking[i][1]) + "\n")
+            f.write(str(ranking)+"\n")
             f.write("R(G) = %s" % self.total_reachability + "\n")
             f.write("abgeschlossen in %s Sekunden" % finish + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
