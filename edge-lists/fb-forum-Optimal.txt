@@ -898,6 +898,6 @@
 898.Platz: 681
 899.Platz: 508
 R(G) = 290449
-abgeschlossen in 146.30710744857788 Sekunden
-abgeschlossen in 2.4384517908096313 Minuten
-abgeschlossen in 0.040640863180160525 Stunden
+abgeschlossen in 140.23372292518616 Sekunden
+abgeschlossen in 2.3372287154197693 Minuten
+abgeschlossen in 0.038953811923662825 Stunden

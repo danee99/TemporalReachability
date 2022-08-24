@@ -1898,6 +1898,6 @@
 1898.Platz: 4
 1899.Platz: 3
 R(G) = 1794244
-abgeschlossen in 2054.3474934101105 Sekunden
-abgeschlossen in 34.239124890168505 Minuten
-abgeschlossen in 0.5706520815028084 Stunden
+abgeschlossen in 1943.2895591259003 Sekunden
+abgeschlossen in 32.388159318765005 Minuten
+abgeschlossen in 0.5398026553127501 Stunden
