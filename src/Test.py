@@ -126,8 +126,8 @@ class TemporalGraph:
                         if t < a or t + l > b: continue
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                             if earliest_arrival_time[v] != np.inf:
+                                PQ.decrease_key((v, earliest_arrival_time[v]), t + l)
                                 earliest_arrival_time[v] = t + l
-                                PQ.decrease_key(v, t + l)
                             else:
                                 earliest_arrival_time[v] = t + l
                                 fheappush(PQ, (t + l, v))
@@ -152,8 +152,8 @@ class TemporalGraph:
                         if t < a or t + l > b: continue
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                             if earliest_arrival_time[v] != np.inf:
+                                PQ.decrease_key((v, earliest_arrival_time[v]), t + l)
                                 earliest_arrival_time[v] = t + l
-                                PQ.decrease_key(v, t + l)
                             else:
                                 earliest_arrival_time[v] = t + l
                                 fheappush(PQ, (t + l, v))
