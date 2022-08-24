@@ -121,7 +121,7 @@ class TemporalGraph:
                 (current_node, current_arrival_time) = PQ.popitem()
                 visited.add(current_node)
                 for (u, v, t, l) in self.incidence_list[current_node]:
-                    if v not in visited and v not in S:
+                    if v not in visited:
                         if t < a or t + l > b: continue
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                             earliest_arrival_time[v] = t + l
@@ -143,7 +143,7 @@ class TemporalGraph:
                 if current_node != x:
                     visited.add(current_node)
                 for (u, v, t, l) in self.incidence_list[current_node]:
-                    if u != x and v != x and v not in visited and v not in S:
+                    if u != x and v != x and v not in visited:
                         if t < a or t + l > b: continue
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                             earliest_arrival_time[v] = t + l
