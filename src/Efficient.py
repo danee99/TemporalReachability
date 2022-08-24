@@ -4,8 +4,8 @@ import time
 import numpy as np
 from heapdict import heapdict
 
-path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
-# path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
+# path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
+path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
 
 
 # class MinHeap:
