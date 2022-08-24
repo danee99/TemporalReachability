@@ -1890,6 +1890,6 @@
 1890.Platz: 46
 1891.Platz: 7
 R(G) = 624039
-abgeschlossen in 635.2247133255005 Sekunden
-abgeschlossen in 10.587078555425007 Minuten
-abgeschlossen in 0.17645130925708347 Stunden
+abgeschlossen in 594.3429703712463 Sekunden
+abgeschlossen in 9.905716172854106 Minuten
+abgeschlossen in 0.16509526954756842 Stunden
