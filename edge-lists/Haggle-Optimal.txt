@@ -273,6 +273,6 @@
 273.Platz: 56
 274.Platz: 50
 R(G) = 53104
-abgeschlossen in 32.074848651885986 Sekunden
-abgeschlossen in 0.5345808108647664 Minuten
-abgeschlossen in 0.008909680181079441 Stunden
+abgeschlossen in 31.229032516479492 Sekunden
+abgeschlossen in 0.5204838752746582 Minuten
+abgeschlossen in 0.008674731254577637 Stunden
