@@ -1,3 +1,0 @@
-[]
-R(G) = 0
-abgeschlossen in 0.0005613366762797037 Minuten

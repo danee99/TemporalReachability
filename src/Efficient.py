@@ -120,14 +120,12 @@ class TemporalGraph:
             while PQ:
                 (current_node, current_arrival_time) = PQ.popitem()
                 visited.add(current_node)
-                S = {current_node}
                 for (u, v, t, l) in self.incidence_list[current_node]:
                     if v not in visited and v not in S:
                         if t < a or t + l > b: continue
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                             earliest_arrival_time[v] = t + l
                             PQ[v] = earliest_arrival_time[v]
-                            S.add(v)
             self.total_reachability += len(visited)
 
     def rank_node(self, x, a, b, before, helper):
@@ -144,14 +142,12 @@ class TemporalGraph:
                 (current_node, current_arrival_time) = PQ.popitem()
                 if current_node != x:
                     visited.add(current_node)
-                S = {current_node}
                 for (u, v, t, l) in self.incidence_list[current_node]:
                     if u != x and v != x and v not in visited and v not in S:
                         if t < a or t + l > b: continue
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                             earliest_arrival_time[v] = t + l
                             PQ[v] = earliest_arrival_time[v]
-                            S.add(v)
             total += len(visited)
         return 1 - (total / before), x
 
