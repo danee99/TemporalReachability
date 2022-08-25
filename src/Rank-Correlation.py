@@ -99,45 +99,43 @@ def import_ranking_alternative(degree_input, reachability_input, output_name, nu
 # plt.tight_layout()
 # plt.savefig(path + '/Plots/'+name+'.svg')
 
-cool = [10, 50, 100, 1000]
-# cool = [10]
-for top_k in cool:
-    arr2 = []
-    dataset = "wiki_talk_gl"
-    # with open(path + "edge-lists\\" + dataset + "-Heuristik-top-" + str(1000) + ".txt", "r") as h:
-    with open(path + "edge-lists\\" + dataset + "-k-Nachbarschaft-Ranking (Digraph)-top-" + str(1000) + ".txt", "r") as h:
-        with open(path + "edge-lists\\" + dataset + "-Optimal.txt", "r") as o:
-            for line2 in o:
-                arr = line2.split()
-                if arr[1] != '=' and arr[1] != 'in':
-                    arr2.append(int(arr[1]))
-            line1 = h.readlines()
-            arr1 = np.fromstring(line1[0].strip('[]\n'), dtype=int, sep=',')
-            optimal = set(arr2[:top_k])
-            heuristik = set(arr1[:top_k])
-            print(len(optimal.intersection(heuristik)) / len(optimal.union(heuristik)), top_k)
+# cool = [10, 50, 100, 1000]
+# # cool = [10]
+# for top_k in cool:
+#     arr2 = []
+#     dataset = "wiki_talk_gl"
+#     # with open(path + "edge-lists\\" + dataset + "-Heuristik-top-" + str(1000) + ".txt", "r") as h:
+#     with open(path + "edge-lists\\" + dataset + "-k-Nachbarschaft-Ranking (Digraph)-top-" + str(1000) + ".txt", "r") as h:
+#         with open(path + "edge-lists\\" + dataset + "-Optimal.txt", "r") as o:
+#             for line2 in o:
+#                 arr = line2.split()
+#                 if arr[1] != '=' and arr[1] != 'in':
+#                     arr2.append(int(arr[1]))
+#             line1 = h.readlines()
+#             arr1 = np.fromstring(line1[0].strip('[]\n'), dtype=int, sep=',')
+#             optimal = set(arr2[:top_k])
+#             heuristik = set(arr1[:top_k])
+#             print(len(optimal.intersection(heuristik)) / len(optimal.union(heuristik)), top_k)
 
-# aves-weaver-social 445
-# email-dnc 1891
-# fb-forum 899
-# fb-messages 1.899
-# Haggle 274
-# ia-hospital-ward-proximity-attr 75
-# ia-workplace-contacts 92
-# radoslaw_email 167
-# twitter 4605
-# UC-Irvine-messages 1899
+# copresence-InVS13
+# High-School_data_2013
+# copresence-InVS15
+# dblp-cite temp betw
+# infectious temp betw und temp close
+# wiki_talk_gl static
+# ia-reality-call temp betw und temp close
 
-# name = "UC-Irvine-messages"
-# import_ranking_alternative(name + "-Outdegrees.txt",
-#                            name + "-Ranking.txt",
-#                            name,
-#                            1899,
-#                            name + "-temporal-betweenness.txt",
-#                            name + "-temporal-closeness.txt",
-#                            name + "-Ranking (static).txt",
-#                            name + "-Outdegrees-static.txt"
-#                            )
+
+name = "wiki_talk_gl"
+import_ranking_alternative(name + "-Outdegrees.txt",
+                           name + "-Ranking.txt",
+                           name,
+                           10972,
+                           name + "-temporal-betweenness.txt",
+                           name + "-temporal-closeness.txt",
+                           name + "-Ranking (static).txt",
+                           name + "-Outdegrees-static.txt"
+                           )
 
 # name = "UC-Irvine-messages"
 # import_ranking(name + "-Outdegrees.txt",
