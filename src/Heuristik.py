@@ -4,6 +4,7 @@ from queue import PriorityQueue
 import heapq
 import numpy as np
 import os
+from heapdict import heapdict
 
 # path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
 path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
@@ -109,20 +110,18 @@ class TemporalGraph:
             visited = set()
             earliest_arrival_time = {v: np.inf for v in self.graph}
             earliest_arrival_time[node] = a
-            PQ = []
-            heapq.heappush(PQ, (0, node))
+            PQ = heapdict()
+            PQ[node] = 0
             while PQ:
-                (current_arrival_time, current_node) = heapq.heappop(PQ)
+                (current_node, current_arrival_time) = PQ.popitem()
                 if current_node != x:
                     visited.add(current_node)
-                S = {current_node}
                 for (u, v, t, l) in self.graph[current_node][0]:
-                    if u != x and v != x and v not in visited and v not in S:
+                    if u != x and v != x and v not in visited:
                         if t < a or t + l > b: continue
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                             earliest_arrival_time[v] = t + l
-                            heapq.heappush(PQ, (earliest_arrival_time[v], v))
-                            S.add(v)
+                            PQ[v] = earliest_arrival_time[v]
             lower_bound += len(visited) + self.graph[node][2]
             # upper_bound += len(visited) + self.num_deleted_nodes
         # return x, (lower_bound, upper_bound)

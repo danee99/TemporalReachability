@@ -4,9 +4,11 @@ from queue import PriorityQueue
 import heapq
 import numpy as np
 import os
+from heapdict import heapdict
 
 # path = os.path.join(os.getcwd(), os.pardir) + "\\edge-lists\\"
 path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
+
 
 class TemporalGraph:
     def __init__(self):
@@ -86,19 +88,17 @@ class TemporalGraph:
             visited = set()
             earliest_arrival_time = {j: np.inf for j in k_neighbours}
             earliest_arrival_time[node] = a
-            PQ = []
-            heapq.heappush(PQ, (earliest_arrival_time[node], node))
+            PQ = heapdict()
+            PQ[node] = 0
             while PQ:
-                (current_arrival_time, current_node) = heapq.heappop(PQ)
+                (current_node, current_arrival_time) = PQ.popitem()
                 visited.add(current_node)
-                S = {current_node}
                 for (u, v, t, l) in k_neighbours[current_node]:
-                    if v not in visited and v not in S:
+                    if v not in visited:
                         if t < a or t + l > b: continue
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                             earliest_arrival_time[v] = t + l
-                            heapq.heappush(PQ, (earliest_arrival_time[v], v))
-                            S.add(v)
+                            PQ[v] = earliest_arrival_time[v]
             before += len(visited)
         for node in k_neighbours:
             if node == deleted_node:
@@ -106,21 +106,19 @@ class TemporalGraph:
             visited = set()
             earliest_arrival_time = {j: np.inf for j in k_neighbours}
             earliest_arrival_time[node] = a
-            PQ = []
-            heapq.heappush(PQ, (0, node))
+            PQ = heapdict()
+            PQ[node] = 0
             while PQ:
-                (current_arrival_time, current_node) = heapq.heappop(PQ)
+                (current_node, current_arrival_time) = PQ.popitem()
                 if current_node != deleted_node:
                     visited.add(current_node)
-                S = {current_node}
                 for (u, v, t, l) in k_neighbours[current_node]:
-                    if v not in visited and v not in S:
+                    if v not in visited:
                         if v != deleted_node and u != deleted_node:
                             if t < a or t + l > b: continue
                             if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                                 earliest_arrival_time[v] = t + l
-                                heapq.heappush(PQ, (earliest_arrival_time[v], v))
-                                S.add(v)
+                                PQ[v] = earliest_arrival_time[v]
             total += len(visited)
         if total < size:
             return 0, deleted_node, size
