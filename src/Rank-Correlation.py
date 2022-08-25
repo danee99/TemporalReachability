@@ -84,20 +84,20 @@ def import_ranking_alternative(degree_input, reachability_input, output_name, nu
                                         str(arr4[j]) + "," + str(arr1[j]) + "," + str(arr6[j]) + '\n')
 
 
-# name = "UC-Irvine-messages"
-# mydataframe = pd.read_csv(path + "/Dataframes/"+name)
-# mydataframe = mydataframe.rename(columns={'Temp. Reachability': 'Temporal\nReachability',
-#                                           'Stat. Reachability': 'Static\nReachability',
-#                                           'Temp. Betweenness': 'Temporal\nBetweenness',
-#                                           'Temp. Closeness': 'Temporal\nCloseness',
-#                                           'Degree Centrality': 'Temporal\nOutdegree',
-#                                           'Stat. Degree': 'Static\nOutdegree'
-#                                           })
-# sns.set(font_scale=1.1)
-# obj = sns.heatmap(data=mydataframe.corr(method='kendall'), annot=True, square=True, annot_kws={"size": 12}, linewidths=1)
-# obj.set_xticklabels(obj.get_xticklabels(), rotation=90)
-# plt.tight_layout()
-# plt.savefig(path + '/Plots/'+name+'.svg')
+name = "wiki_talk_gl"
+mydataframe = pd.read_csv(path + "/Dataframes/"+name)
+mydataframe = mydataframe.rename(columns={'Temp. Reachability': 'Temporal\nReachability',
+                                          'Stat. Reachability': 'Static\nReachability',
+                                          'Temp. Betweenness': 'Temporal\nBetweenness',
+                                          'Temp. Closeness': 'Temporal\nCloseness',
+                                          'Degree Centrality': 'Temporal\nOutdegree',
+                                          'Stat. Degree': 'Static\nOutdegree'
+                                          })
+sns.set(font_scale=1.1)
+obj = sns.heatmap(data=mydataframe.corr(method='kendall'), annot=True, square=True, annot_kws={"size": 12}, linewidths=1)
+obj.set_xticklabels(obj.get_xticklabels(), rotation=90)
+plt.tight_layout()
+plt.savefig(path + '/Plots/'+name+'.svg')
 
 # cool = [10, 50, 100, 1000]
 # # cool = [10]
@@ -126,16 +126,16 @@ def import_ranking_alternative(degree_input, reachability_input, output_name, nu
 # ia-reality-call temp betw und temp close
 
 
-name = "wiki_talk_gl"
-import_ranking_alternative(name + "-Outdegrees.txt",
-                           name + "-Ranking.txt",
-                           name,
-                           10972,
-                           name + "-temporal-betweenness.txt",
-                           name + "-temporal-closeness.txt",
-                           name + "-Ranking (static).txt",
-                           name + "-Outdegrees-static.txt"
-                           )
+# name = "wiki_talk_gl"
+# import_ranking_alternative(name + "-Outdegrees.txt",
+#                            name + "-Ranking.txt",
+#                            name,
+#                            8097,
+#                            name + "-temporal-betweenness.txt",
+#                            name + "-temporal-closeness.txt",
+#                            name + "-Ranking (static).txt",
+#                            name + "-Outdegrees-static.txt"
+#                            )
 
 # name = "UC-Irvine-messages"
 # import_ranking(name + "-Outdegrees.txt",
