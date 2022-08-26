@@ -83,39 +83,39 @@ def import_ranking_alternative(degree_input, reachability_input, output_name, nu
                                         str(j) + "," + str(arr2[j]) + "," + str(arr5[j]) + "," + str(arr3[j]) + "," +
                                         str(arr4[j]) + "," + str(arr1[j]) + "," + str(arr6[j]) + '\n')
 
+#
+# name = "wiki_talk_gl"
+# mydataframe = pd.read_csv(path + "/Dataframes/"+name)
+# mydataframe = mydataframe.rename(columns={'Temp. Reachability': 'Temporal\nReachability',
+#                                           'Stat. Reachability': 'Static\nReachability',
+#                                           'Temp. Betweenness': 'Temporal\nBetweenness',
+#                                           'Temp. Closeness': 'Temporal\nCloseness',
+#                                           'Degree Centrality': 'Temporal\nOutdegree',
+#                                           'Stat. Degree': 'Static\nOutdegree'
+#                                           })
+# sns.set(font_scale=1.1)
+# obj = sns.heatmap(data=mydataframe.corr(method='kendall'), annot=True, square=True, annot_kws={"size": 12}, linewidths=1)
+# obj.set_xticklabels(obj.get_xticklabels(), rotation=90)
+# plt.tight_layout()
+# plt.savefig(path + '/Plots/'+name+'.svg')
 
-name = "wiki_talk_gl"
-mydataframe = pd.read_csv(path + "/Dataframes/"+name)
-mydataframe = mydataframe.rename(columns={'Temp. Reachability': 'Temporal\nReachability',
-                                          'Stat. Reachability': 'Static\nReachability',
-                                          'Temp. Betweenness': 'Temporal\nBetweenness',
-                                          'Temp. Closeness': 'Temporal\nCloseness',
-                                          'Degree Centrality': 'Temporal\nOutdegree',
-                                          'Stat. Degree': 'Static\nOutdegree'
-                                          })
-sns.set(font_scale=1.1)
-obj = sns.heatmap(data=mydataframe.corr(method='kendall'), annot=True, square=True, annot_kws={"size": 12}, linewidths=1)
-obj.set_xticklabels(obj.get_xticklabels(), rotation=90)
-plt.tight_layout()
-plt.savefig(path + '/Plots/'+name+'.svg')
-
-# cool = [10, 50, 100, 1000]
-# # cool = [10]
-# for top_k in cool:
-#     arr2 = []
-#     dataset = "wiki_talk_gl"
-#     # with open(path + "edge-lists\\" + dataset + "-Heuristik-top-" + str(1000) + ".txt", "r") as h:
-#     with open(path + "edge-lists\\" + dataset + "-k-Nachbarschaft-Ranking (Digraph)-top-" + str(1000) + ".txt", "r") as h:
-#         with open(path + "edge-lists\\" + dataset + "-Optimal.txt", "r") as o:
-#             for line2 in o:
-#                 arr = line2.split()
-#                 if arr[1] != '=' and arr[1] != 'in':
-#                     arr2.append(int(arr[1]))
-#             line1 = h.readlines()
-#             arr1 = np.fromstring(line1[0].strip('[]\n'), dtype=int, sep=',')
-#             optimal = set(arr2[:top_k])
-#             heuristik = set(arr1[:top_k])
-#             print(len(optimal.intersection(heuristik)) / len(optimal.union(heuristik)), top_k)
+cool = [10, 50, 100, 1000]
+# cool = [10]
+for top_k in cool:
+    arr2 = []
+    dataset = "infectious"
+    # with open(path + "edge-lists\\" + dataset + "-Heuristik-top-" + str(1000) + ".txt", "r") as h:
+    with open(path + "edge-lists\\" + dataset + "-k-Nachbarschaft-Ranking-top-" + str(1000) + ".txt", "r") as h:
+        with open(path + "edge-lists\\" + dataset + "-Optimal.txt", "r") as o:
+            for line2 in o:
+                arr = line2.split()
+                if arr[1] != '=' and arr[1] != 'in':
+                    arr2.append(int(arr[1]))
+            line1 = h.readlines()
+            arr1 = np.fromstring(line1[0].strip('[]\n'), dtype=int, sep=',')
+            optimal = set(arr2[:top_k])
+            heuristik = set(arr1[:top_k])
+            print(len(optimal.intersection(heuristik)) / len(optimal.union(heuristik)), top_k)
 
 # copresence-InVS13
 # High-School_data_2013
