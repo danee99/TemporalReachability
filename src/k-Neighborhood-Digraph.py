@@ -185,7 +185,7 @@ if __name__ == '__main__':
                 result[i][3]) + " mit R(K) = " + str(result[i][4]) + "\n")
         # result.sort(reverse=True)
         # f.write(str([v for (ranking, v, size) in result]) + "\n")
-        sizes = [size for (ranking, v, size) in result]
+        sizes = [size for (ranking, v, size, total, before) in result]
         f.write("Durchschnitt |K| = " + str(str(round(sum(sizes) / len(sizes))) + "\n"))
         f.write("wurde auf die " + str(k) + "-Nachbarschaft jedes Knotens angewendet." + "\n")
         f.write("Schwellwert fuer die Groesse der Nachbaschaft: " + str(p) + "\n")
