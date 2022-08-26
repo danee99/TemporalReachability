@@ -116,7 +116,7 @@ class TemporalGraph:
         size = len(k_neighbours)
         size_alt = size - 1
         if size <= p:
-            return 0, deleted_node, size
+            return 0, deleted_node, size, total, before
         for node in k_neighbours:
             visited = set()
             earliest_arrival_time = {j: np.inf for j in k_neighbours}
@@ -154,12 +154,12 @@ class TemporalGraph:
                                 PQ[v] = earliest_arrival_time[v]
             total += len(visited)
         if total < size:
-            return 0, deleted_node, size
+            return 0, deleted_node, size, total, before
         rank = 1 - (total * size) / (before * size_alt)
         if rank < 0:
-            return 0, deleted_node, size
+            return 0, deleted_node, size, total, before
         else:
-            return rank, deleted_node, size
+            return rank, deleted_node, size, total, before
 
 
 if __name__ == '__main__':
@@ -180,8 +180,9 @@ if __name__ == '__main__':
     with open(path + output_file, 'w') as f:
         result.sort(reverse=True)
         for i in range(len(result)):
-            f.write(str(i + 1) + ".Platz: " + str(result[i][1]) + " mit R(K-v) = " + str(
-                result[i][0]) + " und |K| = " + str(result[i][2]) + "\n")
+            f.write(str(i + 1) + ".Platz: " + str(result[i][1]) + " mit rank(v) = " + str(
+                result[i][0]) + " und |K| = " + str(result[i][2]) + " mit R(K-v) = " + str(
+                result[i][3]) + " mit R(K) = " + str(result[i][4]) + "\n")
         # result.sort(reverse=True)
         # f.write(str([v for (ranking, v, size) in result]) + "\n")
         sizes = [size for (ranking, v, size) in result]
