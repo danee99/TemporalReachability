@@ -1,0 +1,5 @@
+[(3553, 269), (3577, 415), (3652, 239), (3653, 235), (3662, 133), (3692, 170), (3697, 421), (3697, 422), (3699, 210), (3701, 31)]
+Einsparung von 0.8396598846037048% r(v) Berechnungen
+abgeschlossen in 0.8237659931182861 Sekunden
+abgeschlossen in 0.013729433218638102 Minuten
+abgeschlossen in 0.0002288238869773017 Stunden
