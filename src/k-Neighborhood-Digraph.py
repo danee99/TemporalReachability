@@ -166,7 +166,7 @@ if __name__ == '__main__':
     input_graph = input('Edgeliste eingeben:')
     k = int(input('k-Nachbarschaft, Gebe den Wert k ein:'))
     p = int(input('Schranke für die Größe der Nachbarschaft:'))
-    output_file = input_graph.split(".")[0] + '-k-Nachbarschaft-Ranking (Digraph)-top-' + str(1000) + '.txt'
+    output_file = input_graph.split(".")[0] + '-k-Nachbarschaft-Ranking-k-' + str(k) + '.txt'
     G = TemporalGraph()
     G.import_edgelist(input_graph)
     start_time = time.time()
@@ -179,7 +179,11 @@ if __name__ == '__main__':
     finish = time.time() - start_time
     with open(path + output_file, 'w') as f:
         result.sort(reverse=True)
-        f.write(str([v for (ranking, v, size) in result]) + "\n")
+        for i in range(len(result)):
+            f.write(str(i + 1) + ".Platz: " + str(result[i][1]) + " mit R(K-v) = " + str(
+                result[i][0]) + " und |K| = " + str(result[i][2]) + "\n")
+        # result.sort(reverse=True)
+        # f.write(str([v for (ranking, v, size) in result]) + "\n")
         sizes = [size for (ranking, v, size) in result]
         f.write("Durchschnitt |K| = " + str(str(round(sum(sizes) / len(sizes))) + "\n"))
         f.write("wurde auf die " + str(k) + "-Nachbarschaft jedes Knotens angewendet." + "\n")

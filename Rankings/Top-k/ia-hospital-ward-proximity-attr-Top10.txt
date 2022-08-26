@@ -1,4 +1,5 @@
 [(5078, 7), (5087, 9), (5087, 9), (5088, 8), (5091, 0), (5091, 1), (5091, 4), (5091, 5), (5091, 10), (5091, 11)]
-abgeschlossen in 5.499274730682373 Sekunden
-abgeschlossen in 0.09165457884470622 Minuten
-abgeschlossen in 0.001527576314078437 Stunden
+Einsparung von 0.0% r(v) Berechnungen
+abgeschlossen in 6.23093056678772 Sekunden
+abgeschlossen in 0.10384884277979532 Minuten
+abgeschlossen in 0.0017308140463299221 Stunden
