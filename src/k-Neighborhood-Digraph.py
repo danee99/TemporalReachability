@@ -155,7 +155,7 @@ class TemporalGraph:
             total += len(visited)
         if total < size:
             return 0, deleted_node, size, total, before
-        rank = (total * size) / (before * size_alt)
+        rank = 1-(total * size) / (before * size_alt)
         if rank < 0:
             return 0, deleted_node, size, total, before
         else:
