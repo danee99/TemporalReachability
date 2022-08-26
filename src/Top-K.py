@@ -100,7 +100,7 @@ class TemporalGraph:
             max_heap.sort()
             f.write(str(max_heap) + "\n")
             expected = (self.n ** 2) - self.n
-            f.write("Einsparung von %s%% r(v) Berechnungen" % ((expected-self.loop_counter)/expected) + "\n")
+            f.write("Einsparung von %s%% r(v) Berechnungen" % (((expected-self.loop_counter)/expected)*100) + "\n")
             f.write("abgeschlossen in %s Sekunden" % finish + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
             f.write("abgeschlossen in %s Stunden" % (finish / 3600))

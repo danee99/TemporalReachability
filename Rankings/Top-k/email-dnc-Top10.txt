@@ -1,5 +1,5 @@
 [(481326, 100), (515440, 62), (559134, 5), (560383, 353), (561901, 16), (576521, 341), (579780, 49), (591009, 4), (594056, 182), (600653, 3)]
-Einsparung von 431157 Schleifen
-abgeschlossen in 2465.8420038223267 Sekunden
-abgeschlossen in 41.09736673037211 Minuten
-abgeschlossen in 0.6849561121728686 Stunden
+Einsparung von 12.063743882887193% r(v) Berechnungen
+abgeschlossen in 2505.66357254982 Sekunden
+abgeschlossen in 41.761059542497 Minuten
+abgeschlossen in 0.6960176590416166 Stunden
