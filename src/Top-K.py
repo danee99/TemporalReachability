@@ -5,6 +5,7 @@ from queue import PriorityQueue
 import heapq_max
 import heapq
 import numpy as np
+from heapdict import heapdict
 
 k = 10
 max_heap = []
@@ -72,10 +73,10 @@ class TemporalGraph:
             visited = set()
             earliest_arrival_time = helper.copy()
             earliest_arrival_time[node] = alpha
-            PQ = []
-            heapq.heappush(PQ, (0, node))
+            PQ = heapdict()
+            PQ[node] = 0
             while PQ:
-                (current_arrival_time, current_node) = heapq.heappop(PQ)
+                (current_node, current_arrival_time) = PQ.popitem()
                 if current_node != x:
                     visited.add(current_node)
                 for (u, v, t, l) in self.incidence_list[current_node]:
@@ -83,7 +84,7 @@ class TemporalGraph:
                         if t < alpha or t + l > beta: continue
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                             earliest_arrival_time[v] = t + l
-                            heapq.heappush(PQ, (earliest_arrival_time[v], v))
+                            PQ[v] = earliest_arrival_time[v]
             total = total + len(visited)
             if max_heap != [] and len(max_heap) >= k and total > max_heap[0][0]:
                 return -1, x
