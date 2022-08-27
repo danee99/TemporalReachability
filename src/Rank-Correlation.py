@@ -83,6 +83,7 @@ def import_ranking_alternative(degree_input, reachability_input, output_name, nu
                                         str(j) + "," + str(arr2[j]) + "," + str(arr5[j]) + "," + str(arr3[j]) + "," +
                                         str(arr4[j]) + "," + str(arr1[j]) + "," + str(arr6[j]) + '\n')
 
+
 #
 # name = "wiki_talk_gl"
 # mydataframe = pd.read_csv(path + "/Dataframes/"+name)
@@ -103,16 +104,21 @@ cool = [10, 50, 100, 1000]
 # cool = [10]
 for top_k in cool:
     arr2 = []
-    dataset = "infectious"
+    arr1 = []
+    dataset = "email-dnc"
     # with open(path + "edge-lists\\" + dataset + "-Heuristik-top-" + str(1000) + ".txt", "r") as h:
-    with open(path + "edge-lists\\" + dataset + "-k-Nachbarschaft-Ranking-top-" + str(1000) + ".txt", "r") as h:
+    with open(path + "edge-lists\\" + dataset + "-k-Nachbarschaft-Ranking-k-" + str(3) + ".txt", "r") as h:
         with open(path + "edge-lists\\" + dataset + "-Optimal.txt", "r") as o:
             for line2 in o:
                 arr = line2.split()
                 if arr[1] != '=' and arr[1] != 'in':
                     arr2.append(int(arr[1]))
-            line1 = h.readlines()
-            arr1 = np.fromstring(line1[0].strip('[]\n'), dtype=int, sep=',')
+            # line1 = h.readlines()
+            # arr1 = np.fromstring(line1[0].strip('[]\n'), dtype=int, sep=',')
+            for line1 in h:
+                arr = line1.split()
+                if arr[1] not in ['=', '|K|', 'die', 'fuer', 'in', 'auf']:
+                    arr1.append(int(arr[1]))
             optimal = set(arr2[:top_k])
             heuristik = set(arr1[:top_k])
             print(len(optimal.intersection(heuristik)) / len(optimal.union(heuristik)), top_k)

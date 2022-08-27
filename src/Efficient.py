@@ -190,7 +190,7 @@ if __name__ == '__main__':
     directed = (input('Soll die Kantenliste als gerichtet betrachtet werden? [y/n]:'))
     a = int(input('Intervall a eingeben: '))
     b = np.inf
-    output_file = input_graph.split(".")[0] + '-keine-Parallelisierung.txt'
+    output_file = input_graph.split(".")[0] + '-Ranking.txt'
     G = TemporalGraph()
     if directed == 'y':
         G.import_edgelist(input_graph)
