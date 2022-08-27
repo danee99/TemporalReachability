@@ -83,7 +83,7 @@ class TemporalGraph:
         size = len(k_neighbours)
         size_alt = size - 1
         if size <= p:
-            return 0, deleted_node, size
+            return 0, deleted_node, size, total, before
         for node in k_neighbours:
             visited = set()
             earliest_arrival_time = {j: np.inf for j in k_neighbours}
@@ -121,12 +121,12 @@ class TemporalGraph:
                                 PQ[v] = earliest_arrival_time[v]
             total += len(visited)
         if total < size:
-            return 0, deleted_node, size
+            return 0, deleted_node, size, total, before
         rank = 1 - (total * size) / (before * size_alt)
         if rank < 0:
-            return 0, deleted_node, size
+            return 0, deleted_node, size, total, before
         else:
-            return rank, deleted_node, size
+            return rank, deleted_node, size, total, before
 
 
 if __name__ == '__main__':
@@ -149,20 +149,14 @@ if __name__ == '__main__':
     pool.join()
     finish = time.time() - start_time
     with open(path + output_file, 'w') as f:
-        # result.sort(reverse=True)
-        # f.write(str([v for (ranking, v, size) in result]) + "\n")
-        # sizes = [size for (ranking, v, size) in result]
-        # f.write("Durchschnitt |K| = " + str(str(round(sum(sizes) / len(sizes))) + "\n"))
-        # f.write("wurde auf die " + str(k) + "-Nachbarschaft jedes Knotens angewendet." + "\n")
-        # f.write("Schwellwert fuer die Groesse der Nachbaschaft: " + str(p) + "\n")
-        # f.write("abgeschlossen in %s Sekunden" % finish + "\n")
-        # f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
-        # f.write("abgeschlossen in %s Stunden" % (finish / 3600))
         result.sort(reverse=True)
         for i in range(len(result)):
-            f.write(str(i + 1) + ".Platz: " + str(result[i][1]) + " mit R(K-v) = " + str(
-                result[i][0]) + " und |K| = " + str(result[i][2]) + "\n")
-        sizes = [size for (ranking, v, size) in result]
+            f.write(str(i + 1) + ".Platz: " + str(result[i][1]) + " mit rank(v) = " + str(
+                result[i][0]) + " und |K| = " + str(result[i][2]) + " mit R(K-v) = " + str(
+                result[i][3]) + " mit R(K) = " + str(result[i][4]) + "\n")
+        # result.sort(reverse=True)
+        # f.write(str([v for (ranking, v, size) in result]) + "\n")
+        sizes = [size for (ranking, v, size, total, before) in result]
         f.write("Durchschnitt |K| = " + str(str(round(sum(sizes) / len(sizes))) + "\n"))
         f.write("wurde auf die " + str(k) + "-Nachbarschaft jedes Knotens angewendet." + "\n")
         f.write("Schwellwert fuer die Groesse der Nachbaschaft: " + str(p) + "\n")
