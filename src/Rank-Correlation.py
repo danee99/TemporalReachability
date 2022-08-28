@@ -105,7 +105,7 @@ cool = [10, 50, 100, 1000]
 for top_k in cool:
     arr2 = []
     arr1 = []
-    dataset = "radoslaw-email"
+    dataset = "fb-messages"
     # with open(path + "edge-lists\\" + dataset + "-Heuristik-top-" + str(1000) + ".txt", "r") as h:
     with open(path + "edge-lists\\" + dataset + "-k-Nachbarschaft-Ranking-k-" + str(3) + ".txt", "r") as h:
         with open(path + "edge-lists\\" + dataset + "-Optimal.txt", "r") as o:
@@ -122,6 +122,9 @@ for top_k in cool:
             optimal = set(arr2[:top_k])
             heuristik = set(arr1[:top_k])
             print(len(optimal.intersection(heuristik)) / len(optimal.union(heuristik)), top_k)
+            # intersection = len(list(set(optimal).intersection(heuristik)))
+            # union = (len(set(optimal)) + len(set(heuristik))) - intersection
+            # print(float(intersection) / union)
 
 # copresence-InVS13
 # High-School_data_2013
