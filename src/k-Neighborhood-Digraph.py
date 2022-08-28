@@ -62,6 +62,18 @@ class TemporalGraph:
                 l = int(arr[3])
                 self.add_edge(u, v, t, l)
 
+    def import_undirected_edgelist(self, file_name):
+        with open(path + file_name, "r") as f:
+            self.n = int(f.readline())
+            for line in f:
+                arr = line.split()
+                u = int(arr[0])
+                v = int(arr[1])
+                t = int(arr[2])
+                l = int(arr[3])
+                self.add_edge(u, v, t, l)
+                self.add_edge(v, u, t, l)
+
     def k_neighborhood(self, node, k):
         # Ausgabe: Menge der Knoten, die sich in der k-Nachbarschaft von "node" befinden
         visited = set()
@@ -166,9 +178,13 @@ if __name__ == '__main__':
     input_graph = input('Edgeliste eingeben:')
     k = int(input('k-Nachbarschaft, Gebe den Wert k ein:'))
     p = int(input('Schranke für die Größe der Nachbarschaft:'))
+    directed = (input('Soll die Kantenliste als gerichtet betrachtet werden? [y/n]:'))
     output_file = input_graph.split(".")[0] + '-k-Nachbarschaft-Ranking-k-' + str(k) + '.txt'
     G = TemporalGraph()
-    G.import_edgelist(input_graph)
+    if directed == 'y':
+        G.import_edgelist(input_graph)
+    elif directed == 'n':
+        G.import_undirected_edgelist(input_graph)
     start_time = time.time()
     pool = multiprocessing.Pool(multiprocessing.cpu_count())
     result_objects = [pool.apply_async(G.total_reachability_after, args=(node, 0, np.inf, k, p)) for node in
