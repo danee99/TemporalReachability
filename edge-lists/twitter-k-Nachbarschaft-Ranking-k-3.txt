@@ -4605,7 +4605,7 @@
 4605.Platz: 0 mit rank(v) = 0 und |K| = 13 mit R(K-v) = 12 mit R(K) = 131
 Durchschnitt |K| = 311
 wurde auf die 3-Nachbarschaft jedes Knotens angewendet.
-Schwellwert fuer die Groesse der Nachbaschaft: 1
-abgeschlossen in 470.26608300209045 Sekunden
-abgeschlossen in 7.837768050034841 Minuten
-abgeschlossen in 0.1306294675005807 Stunden
+Schwellwert fuer die Groesse der Nachbaschaft: 0
+abgeschlossen in 491.53164076805115 Sekunden
+abgeschlossen in 8.192194012800853 Minuten
+abgeschlossen in 0.1365365668800142 Stunden
