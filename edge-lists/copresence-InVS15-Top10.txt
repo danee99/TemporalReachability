@@ -1,0 +1,5 @@
+[(46789, 50), (47010, 130), (47013, 54), (47013, 128), (47013, 166), (47014, 114), (47015, 23), (47015, 134), (47016, 25), (47016, 52)]
+Einsparung von 0.018851325876586653% r(v) Berechnungen
+abgeschlossen in 4483.923147439957 Sekunden
+abgeschlossen in 74.73205245733261 Minuten
+abgeschlossen in 1.2455342076222102 Stunden

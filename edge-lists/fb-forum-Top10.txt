@@ -1,0 +1,5 @@
+[(278543, 1), (282546, 84), (282676, 87), (284569, 41), (284682, 27), (284715, 403), (284754, 33), (285053, 23), (285689, 15), (286029, 110)]
+Einsparung von 8.633200462776012% r(v) Berechnungen
+abgeschlossen in 403.8763060569763 Sekunden
+abgeschlossen in 6.731271767616272 Minuten
+abgeschlossen in 0.11218786279360453 Stunden

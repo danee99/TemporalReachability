@@ -1,0 +1,5 @@
+[(106173, 300), (106193, 107), (106196, 51), (106196, 158), (106196, 249), (106197, 198), (106198, 74), (106198, 230), (106199, 220), (106199, 287)]
+Einsparung von 0.0% r(v) Berechnungen
+abgeschlossen in 996.8204522132874 Sekunden
+abgeschlossen in 16.61367420355479 Minuten
+abgeschlossen in 0.2768945700592465 Stunden

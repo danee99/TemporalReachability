@@ -1,0 +1,5 @@
+[(20400, 67), (20536, 58), (20540, 13), (20548, 79), (20549, 83), (20644, 37), (20674, 17), (20675, 85), (20676, 103), (20677, 121)]
+Einsparung von 0.8873818627804632% r(v) Berechnungen
+abgeschlossen in 40.73977541923523 Sekunden
+abgeschlossen in 0.6789962569872539 Minuten
+abgeschlossen in 0.011316604283120897 Stunden

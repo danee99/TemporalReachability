@@ -1,0 +1,5 @@
+[(481326, 100), (515440, 62), (559134, 5), (560383, 353), (561901, 16), (576521, 341), (579780, 49), (591009, 4), (594056, 182), (600653, 3)]
+Einsparung von 12.063743882887193% r(v) Berechnungen
+abgeschlossen in 1707.1407437324524 Sekunden
+abgeschlossen in 28.452345728874207 Minuten
+abgeschlossen in 0.47420576214790344 Stunden

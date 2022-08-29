@@ -1,0 +1,5 @@
+[(8141, 37), (8172, 6), (8172, 65), (8173, 19), (8174, 27), (8176, 9), (8176, 9), (8176, 16), (8177, 2), (8177, 5)]
+Einsparung von 0.0% r(v) Berechnungen
+abgeschlossen in 3.0022952556610107 Sekunden
+abgeschlossen in 0.050038254261016844 Minuten
+abgeschlossen in 0.0008339709043502807 Stunden
