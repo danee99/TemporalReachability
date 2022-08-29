@@ -107,7 +107,7 @@ for top_k in cool:
     arr1 = []
     dataset = "fb-messages"
     # with open(path + "edge-lists\\" + dataset + "-Heuristik-top-" + str(1000) + ".txt", "r") as h:
-    with open(path + "edge-lists\\" + dataset + "-k-Nachbarschaft-Ranking-k-" + str(3) + ".txt", "r") as h:
+    with open(path + "edge-lists\\" + dataset + "-k-Nachbarschaft-Ranking-k-" + str(2) + ".txt", "r") as h:
         with open(path + "edge-lists\\" + dataset + "-Optimal.txt", "r") as o:
             for line2 in o:
                 arr = line2.split()

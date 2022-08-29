@@ -8,9 +8,9 @@ name = "Auswirkungen-der-Modifikationen"
 
 bar_width = 0.25
 x = ['radoslaw-\nemail', 'email-dnc', 'UC-Irvine-\nmessages', 'dblp-cite', 'wiki_talk_\ngl']
-heuristik = [0.3, 3.6, 23.3, 5, 19.76]
+heuristik = [0.3, 3.6, 23.3, 5.1, 19.76]
 normal = [0.34, 9.9, 32.4, 42.8, 230.3]
-k_neighborhood = [-10, 12.24, -10, -10, -10]
+k_neighborhood = [0.47, 2.3, -10, 9.26, 212.6]
 k_neighborhood_mit_Schranke = [0, 0, 0, 0, 0]
 
 bar1 = np.arange(len(x))
