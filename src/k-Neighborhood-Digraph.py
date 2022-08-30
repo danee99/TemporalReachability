@@ -179,7 +179,7 @@ if __name__ == '__main__':
     k = int(input('k-Nachbarschaft, Gebe den Wert k ein:'))
     p = int(input('Schranke für die Größe der Nachbarschaft:'))
     directed = (input('Soll die Kantenliste als gerichtet betrachtet werden? [y/n]:'))
-    output_file = input_graph.split(".")[0] + '-k-Nachbarschaft-Ranking-k-' + str(k) + '.txt'
+    output_file = input_graph.split(".")[0] + '-k-Nachbarschaft-Ranking-alt-k-' + str(k) + '.txt'
     G = TemporalGraph()
     if directed == 'y':
         G.import_edgelist(input_graph)
