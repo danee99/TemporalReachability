@@ -1,5 +1,5 @@
 [(1757802, 522), (1767933, 41), (1768893, 2), (1770172, 399), (1776677, 31), (1777558, 712), (1780801, 104), (1781375, 1542), (1781713, 8), (1782274, 193)]
-Einsparung von 100.0% r(v) Berechnungen
-abgeschlossen in 1958.1043682098389 Sekunden
-abgeschlossen in 32.635072803497316 Minuten
-abgeschlossen in 0.5439178800582886 Stunden
+Einsparung von 6.048743973174279% r(v) Berechnungen
+abgeschlossen in 6484.7478930950165 Sekunden
+abgeschlossen in 108.07913155158361 Minuten
+abgeschlossen in 1.8013188591930602 Stunden

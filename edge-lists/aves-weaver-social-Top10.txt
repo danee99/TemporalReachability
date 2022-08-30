@@ -1,5 +1,5 @@
 [(3553, 269), (3577, 415), (3652, 239), (3653, 235), (3662, 133), (3692, 170), (3697, 421), (3697, 422), (3699, 210), (3701, 31)]
-Einsparung von 100.0% r(v) Berechnungen
-abgeschlossen in 1.8112993240356445 Sekunden
-abgeschlossen in 0.030188322067260742 Minuten
-abgeschlossen in 0.0005031387011210124 Stunden
+Einsparung von 0.8396598846037048% r(v) Berechnungen
+abgeschlossen in 0.8228113651275635 Sekunden
+abgeschlossen in 0.013713522752126058 Minuten
+abgeschlossen in 0.0002285587125354343 Stunden
