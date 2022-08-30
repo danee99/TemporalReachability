@@ -171,7 +171,7 @@ class TemporalGraph:
         if rank < 0:
             return 0, deleted_node, size, total, before
         else:
-            return rank, deleted_node, size, total, before
+            return rank*size, deleted_node, size, total, before
 
 
 if __name__ == '__main__':
