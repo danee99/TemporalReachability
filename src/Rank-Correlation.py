@@ -101,30 +101,35 @@ def import_ranking_alternative(degree_input, reachability_input, output_name, nu
 # plt.savefig(path + '/Plots/'+name+'.svg')
 
 cool = [10, 50, 100, 1000]
-# cool = [10]
-for top_k in cool:
-    arr2 = []
-    arr1 = []
-    dataset = "fb-messages"
-    # with open(path + "edge-lists\\" + dataset + "-Heuristik-top-" + str(1000) + ".txt", "r") as h:
-    with open(path + "edge-lists\\" + dataset + "-k-Nachbarschaft-Ranking-k-" + str(2) + ".txt", "r") as h:
-        with open(path + "edge-lists\\" + dataset + "-Optimal.txt", "r") as o:
-            for line2 in o:
-                arr = line2.split()
-                if arr[1] != '=' and arr[1] != 'in':
-                    arr2.append(int(arr[1]))
-            # line1 = h.readlines()
-            # arr1 = np.fromstring(line1[0].strip('[]\n'), dtype=int, sep=',')
-            for line1 in h:
-                arr = line1.split()
-                if arr[1] not in ['=', '|K|', 'die', 'fuer', 'in', 'auf']:
-                    arr1.append(int(arr[1]))
-            optimal = set(arr2[:top_k])
-            heuristik = set(arr1[:top_k])
-            print(len(optimal.intersection(heuristik)) / len(optimal.union(heuristik)), top_k)
-            # intersection = len(list(set(optimal).intersection(heuristik)))
-            # union = (len(set(optimal)) + len(set(heuristik))) - intersection
-            # print(float(intersection) / union)
+# cool = [10]+
+dataset = "wiki_talk_gl"
+print("Datensatz: " + str(dataset))
+for another_ugly_var in range(1, 4):
+    print(str(another_ugly_var) + "er Nachbarschaft")
+    for top_k in cool:
+        arr2 = []
+        arr1 = []
+        # with open(path + "edge-lists\\" + dataset + "-Heuristik-top-" + str(1000) + ".txt", "r") as h:
+        with open(path + "edge-lists\\" + dataset + "-k-Nachbarschaft-Ranking-alt-k-" + str(another_ugly_var) + ".txt",
+                  "r") as h:
+            with open(path + "edge-lists\\" + dataset + "-Optimal.txt", "r") as o:
+                for line2 in o:
+                    arr = line2.split()
+                    if arr[1] != '=' and arr[1] != 'in':
+                        arr2.append(int(arr[1]))
+                # line1 = h.readlines()
+                # arr1 = np.fromstring(line1[0].strip('[]\n'), dtype=int, sep=',')
+                for line1 in h:
+                    arr = line1.split()
+                    if arr[1] not in ['=', '|K|', 'die', 'fuer', 'in', 'auf']:
+                        arr1.append(int(arr[1]))
+                optimal = set(arr2[:top_k])
+                heuristik = set(arr1[:top_k])
+                print(len(optimal.intersection(heuristik)) / len(optimal.union(heuristik)), " bei Top " + str(top_k))
+                # intersection = len(list(set(optimal).intersection(heuristik)))
+                # union = (len(set(optimal)) + len(set(heuristik))) - intersection
+                # print(float(intersection) / union)
+    print("--------------------------------")
 
 # copresence-InVS13
 # High-School_data_2013
