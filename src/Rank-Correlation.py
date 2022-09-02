@@ -101,6 +101,7 @@ def import_ranking_alternative(degree_input, reachability_input, output_name, nu
 # plt.savefig(path + '/Plots/'+name+'.svg')
 
 cool = [10, 50, 100, 1000]
+rez = []
 # cool = [10]+
 dataset = "wiki_talk_gl"
 print("Datensatz: " + str(dataset))
@@ -125,11 +126,16 @@ for another_ugly_var in range(1, 4):
                         arr1.append(int(arr[1]))
                 optimal = set(arr2[:top_k])
                 heuristik = set(arr1[:top_k])
-                print(len(optimal.intersection(heuristik)) / len(optimal.union(heuristik)), " bei Top " + str(top_k))
+                rez.append(round(len(optimal.intersection(heuristik)) / len(optimal.union(heuristik)), 2))
+                print(round(len(optimal.intersection(heuristik)) / len(optimal.union(heuristik)), 2))
+                # print(len(optimal.intersection(heuristik)) / len(optimal.union(heuristik)), " bei Top " + str(top_k))
                 # intersection = len(list(set(optimal).intersection(heuristik)))
                 # union = (len(set(optimal)) + len(set(heuristik))) - intersection
                 # print(float(intersection) / union)
     print("--------------------------------")
+print(str(rez).replace(',', ' ').replace('[', '').replace(']', '').replace('.', ','))
+
+print(" & "+ str(rez).replace(',', ' & ').replace('[', '').replace(']', '').replace('.', ','))
 
 # copresence-InVS13
 # High-School_data_2013
