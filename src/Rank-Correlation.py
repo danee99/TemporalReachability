@@ -103,7 +103,7 @@ def import_ranking_alternative(degree_input, reachability_input, output_name, nu
 cool = [10, 50, 100, 1000]
 rez = []
 # cool = [10]+
-dataset = "wiki_talk_gl"
+dataset = "dblp-cite"
 print("Datensatz: " + str(dataset))
 for another_ugly_var in range(1, 4):
     print(str(another_ugly_var) + "er Nachbarschaft")

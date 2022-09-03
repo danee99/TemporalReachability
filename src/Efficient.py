@@ -68,6 +68,7 @@ class TemporalGraph:
         self.n = 0
         self.m = 0
         self.total_reachability = 0
+        self.memory = []
 
     def print_graph(self):
         for node in self.nodes:
@@ -90,6 +91,7 @@ class TemporalGraph:
                     l = 1
                 self.incidence_list[u].append((u, v, t, l))
                 self.m += 1
+        self.memory = [0 for _ in range(self.n)]
 
     def import_undirected_edgelist(self, file_name):
         with open(path + file_name, "r") as f:
@@ -109,6 +111,7 @@ class TemporalGraph:
                 self.incidence_list[u].append((u, v, t, l))
                 self.incidence_list[v].append((v, u, t, l))
                 self.m += 2
+        self.memory = [0 for _ in range(self.n)]
 
     def calc_total_reachability(self, a, b):
         for node in self.nodes:
@@ -126,6 +129,7 @@ class TemporalGraph:
                         if t + l < earliest_arrival_time[v] and t >= current_arrival_time:
                             earliest_arrival_time[v] = t + l
                             PQ[v] = earliest_arrival_time[v]
+            self.memory[node] = len(visited)
             self.total_reachability += len(visited)
 
     def rank_node(self, x, a, b, before, helper):
@@ -149,7 +153,8 @@ class TemporalGraph:
                             earliest_arrival_time[v] = t + l
                             PQ[v] = earliest_arrival_time[v]
             total += len(visited)
-        return 1 - (total / before), x
+        new_before = before - self.memory[x]
+        return 1 - (total / new_before), x
 
     def node_ranking(self, a, b, output_name):
         start_time = time.time()
@@ -190,7 +195,7 @@ if __name__ == '__main__':
     directed = (input('Soll die Kantenliste als gerichtet betrachtet werden? [y/n]:'))
     a = int(input('Intervall a eingeben: '))
     b = np.inf
-    output_file = input_graph.split(".")[0] + '-Ranking.txt'
+    output_file = input_graph.split(".")[0] + '-Ranking-new.txt'
     G = TemporalGraph()
     if directed == 'y':
         G.import_edgelist(input_graph)
