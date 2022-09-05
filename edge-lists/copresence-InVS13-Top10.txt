@@ -1,5 +1,5 @@
 [(8748, 55), (8749, 0), (8749, 1), (8749, 2), (8749, 4), (8749, 5), (8749, 6), (8749, 7), (8749, 8), (8749, 9)]
 Einsparung von 0.0% r(v) Berechnungen
-abgeschlossen in 197.09440994262695 Sekunden
-abgeschlossen in 3.284906832377116 Minuten
-abgeschlossen in 0.054748447206285265 Stunden
+abgeschlossen in 194.96980142593384 Sekunden
+abgeschlossen in 3.2494966904322307 Minuten
+abgeschlossen in 0.05415827817387051 Stunden
