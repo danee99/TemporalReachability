@@ -84,8 +84,7 @@ def import_ranking_alternative(degree_input, reachability_input, output_name, nu
                                         str(arr4[j]) + "," + str(arr1[j]) + "," + str(arr6[j]) + '\n')
 
 
-#
-# name = "wiki_talk_gl"
+# name = "ia-hospital-ward-proximity-attr"
 # mydataframe = pd.read_csv(path + "/Dataframes/"+name)
 # mydataframe = mydataframe.rename(columns={'Temp. Reachability': 'Temporal\nReachability',
 #                                           'Stat. Reachability': 'Static\nReachability',
@@ -103,7 +102,7 @@ def import_ranking_alternative(degree_input, reachability_input, output_name, nu
 cool = [10, 50, 100, 1000]
 rez = []
 # cool = [10]+
-dataset = "dblp-cite"
+dataset = "ia-reality-call"
 print("Datensatz: " + str(dataset))
 for another_ugly_var in range(1, 4):
     print(str(another_ugly_var) + "er Nachbarschaft")
