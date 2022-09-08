@@ -99,42 +99,42 @@ def import_ranking_alternative(degree_input, reachability_input, output_name, nu
 # plt.tight_layout()
 # plt.savefig(path + '/Plots/'+name+'.svg')
 
-cool = [10, 50, 100, 1000]
-rez = []
-# cool = [10]+
-dataset = "ia-reality-call"
-print("Datensatz: " + str(dataset))
-for another_ugly_var in range(1, 4):
-    print(str(another_ugly_var) + "er Nachbarschaft")
-    for top_k in cool:
-        arr2 = []
-        arr1 = []
-        # with open(path + "edge-lists\\" + dataset + "-Heuristik-top-" + str(1000) + ".txt", "r") as h:
-        with open(path + "edge-lists\\" + dataset + "-k-Nachbarschaft-Ranking-alt-k-" + str(another_ugly_var) + ".txt",
-                  "r") as h:
-            with open(path + "edge-lists\\" + dataset + "-Optimal.txt", "r") as o:
-                for line2 in o:
-                    arr = line2.split()
-                    if arr[1] != '=' and arr[1] != 'in':
-                        arr2.append(int(arr[1]))
-                # line1 = h.readlines()
-                # arr1 = np.fromstring(line1[0].strip('[]\n'), dtype=int, sep=',')
-                for line1 in h:
-                    arr = line1.split()
-                    if arr[1] not in ['=', '|K|', 'die', 'fuer', 'in', 'auf']:
-                        arr1.append(int(arr[1]))
-                optimal = set(arr2[:top_k])
-                heuristik = set(arr1[:top_k])
-                rez.append(round(len(optimal.intersection(heuristik)) / len(optimal.union(heuristik)), 2))
-                print(round(len(optimal.intersection(heuristik)) / len(optimal.union(heuristik)), 2))
-                # print(len(optimal.intersection(heuristik)) / len(optimal.union(heuristik)), " bei Top " + str(top_k))
-                # intersection = len(list(set(optimal).intersection(heuristik)))
-                # union = (len(set(optimal)) + len(set(heuristik))) - intersection
-                # print(float(intersection) / union)
-    print("--------------------------------")
-print(str(rez).replace(',', ' ').replace('[', '').replace(']', '').replace('.', ','))
-
-print(" & "+ str(rez).replace(',', ' & ').replace('[', '').replace(']', '').replace('.', ','))
+# cool = [10, 50, 100, 1000]
+# rez = []
+# # cool = [10]+
+# dataset = "ia-reality-call"
+# print("Datensatz: " + str(dataset))
+# for another_ugly_var in range(1, 4):
+#     print(str(another_ugly_var) + "er Nachbarschaft")
+#     for top_k in cool:
+#         arr2 = []
+#         arr1 = []
+#         # with open(path + "edge-lists\\" + dataset + "-Heuristik-top-" + str(1000) + ".txt", "r") as h:
+#         with open(path + "edge-lists\\" + dataset + "-k-Nachbarschaft-Ranking-alt-k-" + str(another_ugly_var) + ".txt",
+#                   "r") as h:
+#             with open(path + "edge-lists\\" + dataset + "-Optimal.txt", "r") as o:
+#                 for line2 in o:
+#                     arr = line2.split()
+#                     if arr[1] != '=' and arr[1] != 'in':
+#                         arr2.append(int(arr[1]))
+#                 # line1 = h.readlines()
+#                 # arr1 = np.fromstring(line1[0].strip('[]\n'), dtype=int, sep=',')
+#                 for line1 in h:
+#                     arr = line1.split()
+#                     if arr[1] not in ['=', '|K|', 'die', 'fuer', 'in', 'auf']:
+#                         arr1.append(int(arr[1]))
+#                 optimal = set(arr2[:top_k])
+#                 heuristik = set(arr1[:top_k])
+#                 rez.append(round(len(optimal.intersection(heuristik)) / len(optimal.union(heuristik)), 2))
+#                 print(round(len(optimal.intersection(heuristik)) / len(optimal.union(heuristik)), 2))
+#                 # print(len(optimal.intersection(heuristik)) / len(optimal.union(heuristik)), " bei Top " + str(top_k))
+#                 # intersection = len(list(set(optimal).intersection(heuristik)))
+#                 # union = (len(set(optimal)) + len(set(heuristik))) - intersection
+#                 # print(float(intersection) / union)
+#     print("--------------------------------")
+# print(str(rez).replace(',', ' ').replace('[', '').replace(']', '').replace('.', ','))
+#
+# print(" & "+ str(rez).replace(',', ' & ').replace('[', '').replace(']', '').replace('.', ','))
 
 # copresence-InVS13
 # High-School_data_2013
@@ -177,3 +177,23 @@ print(" & "+ str(rez).replace(',', ' & ').replace('[', '').replace(']', '').repl
 #
 #
 # vs_heuristik("email-dnc-Heuristik.txt", "email-dnc-Ranking.txt")
+
+def import_ranking_new(input, k):
+    arr1 = []
+    arr2 = []
+    with open(path + "edge-lists\\" + input + "-Optimal.txt", "r") as a:
+        with open(path + "edge-lists\\" + input + "-Ranking-new.txt", "r") as b:
+            for line1 in a:
+                help = line1.split()
+                if help[1] != '=' and help[1] != 'in':
+                    arr1.append(int(help[1]))
+            for line2 in b:
+                help = line2.split()
+                if help[1] != '=' and help[1] != 'in':
+                    arr2.append(int(help[1]))
+    normal = set(arr2[:k])
+    new = set(arr1[:k])
+    print("Jaccard-Koeffizient: " +str(round(len(normal.intersection(new)) / len(normal.union(new)), 2)))
+
+
+import_ranking_new("dblp-cite", 10)
