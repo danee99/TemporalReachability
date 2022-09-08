@@ -25,7 +25,7 @@ def log_result(result):
 class TemporalGraph:
     def __init__(self):
         self.n = 0
-        self.nodes = set()
+        self.nodes = {}
         self.incidence_list = []
         self.loop_counter = 0
 
@@ -42,9 +42,13 @@ class TemporalGraph:
                     l = int(arr[3])
                 except IndexError:
                     l = 1
-                self.nodes.add(u)
-                self.nodes.add(v)
+                if u not in self.nodes:
+                    self.nodes[u] = 0
+                if v not in self.nodes:
+                    self.nodes[v] = 0
                 self.incidence_list[u].append((u, v, t, l))
+                self.nodes[u] += 1
+            self.nodes = {node: deg for node, deg in sorted(self.nodes.items(), key=lambda item: item[1], reverse=True)}
 
     def import_undirected_edgelist(self, file_name):
         with open(path + file_name, "r") as f:
@@ -59,10 +63,15 @@ class TemporalGraph:
                     l = int(arr[3])
                 except IndexError:
                     l = 1
-                self.nodes.add(u)
-                self.nodes.add(v)
+                if u not in self.nodes:
+                    self.nodes[u] = 0
+                if v not in self.nodes:
+                    self.nodes[v] = 0
                 self.incidence_list[u].append((u, v, t, l))
                 self.incidence_list[v].append((v, u, t, l))
+                self.nodes[u] += 1
+                self.nodes[v] += 1
+            self.nodes = {node: deg for node, deg in sorted(self.nodes.items(), key=lambda item: item[1], reverse=True)}
 
     def top_k_util(self, x, alpha, beta, helper):
         total = 0
