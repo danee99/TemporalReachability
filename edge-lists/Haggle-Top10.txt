@@ -1,5 +1,5 @@
-[(48217, 17), (49334, 7), (49378, 21), (49907, 13), (50251, 25), (51152, 33), (51392, 44), (51493, 28), (51546, 12), (51566, 88)]
-Einsparung von 9.045212694847732% r(v) Berechnungen
-abgeschlossen in 91.23036050796509 Sekunden
-abgeschlossen in 1.5205060084660849 Minuten
-abgeschlossen in 0.02534176680776808 Stunden
+[(48217, 17), (48217, 17), (49334, 7), (49378, 21), (49907, 13), (50251, 25), (51152, 33), (51392, 44), (51493, 28), (51546, 12)]
+Einsparung von 6.406245822304217% r(v) Berechnungen
+abgeschlossen in 93.61025381088257 Sekunden
+abgeschlossen in 1.5601708968480428 Minuten
+abgeschlossen in 0.026002848280800715 Stunden
