@@ -178,22 +178,37 @@ def import_ranking_alternative(degree_input, reachability_input, output_name, nu
 #
 # vs_heuristik("email-dnc-Heuristik.txt", "email-dnc-Ranking.txt")
 
-def import_ranking_new(input, k):
-    arr1 = []
-    arr2 = []
-    with open(path + "edge-lists\\" + input + "-Optimal.txt", "r") as a:
+def import_ranking_new(input):
+    with open(path + "Rankings\\Temporal Reachability\\" + input + "-Ranking.txt", "r") as a:
         with open(path + "edge-lists\\" + input + "-Ranking-new.txt", "r") as b:
-            for line1 in a:
-                help = line1.split()
-                if help[1] != '=' and help[1] != 'in':
-                    arr1.append(int(help[1]))
-            for line2 in b:
-                help = line2.split()
-                if help[1] != '=' and help[1] != 'in':
-                    arr2.append(int(help[1]))
-    normal = set(arr2[:k])
-    new = set(arr1[:k])
-    print("Jaccard-Koeffizient: " +str(round(len(normal.intersection(new)) / len(normal.union(new)), 2)))
+            arr1 = a.readlines()
+            arr2 = b.readlines()
+    tau, p_value = stats.kendalltau(arr1, arr2)
+    print(tau)
 
 
-import_ranking_new("dblp-cite", 10)
+datasets = ["aves-weaver-social",
+            "ia-workplace-contacts",
+            "ia-hospital-ward-proximity-attr",
+            "Haggle",
+            "radoslaw-email",
+            "copresence-InVS13",
+            "fb-forum",
+            "High-School_data_2013",
+            "email-dnc",
+            "copresence-InVS15",
+            "UC-Irvine-messages",
+            "fb-messages",
+            "dblp-cite",
+            "twitter",
+            "infectious",
+            "wiki_talk_gl",
+            "ia-reality-call"]
+for i in datasets:
+    print("--------------------------------")
+    print(str(i)+":")
+    try:
+        import_ranking_new(i)
+    except:
+        print("noch nicht ausgewertet")
+        continue
