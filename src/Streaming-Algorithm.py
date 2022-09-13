@@ -97,7 +97,7 @@ class TemporalGraph:
         before = self.total_reachability(a, b)
         helper = [np.inf for _ in range(self.n)]
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        result_objects = [pool.apply_async(self.rank_node, args=(a, b, node, helper, before)) for node in
+        result_objects = [pool.apply_async(self.rank_node, args=(a, b, node, before, helper)) for node in
                           range(0, self.n)]
         ranking = [r.get() for r in result_objects]
         pool.close()
