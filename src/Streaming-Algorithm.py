@@ -25,6 +25,7 @@ class TemporalGraph:
         self.nodes = []
         self.edge_stream = []
         self.n = 0
+        self.loop_counter = 0
 
     def import_edgelist(self, file_name):
         with open(path + file_name, "r") as f:
@@ -76,6 +77,7 @@ class TemporalGraph:
     def rank_node(self, a, b, x, before, helper):
         total_reach = 0
         for node in self.nodes:
+            self.loop_counter += 1
             if node == x:
                 continue
             reach_num = 1
@@ -93,41 +95,36 @@ class TemporalGraph:
         # return total_reach
 
     def node_ranking(self, a, b, output_name):
-        start_time = time.time()
-        before = self.total_reachability(a, b)
-        helper = [np.inf for _ in range(self.n)]
-        pool = multiprocessing.Pool(multiprocessing.cpu_count())
-        result_objects = [pool.apply_async(self.rank_node, args=(a, b, node, before, helper)) for node in
-                          range(0, self.n)]
-        ranking = [r.get() for r in result_objects]
-        pool.close()
-        pool.join()
-        finish = time.time() - start_time
-        with open(path + output_name, 'w') as f:
-            # ranking.sort(key=lambda tup: tup[0], reverse=True)
-            # ranking.sort(reverse=True)
-            # f.write(str([v for (rank, v) in ranking[:k]]) + "\n")
-            f.write(str(ranking) + "\n")
-            f.write("R(G) = %s" % before + "\n")
-            f.write("abgeschlossen in %s Sekunden" % finish + "\n")
-            f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
-            f.write("abgeschlossen in %s Stunden" % (finish / 3600))
         # start_time = time.time()
         # before = self.total_reachability(a, b)
         # helper = [np.inf for _ in range(self.n)]
-        # ranking = []
-        # for node in range(0, self.n):
-        #     ranking.append(self.rank_node(a, b, node, before, helper))
+        # pool = multiprocessing.Pool(multiprocessing.cpu_count())
+        # result_objects = [pool.apply_async(self.rank_node, args=(a, b, node, before, helper)) for node in
+        #                   range(0, self.n)]
+        # ranking = [r.get() for r in result_objects]
+        # pool.close()
+        # pool.join()
         # finish = time.time() - start_time
         # with open(path + output_name, 'w') as f:
-        #     # f.write(str(ranking) + "\n")
-        #     ranking.sort(reverse=True)
-        #     for i in range(len(ranking)):
-        #         f.write(str(i + 1) + ".Platz: " + str(ranking[i][1]) + "\n")
+        #     f.write(str(ranking) + "\n")
         #     f.write("R(G) = %s" % before + "\n")
         #     f.write("abgeschlossen in %s Sekunden" % finish + "\n")
         #     f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
         #     f.write("abgeschlossen in %s Stunden" % (finish / 3600))
+        start_time = time.time()
+        before = self.total_reachability(a, b)
+        helper = [np.inf for _ in range(self.n)]
+        ranking = []
+        for node in range(0, self.n):
+            ranking.append(self.rank_node(a, b, node, before, helper))
+        finish = time.time() - start_time
+        with open(path + output_name, 'w') as f:
+            f.write(str(ranking) + "\n")
+            f.write("loops = %s" % self.loop_counter + "\n")
+            f.write("R(G) = %s" % before + "\n")
+            f.write("abgeschlossen in %s Sekunden" % finish + "\n")
+            f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
+            f.write("abgeschlossen in %s Stunden" % (finish / 3600))
 
     def top_k_util(self, x, a, b, helper):
         total = 0
