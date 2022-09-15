@@ -9,9 +9,11 @@ import heapq_max
 path = "/home/stud/degenste/BA/TemporalReachability/edge-lists/"
 max_heap = []
 k = 10
+loops = []
 
 
 def log_result(result):
+    loops.append(result[2])
     if result[0] != -1:
         if len(max_heap) < k:
             heapq_max.heappush_max(max_heap, (result[0], result[1]))
@@ -25,7 +27,6 @@ class TemporalGraph:
         self.nodes = []
         self.edge_stream = []
         self.n = 0
-        self.loop_counter = 0
 
     def import_edgelist(self, file_name):
         with open(path + file_name, "r") as f:
@@ -77,7 +78,6 @@ class TemporalGraph:
     def rank_node(self, a, b, x, before, helper):
         total_reach = 0
         for node in self.nodes:
-            self.loop_counter += 1
             if node == x:
                 continue
             reach_num = 1
@@ -128,7 +128,9 @@ class TemporalGraph:
 
     def top_k_util(self, x, a, b, helper):
         total = 0
+        loop_counter = 0
         for node in self.nodes:
+            loop_counter += 1
             if node == x:
                 continue
             reach_num = 1
@@ -143,7 +145,7 @@ class TemporalGraph:
             total += reach_num
             if max_heap != [] and len(max_heap) >= k and total > max_heap[0][0]:
                 return -1, x
-        return total, x
+        return total, x, loop_counter
 
     def top_k_reachability(self, alpha, beta, k, output_name):
         start_time = time.time()
@@ -157,6 +159,7 @@ class TemporalGraph:
         with open(path + output_name, 'w') as f:
             max_heap.sort()
             f.write(str(max_heap) + "\n")
+            f.write("loops = %s" % sum(loops) + "\n")
             f.write("abgeschlossen in %s Sekunden" % finish + "\n")
             f.write("abgeschlossen in %s Minuten" % (finish / 60) + "\n")
             f.write("abgeschlossen in %s Stunden" % (finish / 3600))
